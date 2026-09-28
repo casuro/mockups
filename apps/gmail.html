@@ -92,32 +92,79 @@
   .rail-btn .pill svg { width: 22px; height: 22px; }
   .rail-btn .count { position: absolute; top: -2px; left: 32px; background: #b3261e; color: #fff; border-radius: 8px; min-width: 16px; height: 16px; padding: 0 4px; font-size: 11px; line-height: 16px; font-weight: 500; }
 
-  /* Nav sidebar */
-  .nav { width: 256px; padding-right: 16px; overflow-y: auto; transition: width .2s; }
+  /* Nav sidebar: a fixed-width slot holding a panel that can peek open over the content when collapsed */
+  .nav { position: relative; width: 256px; transition: width .2s cubic-bezier(.4,0,.2,1); z-index: 25; }
   .nav.collapsed { width: 72px; }
+  .nav-panel {
+    position: absolute; top: 0; left: 0; bottom: 0; width: 256px; padding: 0 16px 16px 0; background: var(--bg);
+    overflow-y: auto; overflow-x: hidden; transition: width .2s cubic-bezier(.4,0,.2,1), box-shadow .2s; scrollbar-width: thin; scrollbar-color: transparent transparent;
+  }
+  .nav-panel:hover { scrollbar-color: var(--line-2) transparent; }
+  .nav-panel::-webkit-scrollbar { width: 8px; }
+  .nav-panel::-webkit-scrollbar-thumb { background: transparent; border-radius: 4px; }
+  .nav-panel:hover::-webkit-scrollbar-thumb { background: var(--line-2); }
+  .nav.collapsed .nav-panel { width: 72px; padding-right: 0; }
+  .nav.collapsed.peek .nav-panel { width: 256px; padding-right: 16px; box-shadow: 0 1px 2px rgba(60,64,67,.3), 2px 0 8px 2px rgba(60,64,67,.15); border-radius: 0 16px 16px 0; }
+  .drawer-head { display: none; }
   .compose-btn {
-    display: flex; align-items: center; gap: 12px; height: 56px; padding: 0 20px 0 16px; margin: 0 0 16px 0; border-radius: 16px;
-    background: var(--compose); color: #001d35; font-weight: 500; transition: box-shadow .15s, background .15s;
+    display: flex; align-items: center; gap: 12px; height: 56px; padding: 0 20px 0 16px; margin: 0 0 16px 8px; border-radius: 16px; white-space: nowrap;
+    background: var(--compose); color: #001d35; font-weight: 500; transition: box-shadow .15s, background .15s, width .2s;
   }
   :root[data-theme="dark"] .compose-btn { color: #c2e7ff; }
   .compose-btn:hover { box-shadow: var(--shadow); background: var(--compose-hover); }
   .compose-btn svg { width: 24px; height: 24px; }
-  .nav.collapsed .compose-btn { width: 56px; padding: 0 16px; }
-  .nav.collapsed .compose-btn span, .nav.collapsed .nav-item .lbl, .nav.collapsed .nav-item .n, .nav.collapsed .nav-head span, .nav.collapsed .nav-head button { display: none; }
+  .nav.collapsed:not(.peek) .compose-btn { width: 56px; padding: 0 16px; }
+  .nav.collapsed:not(.peek) :is(.compose-btn span, .nav-item .lbl, .nav-item .n, .nav-item .kebab, .nav-head) { display: none; }
   .nav-item {
-    width: 100%; height: 32px; display: flex; align-items: center; gap: 18px; padding: 0 12px 0 26px; border-radius: 0 16px 16px 0;
-    color: var(--text); font-size: 14px; text-align: left;
+    position: relative; width: 100%; height: 32px; display: flex; align-items: center; gap: 18px; padding: 0 12px 0 calc(26px + var(--depth, 0) * 16px); border-radius: 0 16px 16px 0;
+    color: var(--text); font-size: 14px; text-align: left; white-space: nowrap;
   }
-  .nav.collapsed .nav-item { width: 56px; border-radius: 16px; padding: 0 16px; margin-left: 8px; }
+  .nav.collapsed:not(.peek) .nav-item { width: 56px; border-radius: 16px; padding: 0 18px; margin-left: 8px; }
   .nav-item:hover { background: var(--hover); }
   .nav-item.active { background: var(--nav-active); color: var(--nav-active-text); font-weight: 700; }
   .nav-item.bold { font-weight: 700; }
-  .nav-item .lbl { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .nav-item .n { font-size: 12px; font-weight: 700; }
+  .nav-item .lbl { flex: 1; overflow: hidden; text-overflow: ellipsis; }
+  .nav-item .n { font-size: 12px; letter-spacing: .2px; }
+  .nav-item.bold .n, .nav-item.active .n { font-weight: 700; }
+  .nav-item .ico { position: relative; display: grid; place-items: center; width: 20px; height: 20px; flex: none; }
   .nav-item svg { width: 20px; height: 20px; }
-  .nav-head { display: flex; align-items: center; justify-content: space-between; padding: 16px 8px 4px 26px; font-size: 16px; font-family: "Google Sans", Roboto, sans-serif; }
-  .label-dot { width: 20px; display: grid; place-items: center; }
-  .label-dot i { width: 12px; height: 12px; border-radius: 3px; display: block; transform: rotate(0deg); }
+  .nav-item .badge { display: none; position: absolute; top: -7px; left: 11px; min-width: 16px; height: 16px; padding: 0 4px; border-radius: 8px; background: #b3261e; color: #fff; font-size: 10px; line-height: 16px; font-weight: 500; text-align: center; }
+  .nav.collapsed:not(.peek) .nav-item .badge { display: block; }
+  .nav-item .kebab { display: none; margin-right: -8px; width: 28px; height: 28px; border-radius: 50%; place-items: center; color: var(--text-2); }
+  .nav-item .kebab svg { width: 18px; height: 18px; }
+  .nav-item .kebab:hover { background: rgba(0,0,0,.08); }
+  :root[data-theme="dark"] .nav-item .kebab:hover { background: rgba(255,255,255,.1); }
+  .nav-item:hover .kebab, .nav-item .kebab.open { display: grid; }
+  .nav-item:hover .n.hide-on-hover { display: none; }
+  .nav-item.more { color: var(--text); }
+  .nav-item.more svg { width: 20px; height: 20px; }
+  .nav-sub { overflow: hidden; }
+  .nav-head { display: flex; align-items: center; justify-content: space-between; height: 40px; margin-top: 12px; padding: 0 8px 0 26px; font-size: 16px; font-weight: 500; font-family: "Google Sans", Roboto, sans-serif; white-space: nowrap; }
+  .nav.collapsed:not(.peek) .nav-sep { display: block; }
+  .nav-sep { display: none; height: 1px; background: var(--line); margin: 12px 20px 12px 24px; }
+
+  /* Label menu and dialogs */
+  .label-menu { width: 248px; }
+  .label-menu .opt svg { width: 18px; height: 18px; color: var(--text-2); }
+  .label-menu hr { border: 0; border-top: 1px solid var(--line); margin: 8px 0; }
+  .swatches { display: grid; grid-template-columns: repeat(6, 24px); gap: 8px; padding: 6px 20px 10px; }
+  .swatches button { width: 24px; height: 24px; border-radius: 4px; position: relative; }
+  .swatches button.on::after { content: ""; position: absolute; left: 8px; top: 4px; width: 6px; height: 11px; border: solid #fff; border-width: 0 2px 2px 0; transform: rotate(45deg); }
+  .menu-cap { font-size: 12px; color: var(--text-3); padding: 4px 20px 2px; }
+  .dialog-scrim { position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 60; display: grid; place-items: center; animation: fadein .15s; }
+  @keyframes fadein { from { opacity: 0; } }
+  .dialog { width: min(420px, calc(100vw - 32px)); background: var(--surface); border-radius: 28px; padding: 24px; box-shadow: var(--shadow-lg); animation: up .2s cubic-bezier(.2,.8,.2,1); }
+  .dialog h2 { font-family: "Google Sans", Roboto, sans-serif; font-size: 24px; line-height: 32px; font-weight: 400; margin-bottom: 16px; }
+  .dialog label.f { display: block; font-size: 12px; color: var(--text-2); margin-bottom: 6px; }
+  .dialog input[type=text] { width: 100%; height: 48px; border: 1px solid var(--chip-line); border-radius: 4px; padding: 0 14px; background: var(--surface); outline: 0; font-size: 16px; }
+  .dialog input[type=text]:focus { border: 2px solid var(--primary); padding: 0 13px; }
+  .dialog .check { display: flex; align-items: center; gap: 12px; margin-top: 16px; color: var(--text-2); }
+  .dialog .check input { width: 18px; height: 18px; accent-color: var(--primary); }
+  .dialog .err { color: #b3261e; font-size: 12px; margin-top: 6px; min-height: 16px; }
+  .dialog .acts { display: flex; justify-content: flex-end; gap: 8px; margin-top: 20px; }
+  .text-btn { height: 40px; padding: 0 16px; border-radius: 20px; color: var(--primary); font-weight: 500; }
+  .text-btn:hover { background: var(--hover); }
+  .text-btn:disabled { color: var(--text-3); opacity: .6; cursor: default; background: none; }
 
   /* Main card */
   .main { background: var(--surface); border-radius: 16px; margin: 0 0 16px; display: flex; flex-direction: column; min-width: 0; min-height: 0; overflow: hidden; }
@@ -317,7 +364,9 @@
   .compose.min .c-field, .compose.min textarea, .compose.min .send-bar { display: none; }
 
   /* Side panel */
-  .side { display: flex; flex-direction: column; align-items: center; gap: 12px; padding-top: 12px; }
+  .side { grid-column: 5; grid-row: 1; display: flex; flex-direction: column; align-items: center; gap: 12px; padding-top: 12px; }
+  .sidepanel { grid-column: 4; grid-row: 1; }
+  .main { grid-column: 3; grid-row: 1; }
   .side-app { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; position: relative; }
   .side-app:hover { background: var(--hover); }
   .side-app.active { background: var(--nav-active); }
@@ -430,10 +479,6 @@
   @media (max-width: 1100px) {
     .body { grid-template-columns: 68px auto 1fr 0 0; }
     .side, .sidepanel { display: none; }
-    .nav { width: 72px; }
-    .nav .compose-btn { width: 56px; padding: 0 16px; }
-    .nav .compose-btn span, .nav .nav-item .lbl, .nav .nav-item .n, .nav .nav-head span, .nav .nav-head button { display: none; }
-    .nav .nav-item { width: 56px; border-radius: 16px; padding: 0 18px; margin-left: 8px; }
     .main { margin-right: 16px; }
     .compose { right: 16px; }
     .split { grid-template-columns: 1fr; }
@@ -446,11 +491,12 @@
     .searchbox { height: 44px; }
     .body { grid-template-columns: 1fr; }
     .rail { display: none; }
-    .nav, .nav.collapsed { position: fixed; left: 0; top: 0; bottom: 0; width: 280px; z-index: 45; background: var(--bg); padding: 16px 12px 16px 0; transform: translateX(-100%); transition: transform .2s; box-shadow: var(--shadow-lg); }
-    .nav.open { transform: none; }
+    .nav, .nav.collapsed { width: 0; }
+    .nav .nav-panel { position: fixed; z-index: 45; width: 288px; padding: 0 12px 16px 0; border-radius: 0 16px 16px 0; transform: translateX(-100%); transition: transform .22s cubic-bezier(.4,0,.2,1); box-shadow: var(--shadow-lg); }
+    .nav.open .nav-panel { transform: none; }
     .nav .compose-btn { display: none; }
-    .nav .nav-item .lbl, .nav .nav-item .n, .nav .nav-head span, .nav .nav-head button { display: initial; }
-    .nav .nav-item { width: 100%; border-radius: 0 16px 16px 0; padding: 0 12px 0 26px; margin-left: 0; }
+    .drawer-head { display: flex; align-items: center; gap: 8px; height: 64px; padding-left: 24px; margin-bottom: 4px; }
+    .drawer-head svg { width: 30px; height: 24px; }
     .scrim { position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 44; }
     .main { margin: 0; border-radius: 16px 16px 0 0; }
     .tabs { display: none; }
@@ -607,6 +653,9 @@ const IC = {
   keyboard: S('<rect x="2.5" y="6" width="19" height="12" rx="2"/><path d="M6 10h.1M9.5 10h.1M13 10h.1M16.5 10h.1M7.5 14h9"/>'),
   moveTo: S('<path d="M4 6.5h6l2 2h8v10a1 1 0 01-1 1H5a1 1 0 01-1-1zM11 14h6M14.5 11.5L17 14l-2.5 2.5"/>'),
   task: S('<circle cx="12" cy="12" r="8.5"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/>'),
+  scheduled: S('<path d="M11 18.3L3.5 20.5V3.5l17 8.5-3.2 1.6"/><path d="M3.5 12H10"/><circle cx="17" cy="17.5" r="3.8"/><path d="M17 15.8v1.9l1.2.9"/>'),
+  allMail: S('<rect x="3" y="7.5" width="14.5" height="12" rx="1.5"/><path d="M3.5 8.5l6.75 5 6.75-5M6.5 4.5h13a1 1 0 011 1V16"/>'),
+  settings: S('<circle cx="12" cy="12" r="3"/><path d="M12 2.8l1.7 2.1 2.7-.5.9 2.6 2.6.9-.5 2.7 2.1 1.7-2.1 1.7.5 2.7-2.6.9-.9 2.6-2.7-.5L12 21.2l-1.7-2.1-2.7.5-.9-2.6-2.6-.9.5-2.7L2.8 12l2.1-1.7-.5-2.7 2.6-.9.9-2.6 2.7.5z"/>'),
 };
 
 // ---------- People & contacts ----------
@@ -660,7 +709,10 @@ const FT = { pdf: ["#d93025", "PDF"], xlsx: ["#188038", "XLS"], docx: ["#1a73e8"
 const fic = name => { const ext = name.split(".").pop(); const [c, t] = FT[ext] || ["#5f6368", "FILE"]; return `<span class="fic" style="background:${c}">${t}</span>`; };
 
 // ---------- Mail data ----------
-const LABELS = { Engineering: "#1a73e8", Design: "#a142f4", Hiring: "#188038", Receipts: "#5f6368", Travel: "#e37400" };
+let LABELS = { Engineering: "#1a73e8", "Engineering/Incidents": "#d93025", Design: "#a142f4", Hiring: "#188038", Receipts: "#5f6368", Travel: "#e37400" };
+const PALETTE = ["#1a73e8", "#a142f4", "#188038", "#e37400", "#d93025", "#e52592", "#12a4af", "#f9ab00", "#3949ab", "#795548", "#5f6368", "#9aa0a6"];
+const labelShort = l => l.split("/").pop();
+const labelIcon = c => `<svg viewBox="0 0 24 24"><path fill="${c}" fill-rule="evenodd" d="M3.5 5.5v6l9 9 7.5-7.5-9-9h-6.5a1 1 0 00-1 1zM7.5 7.2a1.3 1.3 0 100 2.6 1.3 1.3 0 000-2.6z"/></svg>`;
 let uid = 1;
 const mk = (o) => ({ id: uid++, folder: "inbox", tab: "primary", labels: [], unread: false, starred: false, important: false, ...o });
 const P = (...lines) => lines.map(l => `<p>${l}</p>`).join("");
@@ -685,6 +737,9 @@ const mails = [
   ] }),
   mk({ subject: "Latency report for deploy #1482", labels: ["Engineering"], msgs: [
     { from: "marcus", to: [ME, "dev", "sofia"], date: at(1, 18, 2), body: P("p95 latency dropped from ~70ms to ~28ms after the retry fix. Full breakdown by endpoint attached.", "Pool size change is still only in staging.") + sig("marcus"), atts: ["latency-1482.xlsx"] },
+  ] }),
+  mk({ subject: "Postmortem: SEV-2 checkout errors", labels: ["Engineering/Incidents"], unread: true, tab: "updates", msgs: [
+    { from: "dev", to: [ME, "marcus", "sofia"], date: at(2, 10, 30), body: P("Postmortem for Monday's SEV-2 is ready for review. Root cause was connection pool exhaustion under retry storms.", "Action items are assigned in the doc.") + sig("dev"), atts: ["Postmortem SEV-2.docx"] },
   ] }),
   mk({ subject: "Out sick today", msgs: [
     { from: "sofia", to: [ME], date: at(3, 8, 5), body: P("Hi Naman, I'm out sick today. On-call is covered by Dev. Back Monday.") + sig("sofia") },
@@ -751,15 +806,18 @@ const TABS = [
   { id: "updates", name: "Updates", icon: IC.info, color: "#b3261e" },
 ];
 const FOLDERS = [
-  { id: "inbox", name: "Inbox", icon: IC.inbox },
-  { id: "starred", name: "Starred", icon: IC.star },
+  { id: "inbox", name: "Inbox", icon: IC.inbox, iconOn: IC.inbox },
+  { id: "starred", name: "Starred", icon: IC.star, iconOn: IC.starF },
   { id: "snoozed", name: "Snoozed", icon: IC.snooze },
-  { id: "important", name: "Important", icon: IC.imp },
   { id: "sent", name: "Sent", icon: IC.send },
   { id: "drafts", name: "Drafts", icon: IC.draft },
-  { id: "spam", name: "Spam", icon: IC.spam },
-  { id: "trash", name: "Trash", icon: IC.trash },
+  { id: "important", name: "Important", icon: IC.imp, iconOn: IC.impF, more: true },
+  { id: "scheduled", name: "Scheduled", icon: IC.scheduled, more: true },
+  { id: "all", name: "All Mail", icon: IC.allMail, more: true },
+  { id: "spam", name: "Spam", icon: IC.spam, more: true },
+  { id: "trash", name: "Trash", icon: IC.trash, more: true },
 ];
+const HIDDEN = ["trash", "spam", "trash-hidden"];
 
 function visible() {
   let list = mails.filter(m => {
@@ -767,10 +825,11 @@ function visible() {
       const q = state.query.toLowerCase();
       const hay = (m.subject + " " + m.msgs.map(x => contacts[x.from].name + " " + contacts[x.from].email + " " + strip(x.body) + " " + (x.atts || []).join(" ")).join(" ")).toLowerCase();
       if (!hay.includes(q) || m.folder === "trash" || m.folder === "spam") return false;
-    } else if (state.label) { if (!m.labels.includes(state.label) || ["trash", "spam"].includes(m.folder)) return false; }
+    } else if (state.label) { if (!m.labels.some(l => l === state.label || l.startsWith(state.label + "/")) || HIDDEN.includes(m.folder)) return false; }
     else if (state.folder === "inbox") { if (m.folder !== "inbox" || m.tab !== state.tab) return false; }
     else if (state.folder === "starred") { if (!m.starred || ["trash", "spam"].includes(m.folder)) return false; }
     else if (state.folder === "important") { if (!m.important || ["trash", "spam"].includes(m.folder)) return false; }
+    else if (state.folder === "all") { if (HIDDEN.includes(m.folder)) return false; }
     else if (m.folder !== state.folder) return false;
     if (state.hasAtt && !m.msgs.some(x => x.atts)) return false;
     return true;
@@ -799,15 +858,134 @@ function renderRail() {
     `<button class="rail-btn ${state.view === id ? "active" : ""}" data-view="${id}"><span class="pill">${ic}${c ? `<span class="count">${c > 99 ? "99+" : c}</span>` : ""}</span>${l}</button>`).join("");
 }
 
+const narrowMQ = matchMedia("(max-width: 1100px)"), mobileMQ = matchMedia("(max-width: 760px)");
+try { state.moreOpen = localStorage.getItem("gmail.moreOpen") === "1"; } catch { state.moreOpen = false; }
+
 function renderNav() {
   const nav = $("#nav");
-  nav.classList.toggle("collapsed", state.navCollapsed);
-  const count = f => f === "inbox" ? unreadIn() : f === "drafts" ? mails.filter(m => m.folder === "drafts").length : f === "spam" ? mails.filter(m => m.folder === "spam" && m.unread).length : 0;
-  nav.innerHTML = `<button class="compose-btn" data-compose>${IC.pencil}<span>Compose</span></button>
-    ${FOLDERS.map(f => { const c = count(f.id), active = state.view === "mail" && !state.query && !state.label && state.folder === f.id;
-      return `<button class="nav-item ${active ? "active" : ""} ${c && f.id === "inbox" ? "bold" : ""}" data-folder="${f.id}" title="${f.name}">${f.icon}<span class="lbl">${f.name}</span>${c ? `<span class="n">${c}</span>` : ""}</button>`; }).join("")}
-    <div class="nav-head"><span>Labels</span><button class="icon-btn sm" data-tip="Create new label" data-snack="Create a label from Settings">${IC.plus}</button></div>
-    ${Object.entries(LABELS).map(([l, c]) => `<button class="nav-item ${state.label === l ? "active" : ""}" data-label="${l}" title="${l}"><span class="label-dot">${IC.label.replace("<svg", `<svg style="color:${c}"`)}</span><span class="lbl">${l}</span></button>`).join("")}`;
+  const collapsed = !mobileMQ.matches && (state.navCollapsed || narrowMQ.matches);
+  nav.classList.toggle("collapsed", collapsed);
+  nav.classList.toggle("peek", collapsed && !!state.navOverlay);
+  const inView = id => state.view === "mail" && !state.query && !state.label && state.folder === id;
+  const count = f => ({
+    inbox: unreadIn(),
+    drafts: mails.filter(m => m.folder === "drafts").length,
+    spam: mails.filter(m => m.folder === "spam" && m.unread).length,
+    scheduled: mails.filter(m => m.folder === "scheduled").length,
+  })[f] || 0;
+  const moreOpen = state.moreOpen || FOLDERS.some(f => f.more && inView(f.id));
+  const item = f => {
+    const c = count(f.id), active = inView(f.id);
+    return `<button class="nav-item ${active ? "active" : ""} ${c && ["inbox", "spam"].includes(f.id) ? "bold" : ""}" data-folder="${f.id}" aria-label="${f.name}${c ? `, ${c}` : ""}">
+      <span class="ico">${active && f.iconOn ? f.iconOn : f.icon}${f.id === "inbox" && c ? `<i class="badge">${c}</i>` : ""}</span><span class="lbl">${f.name}</span>${c ? `<span class="n">${c}</span>` : ""}</button>`;
+  };
+  const labelUnread = l => mails.filter(m => m.unread && !HIDDEN.includes(m.folder) && m.labels.some(x => x === l || x.startsWith(l + "/"))).length;
+  const labelRow = l => {
+    const depth = l.split("/").length - 1, n = labelUnread(l), active = state.view === "mail" && state.label === l;
+    return `<div class="nav-item ${active ? "active" : ""} ${n ? "bold" : ""}" role="button" tabindex="0" data-label="${esc(l)}" style="--depth:${depth}" aria-label="${esc(labelShort(l))}${n ? `, ${n} unread` : ""}">
+      <span class="ico">${labelIcon(LABELS[l])}</span><span class="lbl">${esc(labelShort(l))}</span>${n ? `<span class="n hide-on-hover">${n}</span>` : ""}
+      <button class="kebab" data-labelmenu="${esc(l)}" aria-label="Options for ${esc(labelShort(l))}">${IC.more}</button></div>`;
+  };
+  nav.innerHTML = `<div class="nav-panel">
+    <div class="drawer-head">${LOGOS.gmail}<span style="font-family:'Google Sans',Roboto,sans-serif;font-size:22px;color:var(--text-2)">Gmail</span></div>
+    <button class="compose-btn" data-compose>${IC.pencil}<span>Compose</span></button>
+    ${FOLDERS.filter(f => !f.more).map(item).join("")}
+    <button class="nav-item more" data-navmore aria-expanded="${moreOpen}"><span class="ico">${moreOpen ? IC.chevU : IC.chevD}</span><span class="lbl">${moreOpen ? "Less" : "More"}</span></button>
+    ${moreOpen ? `<div class="nav-sub">${FOLDERS.filter(f => f.more).map(item).join("")}
+      <button class="nav-item" data-snack="Manage labels in Settings > Labels"><span class="ico">${IC.settings}</span><span class="lbl">Manage labels</span></button>
+      <button class="nav-item" data-newlabel><span class="ico">${IC.plus}</span><span class="lbl">Create new label</span></button></div>` : ""}
+    <div class="nav-sep"></div>
+    <div class="nav-head"><span>Labels</span><button class="icon-btn sm" data-newlabel data-tip="Create new label" aria-label="Create new label">${IC.plus}</button></div>
+    ${Object.keys(LABELS).sort((a, b) => a.localeCompare(b)).map(labelRow).join("")}
+  </div>`;
+}
+
+// Hovering a collapsed sidebar peeks it open over the content, like Gmail
+(() => {
+  const nav = $("#nav"); let t;
+  nav.addEventListener("mouseenter", () => { if (!nav.classList.contains("collapsed")) return; clearTimeout(t); t = setTimeout(() => nav.classList.add("peek"), 180); });
+  nav.addEventListener("mouseleave", () => { clearTimeout(t); if (!state.navOverlay && !$("#pop .label-menu")) nav.classList.remove("peek"); });
+  narrowMQ.addEventListener("change", () => { state.navOverlay = false; renderNav(); });
+  mobileMQ.addEventListener("change", () => { closeDrawer(); renderNav(); });
+})();
+
+// ---------- Labels ----------
+function openLabelMenu(btn, name) {
+  document.querySelectorAll(".kebab.open").forEach(k => k.classList.remove("open"));
+  btn.classList.add("open");
+  popover(btn, `<div class="label-menu"><div class="menu-cap">Label color</div>
+    <div class="swatches">${PALETTE.map(c => `<button class="${LABELS[name] === c ? "on" : ""}" style="background:${c}" data-labelcolor="${esc(name)}|${c}" aria-label="Set color ${c}"></button>`).join("")}</div><hr>
+    <button class="opt" data-labeledit="${esc(name)}">${IC.pencil}Edit</button>
+    <button class="opt" data-labelsub="${esc(name)}">${IC.plus}Add sublabel</button>
+    <button class="opt" data-labelremove="${esc(name)}">${IC.trash}Remove label</button></div>`);
+  const p = $("#pop"), r = btn.getBoundingClientRect();
+  p.style.left = Math.min(r.left, innerWidth - p.offsetWidth - 8) + "px";
+  p.style.top = Math.min(r.bottom + 4, innerHeight - p.offsetHeight - 8) + "px";
+}
+
+function dialog({ title, body, ok, onOk, validate }) {
+  const scrim = document.createElement("div");
+  scrim.className = "dialog-scrim";
+  scrim.innerHTML = `<div class="dialog" role="dialog" aria-modal="true" aria-label="${esc(title)}"><h2>${esc(title)}</h2>${body}<div class="err" id="dlgErr"></div>
+    <div class="acts"><button class="text-btn" data-dlg="cancel">Cancel</button><button class="text-btn" data-dlg="ok">${ok}</button></div></div>`;
+  document.body.appendChild(scrim);
+  const close = () => scrim.remove();
+  const okBtn = scrim.querySelector('[data-dlg="ok"]'), input = scrim.querySelector("input[type=text]");
+  const check = () => { const e = validate ? validate(scrim) : ""; scrim.querySelector("#dlgErr").textContent = e && input && input.value.trim() ? e : ""; okBtn.disabled = !!e; return !e; };
+  scrim.addEventListener("input", check); scrim.addEventListener("change", check);
+  scrim.addEventListener("click", e => {
+    if (e.target === scrim || e.target.closest('[data-dlg="cancel"]')) close();
+    else if (e.target.closest('[data-dlg="ok"]') && check()) { onOk(scrim); close(); }
+  });
+  scrim.addEventListener("keydown", e => { if (e.key === "Escape") { e.stopPropagation(); close(); } if (e.key === "Enter" && check()) { e.preventDefault(); onOk(scrim); close(); } });
+  check();
+  (input || okBtn).focus();
+  if (input) input.select();
+}
+
+function labelNameDialog({ title, ok, initial = "", parent = "", editing = null }) {
+  const opts = Object.keys(LABELS).filter(l => l !== editing && !(editing && l.startsWith(editing + "/"))).sort();
+  dialog({
+    title, ok,
+    body: `<label class="f" for="lblName">Please enter a new label name:</label><input type="text" id="lblName" value="${esc(initial)}" autocomplete="off" maxlength="40">
+      <label class="check"><input type="checkbox" id="lblNest" ${parent ? "checked" : ""}> Nest label under:</label>
+      <select id="lblParent" style="margin:8px 0 0 30px;height:36px;border:1px solid var(--chip-line);border-radius:4px;background:var(--surface);padding:0 8px;min-width:200px" ${parent ? "" : "disabled"}>${opts.map(l => `<option ${l === parent ? "selected" : ""}>${esc(l)}</option>`).join("")}</select>`,
+    validate: d => {
+      d.querySelector("#lblParent").disabled = !d.querySelector("#lblNest").checked;
+      const v = d.querySelector("#lblName").value.trim();
+      if (!v) return "empty";
+      if (v.includes("/")) return "Label names can't contain \"/\".";
+      const full = (d.querySelector("#lblNest").checked ? d.querySelector("#lblParent").value + "/" : "") + v;
+      if (full !== editing && LABELS[full]) return `The label "${v}" already exists.`;
+      return "";
+    },
+    onOk: d => {
+      const v = d.querySelector("#lblName").value.trim();
+      const full = (d.querySelector("#lblNest").checked ? d.querySelector("#lblParent").value + "/" : "") + v;
+      if (editing) renameLabel(editing, full); else { LABELS[full] = PALETTE[Object.keys(LABELS).length % PALETTE.length]; snack(`Label "${v}" was created.`); }
+      renderNav();
+    },
+  });
+}
+
+function renameLabel(from, to) {
+  if (from === to) return;
+  const map = l => l === from ? to : l.startsWith(from + "/") ? to + l.slice(from.length) : l;
+  LABELS = Object.fromEntries(Object.entries(LABELS).map(([k, v]) => [map(k), v]));
+  mails.forEach(m => (m.labels = m.labels.map(map)));
+  if (state.label) state.label = map(state.label);
+  snack(`Label renamed to "${labelShort(to)}".`);
+  renderAll();
+}
+
+function removeLabel(name) {
+  const doomed = Object.keys(LABELS).filter(l => l === name || l.startsWith(name + "/"));
+  const saved = { labels: { ...LABELS }, mails: mails.map(m => [m, [...m.labels]]), current: state.label };
+  doomed.forEach(l => delete LABELS[l]);
+  mails.forEach(m => (m.labels = m.labels.filter(l => !doomed.includes(l))));
+  if (doomed.includes(state.label)) state.label = null;
+  renderAll();
+  snack(`Label "${labelShort(name)}" was removed.`, [{ label: "Undo", fn: () => { LABELS = saved.labels; saved.mails.forEach(([m, l]) => (m.labels = l)); state.label = saved.current; renderAll(); } }]);
 }
 
 function renderSide() {
@@ -882,7 +1060,7 @@ function rowHTML(m) {
     <button class="ic star ${m.starred ? "on" : ""}" data-star="${m.id}" aria-label="${m.starred ? "Starred" : "Not starred"}">${m.starred ? IC.starF : IC.star}</button>
     <button class="ic imp ${m.important ? "on" : ""}" data-imp="${m.id}" aria-label="Important">${m.important ? IC.impF : IC.imp}</button>
     <span class="from">${senders(m)}</span>
-    <span class="mid"><span class="line">${m.labels.map(l => `<span class="lchip" style="background:${LABELS[l]}">${l}</span>`).join("")}<span class="subj">${esc(m.subject)}</span><span class="snip"><span class="sep-dash">- </span>${esc(strip(last.body)).slice(0, 180)}</span></span>
+    <span class="mid"><span class="line">${m.labels.filter(l => LABELS[l]).map(l => `<span class="lchip" style="background:${LABELS[l]}">${esc(labelShort(l))}</span>`).join("")}<span class="subj">${esc(m.subject)}</span><span class="snip"><span class="sep-dash">- </span>${esc(strip(last.body)).slice(0, 180)}</span></span>
       ${atts.length || m.invite ? `<span class="att">${m.invite ? `<span class="attchip">${LOGOS.calendar.replace("<svg", '<svg style="width:16px;height:16px"')}<span>Invitation</span></span>` : ""}${atts.map(a => `<button class="attchip" data-att="${esc(a)}">${fic(a)}<span>${esc(a)}</span></button>`).join("")}</span>` : ""}</span>
     <span class="date">${listDate(lastDate(m))}</span>
     <span class="hov"><button class="icon-btn" data-act="archive:${m.id}" data-tip="Archive">${IC.archive}</button><button class="icon-btn" data-act="delete:${m.id}" data-tip="Delete">${IC.trash}</button>
@@ -906,7 +1084,7 @@ function threadHTML(m, inPane = false) {
       <button class="icon-btn" data-act="markUnread:${m.id}" data-tip="Mark as unread">${IC.unread}</button><button class="icon-btn hide-m" data-act="snooze:${m.id}" data-tip="Snooze">${IC.snooze}</button><button class="icon-btn hide-m" data-act="task:${m.id}" data-tip="Add to Tasks">${IC.task}</button><span class="sep"></span>
       <button class="icon-btn hide-m" data-snack="Move to…" data-tip="Move to">${IC.moveTo}</button><button class="icon-btn hide-m" data-snack="Labels" data-tip="Labels">${IC.label}</button><button class="icon-btn" data-snack="More" data-tip="More">${IC.more}</button>
       <span class="grow"></span>${idx >= 0 && !inPane ? `<span class="range">${idx + 1} of ${list.length}</span><button class="icon-btn sm" data-nav="${idx - 1}" ${idx === 0 ? 'disabled style="opacity:.4"' : ""} data-tip="Newer">${IC.chevL}</button><button class="icon-btn sm" data-nav="${idx + 1}" ${idx === list.length - 1 ? 'disabled style="opacity:.4"' : ""} data-tip="Older">${IC.chevR}</button>` : ""}</div>`;
-  const tags = [m.folder === "inbox" ? "Inbox" : null, ...m.labels].filter(Boolean).map(l => `<span class="tag ${LABELS[l] ? "colored" : ""}" style="${LABELS[l] ? `background:${LABELS[l]}` : ""}">${l}<button data-untag="${m.id}:${l}" aria-label="Remove label">${IC.close}</button></span>`).join("");
+  const tags = [m.folder === "inbox" ? "Inbox" : null, ...m.labels].filter(Boolean).map(l => `<span class="tag ${LABELS[l] ? "colored" : ""}" style="${LABELS[l] ? `background:${LABELS[l]}` : ""}">${esc(labelShort(l))}<button data-untag="${m.id}:${l}" aria-label="Remove label">${IC.close}</button></span>`).join("");
   const msgHTML = (x, i) => {
     const expanded = i === lastIdx || state.expanded.has(`${m.id}:${i}`);
     const c = contacts[x.from];
@@ -1118,7 +1296,12 @@ function popover(anchor, html, cls = "") {
   p.style.top = r.bottom + 6 + "px";
   p.style.left = Math.max(8, Math.min(r.right - p.offsetWidth, innerWidth - p.offsetWidth - 8)) + "px";
 }
-const closePop = () => ($("#popHost").innerHTML = "");
+function closePop() {
+  $("#popHost").innerHTML = "";
+  document.querySelectorAll(".kebab.open").forEach(k => k.classList.remove("open"));
+  const nav = $("#nav");
+  if (!nav.matches(":hover") && !state.navOverlay) nav.classList.remove("peek");
+}
 
 function renderQS() {
   const host = $("#qsHost");
@@ -1136,9 +1319,10 @@ function renderQS() {
 
 // ---------- Events ----------
 document.addEventListener("click", e => {
-  const t = e.target.closest("button, a, [data-open], [data-expand], .c-head");
+  const t = e.target.closest("button, a, [data-open], [data-expand], [data-label], .c-head");
   const snackEl = $("#snack");
-  if ($("#pop") && !e.target.closest("#pop") && !e.target.closest("#appsBtn, #meBtn, [data-selectall]")) closePop();
+  if ($("#pop") && !e.target.closest("#pop") && !e.target.closest("#appsBtn, #meBtn, [data-selectall], [data-labelmenu]")) closePop();
+  if (state.navOverlay && !e.target.closest("#nav, #menuBtn")) { state.navOverlay = false; renderNav(); }
   if (!t) return;
   const d = t.dataset;
   if (t.tagName === "A" && t.getAttribute("href") === "#") e.preventDefault();
@@ -1147,8 +1331,19 @@ document.addEventListener("click", e => {
   if (t === snackEl.querySelector(".x")) { snackEl.classList.remove("show"); return; }
   if (d.view) { state.view = d.view; state.open = null; renderAll(); return; }
   if ("compose" in d) { openCompose(); return; }
-  if (d.folder) { Object.assign(state, { view: "mail", folder: d.folder, label: null, query: "", open: null, hasAtt: false }); state.selected.clear(); $("#search").value = ""; $("#searchClear").hidden = true; closeDrawer(); renderAll(); return; }
-  if (d.label) { Object.assign(state, { view: "mail", label: d.label, query: "", open: null }); state.selected.clear(); closeDrawer(); renderAll(); return; }
+  if (d.folder) { Object.assign(state, { view: "mail", folder: d.folder, label: null, query: "", open: null, hasAtt: false, navOverlay: false }); state.selected.clear(); $("#search").value = ""; $("#searchClear").hidden = true; closeDrawer(); renderAll(); return; }
+  if (d.labelmenu) { e.stopPropagation(); openLabelMenu(t, d.labelmenu); return; }
+  if (d.labelcolor) { const [l, c] = d.labelcolor.split("|"); LABELS[l] = c; closePop(); renderAll(); return; }
+  if (d.labeledit) { const l = d.labeledit, i = l.lastIndexOf("/"); closePop(); labelNameDialog({ title: "Edit label", ok: "Save", initial: labelShort(l), parent: i > 0 ? l.slice(0, i) : "", editing: l }); return; }
+  if (d.labelsub) { const l = d.labelsub; closePop(); labelNameDialog({ title: "New label", ok: "Create", parent: l }); return; }
+  if (d.labelremove) {
+    const l = d.labelremove; closePop();
+    dialog({ title: "Remove label", ok: "Delete", body: `<p style="color:var(--text-2)">Delete the label "${esc(labelShort(l))}"${Object.keys(LABELS).some(x => x.startsWith(l + "/")) ? " and its sublabels" : ""}? Conversations with this label won't be deleted.</p>`, onOk: () => removeLabel(l) });
+    return;
+  }
+  if ("newlabel" in d) { labelNameDialog({ title: "New label", ok: "Create" }); return; }
+  if ("navmore" in d) { state.moreOpen = !state.moreOpen; try { localStorage.setItem("gmail.moreOpen", state.moreOpen ? "1" : "0"); } catch {} renderNav(); return; }
+  if (d.label) { Object.assign(state, { view: "mail", label: d.label, query: "", open: null, navOverlay: false }); state.selected.clear(); closeDrawer(); renderAll(); return; }
   if (d.tab) { state.tab = d.tab; state.selected.clear(); renderMain(); return; }
   if (d.star) { e.stopPropagation(); const m = mails.find(x => x.id === +d.star); m.starred = !m.starred; renderMain(); return; }
   if (d.imp) { e.stopPropagation(); const m = mails.find(x => x.id === +d.imp); m.important = !m.important; snack(m.important ? "Marked as important." : "Marked as not important."); renderMain(); return; }
@@ -1206,7 +1401,8 @@ $("#snack").addEventListener("click", e => { const b = e.target.closest(".x"); i
 function closeDrawer() { $("#nav").classList.remove("open"); $("#scrim").hidden = true; }
 $("#menuBtn").onclick = () => {
   if (innerWidth <= 760) { $("#nav").classList.add("open"); $("#scrim").hidden = false; }
-  else { state.navCollapsed = !state.navCollapsed; renderNav(); }
+  else if (narrowMQ.matches) { state.navOverlay = !state.navOverlay; renderNav(); }
+  else { state.navCollapsed = !state.navCollapsed; state.navOverlay = false; renderNav(); }
 };
 $("#scrim").onclick = closeDrawer;
 $("#fab").onclick = () => openCompose();
@@ -1222,7 +1418,8 @@ $("#searchGo").onclick = e => { e.preventDefault(); doSearch(); };
 $("#searchClear").onclick = e => { e.preventDefault(); $("#search").value = ""; state.query = ""; state.hasAtt = false; $("#searchClear").hidden = true; renderAll(); };
 
 document.addEventListener("keydown", e => {
-  const typing = e.target.closest("input, textarea");
+  if ((e.key === "Enter" || e.key === " ") && e.target.matches('[role="button"]')) { e.preventDefault(); e.target.click(); return; }
+  const typing = e.target.closest("input, textarea, select");
   if (e.key === "Escape") {
     if ($("#pop")) closePop();
     else if (state.qs) { state.qs = false; renderQS(); }
