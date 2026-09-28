@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -10,6 +10,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
   :root {
+    color-scheme: light;
     --rail: #2c0b2d;
     --side: #3f0e40;
     --side-hover: #350d36;
@@ -36,6 +37,7 @@
   }
   /* Light is the default; dark only applies when toggled from the top bar */
   :root[data-theme="dark"] {
+    color-scheme: dark;
     --rail: #120812; --side: #19171d; --side-hover: #27242c; --side-text: #d1d2d3; --side-muted: #9a9b9e;
     --top: #121016; --bg: #1a1d21; --text: #d1d2d3; --muted: #9a9b9e; --line: #35373b; --hover: #222529;
     --link: #1d9bd1; --mention-bg: #3d3524; --mention-text: #1d9bd1; --react-bg: #2b2e33; --react-mine: #1c3a4a;
@@ -57,7 +59,7 @@
   /* ---------- App frame ---------- */
   .app { display: grid; grid-template-rows: 40px 1fr; height: 100vh; }
   .topbar {
-    display: grid; grid-template-columns: 1fr minmax(240px, 720px) 1fr; align-items: center;
+    display: grid; grid-template-columns: minmax(max-content, 1fr) minmax(200px, 720px) 1fr; align-items: center;
     padding: 0 12px; background: var(--top); color: #fff; gap: 12px;
   }
   .tb-left { display: flex; align-items: center; gap: 8px; min-width: 0; }
