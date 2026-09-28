@@ -1,0 +1,22 @@
+{
+  "name": "casuro-mockups",
+  "private": true,
+  "type": "module",
+  "description": "App mockups as single HTML files, and the React version of each for Casuro's episode builder",
+  "scripts": {
+    "dev": "vite",
+    "check": "tsc --noEmit -p tsconfig.json",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.7",
+    "@vitejs/plugin-react": "^6.1.1",
+    "typescript": "^5.9.0",
+    "vite": "^8.2.2"
+  }
+}
