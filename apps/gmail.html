@@ -68,7 +68,7 @@
   /* ---------- Frame ---------- */
   .app { display: grid; grid-template-rows: 64px 1fr; height: 100vh; }
   header.top { display: flex; align-items: center; gap: 4px; padding: 8px 8px 8px 16px; }
-  .brand { display: flex; align-items: center; gap: 4px; width: 214px; flex: none; }
+  .brand { display: flex; align-items: center; gap: 4px; width: 236px; flex: none; }
   .brand .logo { display: flex; align-items: center; gap: 8px; padding-left: 8px; }
   .brand .logo svg { width: 32px; height: 26px; }
   .brand .word { font-family: "Google Sans", "Product Sans", Roboto, sans-serif; font-size: 22px; color: var(--text-2); letter-spacing: -.2px; }
@@ -81,16 +81,7 @@
   .me:hover { background: var(--hover); }
   .me img { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; }
 
-  .body { display: grid; grid-template-columns: 68px auto 1fr auto 56px; min-height: 0; }
-
-  /* Left rail (Mail / Chat / Meet) */
-  .rail { display: flex; flex-direction: column; align-items: center; gap: 4px; padding-top: 4px; }
-  .rail-btn { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 12px; line-height: 16px; font-weight: 500; color: var(--text-2); width: 64px; }
-  .rail-btn .pill { width: 56px; height: 32px; border-radius: 16px; display: grid; place-items: center; position: relative; }
-  .rail-btn:hover .pill { background: var(--hover); }
-  .rail-btn.active .pill { background: var(--nav-active); color: var(--nav-active-text); }
-  .rail-btn .pill svg { width: 22px; height: 22px; }
-  .rail-btn .count { position: absolute; top: -2px; left: 32px; background: #b3261e; color: #fff; border-radius: 8px; min-width: 16px; height: 16px; padding: 0 4px; font-size: 11px; line-height: 16px; font-weight: 500; }
+  .body { display: grid; grid-template-columns: auto 1fr auto 56px; min-height: 0; }
 
   /* Nav sidebar: a fixed-width slot holding a panel that can peek open over the content when collapsed */
   .nav { position: relative; width: 256px; transition: width .2s cubic-bezier(.4,0,.2,1); z-index: 25; }
@@ -185,9 +176,9 @@
   .tab:hover { background: var(--hover); }
   .tab svg { width: 20px; height: 20px; }
   .tab .t { overflow: hidden; }
-  .tab .t b { display: block; font-weight: 500; }
+  .tab .t b { display: flex; align-items: center; gap: 6px; font-weight: 500; white-space: nowrap; }
   .tab .t small { display: block; font-size: 12px; line-height: 14px; font-weight: 400; color: var(--text-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .tab .badge { font-size: 11px; font-weight: 500; color: #fff; border-radius: 8px; padding: 0 6px; line-height: 16px; }
+  .tab .badge { font-size: 11px; font-weight: 500; color: #fff; border-radius: 8px; padding: 0 6px; line-height: 16px; white-space: nowrap; flex: none; }
   .tab.active { color: var(--tabc); }
   .tab.active::after { content: ""; position: absolute; left: 8px; right: 8px; bottom: 0; height: 3px; border-radius: 3px 3px 0 0; background: var(--tabc); }
 
@@ -364,9 +355,10 @@
   .compose.min .c-field, .compose.min textarea, .compose.min .send-bar { display: none; }
 
   /* Side panel */
-  .side { grid-column: 5; grid-row: 1; display: flex; flex-direction: column; align-items: center; gap: 12px; padding-top: 12px; }
-  .sidepanel { grid-column: 4; grid-row: 1; }
-  .main { grid-column: 3; grid-row: 1; }
+  .side { grid-column: 4; grid-row: 1; display: flex; flex-direction: column; align-items: center; gap: 12px; padding-top: 12px; }
+  .sidepanel { grid-column: 3; grid-row: 1; }
+  .main { grid-column: 2; grid-row: 1; }
+  .nav { grid-column: 1; grid-row: 1; }
   .side-app { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; position: relative; }
   .side-app:hover { background: var(--hover); }
   .side-app.active { background: var(--nav-active); }
@@ -440,44 +432,15 @@
   /* Avatars */
   .av { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; display: grid; place-items: center; color: #fff; font-weight: 500; font-size: 14px; flex: none; background: var(--line); }
 
-  /* Chat & Meet */
-  .chat-wrap { display: grid; grid-template-columns: 320px 1fr; flex: 1; min-height: 0; }
-  .chat-list { border-right: 1px solid var(--line); overflow-y: auto; padding: 8px; }
-  .chat-item { width: 100%; display: flex; align-items: center; gap: 12px; padding: 8px 12px; border-radius: 24px; text-align: left; }
-  .chat-item:hover { background: var(--hover); }
-  .chat-item.active { background: var(--nav-active); color: var(--nav-active-text); }
-  .chat-item .b { flex: 1; min-width: 0; }
-  .chat-item small { display: block; color: var(--text-3); font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .chat-item.unread b { font-weight: 700; }
-  .chat-conv { display: flex; flex-direction: column; min-height: 0; }
-  .chat-conv .scroll { padding: 16px 24px; }
-  .cm { display: flex; gap: 10px; margin-top: 14px; }
-  .cm .av { width: 32px; height: 32px; }
-  .cm .h { font-size: 12px; color: var(--text-3); }
-  .cm .h b { color: var(--text); font-weight: 500; margin-right: 6px; font-size: 14px; }
-  .cm.mine { flex-direction: row-reverse; }
-  .cm.mine .bub { background: var(--nav-active); color: var(--nav-active-text); }
-  .cm .bub { background: var(--read-row); border-radius: 16px; padding: 8px 14px; display: inline-block; margin-top: 2px; }
-  .cm.mine > div { text-align: right; }
-  .chat-in { margin: 8px 24px 20px; display: flex; align-items: center; gap: 4px; background: var(--search); border-radius: 24px; padding: 4px 4px 4px 18px; }
-  .chat-in input { flex: 1; border: 0; outline: 0; background: none; height: 40px; }
-  .meet-hero { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; padding: 48px 56px; flex: 1; overflow-y: auto; }
-  .meet-hero h2 { font-family: "Google Sans", Roboto, sans-serif; font-size: 36px; line-height: 44px; font-weight: 400; margin-bottom: 12px; }
-  .meet-hero p { color: var(--text-2); font-size: 18px; line-height: 26px; margin-bottom: 28px; }
-  .meet-actions { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
-  .btn-filled { height: 48px; padding: 0 24px 0 16px; border-radius: 24px; background: var(--primary); color: #fff; font-weight: 500; display: inline-flex; align-items: center; gap: 8px; }
-  :root[data-theme="dark"] .btn-filled { color: #062e6f; }
-  .btn-filled:hover { background: var(--primary-hover); }
-  .code-in { height: 48px; border: 1px solid var(--chip-line); border-radius: 8px; padding: 0 14px; background: var(--surface); outline: 0; width: 220px; }
-  .code-in:focus { border: 2px solid var(--primary); padding: 0 13px; }
-  .meet-art { aspect-ratio: 1; max-width: 360px; justify-self: center; width: 100%; border-radius: 50%; background: var(--search); display: grid; place-items: center; position: relative; }
-  .meet-art .ph { position: absolute; width: 38%; aspect-ratio: 1; border-radius: 16px; overflow: hidden; box-shadow: var(--shadow-lg); }
-  .meet-art .ph img { width: 100%; height: 100%; object-fit: cover; }
-
   /* Mobile */
   .fab { display: none; }
   @media (max-width: 1100px) {
-    .body { grid-template-columns: 68px auto 1fr 0 0; }
+    .body { grid-template-columns: auto 1fr 0 0; }
+    .tab { gap: 10px; padding: 0 12px; }
+    .tab .t small, .tab .badge .nw { display: none; }
+    .row { grid-template-columns: 20px 20px 20px 128px 1fr auto; }
+    .row .att { flex-wrap: nowrap; overflow: hidden; }
+    .attchip { flex: none; max-width: 180px; }
     .side, .sidepanel { display: none; }
     .main { margin-right: 16px; }
     .compose { right: 16px; }
@@ -489,8 +452,7 @@
     .brand { width: auto; }
     .brand .logo, .top .hide-m { display: none; }
     .searchbox { height: 44px; }
-    .body { grid-template-columns: 1fr; }
-    .rail { display: none; }
+    .body { grid-template-columns: 0 1fr 0 0; }
     .nav, .nav.collapsed { width: 0; }
     .nav .nav-panel { position: fixed; z-index: 45; width: 288px; padding: 0 12px 16px 0; border-radius: 0 16px 16px 0; transform: translateX(-100%); transition: transform .22s cubic-bezier(.4,0,.2,1); box-shadow: var(--shadow-lg); }
     .nav.open .nav-panel { transform: none; }
@@ -524,10 +486,6 @@
     .compose, .compose.full { left: 0; right: 0; top: 0; bottom: 0; width: auto; height: auto; transform: none; border-radius: 0; }
     .compose.min { top: auto; height: 40px; }
     .qs { width: 100%; border-radius: 0; }
-    .chat-wrap { grid-template-columns: 1fr; }
-    .chat-wrap .chat-conv { display: none; }
-    .meet-hero { grid-template-columns: 1fr; padding: 24px; }
-    .meet-art { max-width: 240px; }
     .snackbar { left: 12px; right: 12px; bottom: 84px; }
   }
 </style>
@@ -553,7 +511,6 @@
   </header>
 
   <div class="body" id="body">
-    <nav class="rail" id="rail"></nav>
     <nav class="nav" id="nav"></nav>
     <main class="main" id="main"></main>
     <aside class="sidepanel" id="sidepanel" hidden></aside>
@@ -638,8 +595,6 @@ const IC = {
   lock: S('<rect x="5" y="11" width="14" height="9.5" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/>'),
   sign: S('<path d="M4 17c3-6 5-11 7-11s-1 9 1 9 2-4 4-4 1 3 3 3M4 20.5h16"/>'),
   mail: S('<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.5 6.5L12 12.5l8.5-6"/>'),
-  chat: S('<path d="M4 4.5h16v11.5H8l-4 4z"/>'),
-  meet: S('<rect x="3" y="6" width="12" height="12" rx="2"/><path d="M15 10.5l6-3.5v10l-6-3.5"/>'),
   tag: S('<path d="M3.5 5.5v6l9 9 7.5-7.5-9-9h-6.5a1 1 0 00-1 1z"/><circle cx="7.5" cy="8.5" r="1.1"/>'),
   people: S('<circle cx="9" cy="8.5" r="3.2"/><path d="M3 19.5c0-3.2 2.7-5.2 6-5.2s6 2 6 5.2M15.5 5.5a3 3 0 010 6M17.5 14.5c2 .6 3.5 2.2 3.5 5"/>'),
   info: S('<circle cx="12" cy="12" r="8.5"/><path d="M12 11v5.5M12 7.8v.1"/>'),
@@ -649,7 +604,6 @@ const IC = {
   check: S('<path d="M5 12.5l4.5 4.5L19 7.5"/>'),
   download: S('<path d="M12 4v11M7.5 10.5L12 15l4.5-4.5M5 20h14"/>'),
   drive: S('<path d="M8.5 4h7l6 10.5-3.5 6H6l-3.5-6z"/>'),
-  video: S('<rect x="3" y="6" width="12" height="12" rx="2"/><path d="M15 10.5l6-3.5v10l-6-3.5"/>'),
   keyboard: S('<rect x="2.5" y="6" width="19" height="12" rx="2"/><path d="M6 10h.1M9.5 10h.1M13 10h.1M16.5 10h.1M7.5 14h9"/>'),
   moveTo: S('<path d="M4 6.5h6l2 2h8v10a1 1 0 01-1 1H5a1 1 0 01-1-1zM11 14h6M14.5 11.5L17 14l-2.5 2.5"/>'),
   task: S('<circle cx="12" cy="12" r="8.5"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/>'),
@@ -797,7 +751,7 @@ const lastDate = m => m.msgs.at(-1).date;
 const state = {
   folder: "inbox", tab: "primary", label: null, query: "", hasAtt: false,
   open: null, selected: new Set(), navCollapsed: false, density: "default", pane: "none",
-  view: "mail", side: null, expanded: new Set(), replying: null, chatWith: "hana",
+  side: null, expanded: new Set(), replying: null,
 };
 const TABS = [
   { id: "primary", name: "Primary", icon: IC.inbox, color: "#0b57d0" },
@@ -851,22 +805,14 @@ function renderHeader() {
   $("#fab").innerHTML = IC.pencil + "Compose";
 }
 
-function renderRail() {
-  const n = unreadIn();
-  const chatUnread = chats.filter(c => c.unread).length;
-  $("#rail").innerHTML = [["mail", "Mail", IC.mail, n], ["chat", "Chat", IC.chat, chatUnread], ["meet", "Meet", IC.meet, 0]].map(([id, l, ic, c]) =>
-    `<button class="rail-btn ${state.view === id ? "active" : ""}" data-view="${id}"><span class="pill">${ic}${c ? `<span class="count">${c > 99 ? "99+" : c}</span>` : ""}</span>${l}</button>`).join("");
-}
-
-const narrowMQ = matchMedia("(max-width: 1100px)"), mobileMQ = matchMedia("(max-width: 760px)");
+const mobileMQ = matchMedia("(max-width: 760px)");
 try { state.moreOpen = localStorage.getItem("gmail.moreOpen") === "1"; } catch { state.moreOpen = false; }
 
 function renderNav() {
   const nav = $("#nav");
-  const collapsed = !mobileMQ.matches && (state.navCollapsed || narrowMQ.matches);
-  nav.classList.toggle("collapsed", collapsed);
-  nav.classList.toggle("peek", collapsed && !!state.navOverlay);
-  const inView = id => state.view === "mail" && !state.query && !state.label && state.folder === id;
+  // Expanded by default at every desktop and tablet width; the menu button can still collapse it
+  nav.classList.toggle("collapsed", !mobileMQ.matches && state.navCollapsed);
+  const inView = id => !state.query && !state.label && state.folder === id;
   const count = f => ({
     inbox: unreadIn(),
     drafts: mails.filter(m => m.folder === "drafts").length,
@@ -881,7 +827,7 @@ function renderNav() {
   };
   const labelUnread = l => mails.filter(m => m.unread && !HIDDEN.includes(m.folder) && m.labels.some(x => x === l || x.startsWith(l + "/"))).length;
   const labelRow = l => {
-    const depth = l.split("/").length - 1, n = labelUnread(l), active = state.view === "mail" && state.label === l;
+    const depth = l.split("/").length - 1, n = labelUnread(l), active = state.label === l;
     return `<div class="nav-item ${active ? "active" : ""} ${n ? "bold" : ""}" role="button" tabindex="0" data-label="${esc(l)}" style="--depth:${depth}" aria-label="${esc(labelShort(l))}${n ? `, ${n} unread` : ""}">
       <span class="ico">${labelIcon(LABELS[l])}</span><span class="lbl">${esc(labelShort(l))}</span>${n ? `<span class="n hide-on-hover">${n}</span>` : ""}
       <button class="kebab" data-labelmenu="${esc(l)}" aria-label="Options for ${esc(labelShort(l))}">${IC.more}</button></div>`;
@@ -904,8 +850,7 @@ function renderNav() {
 (() => {
   const nav = $("#nav"); let t;
   nav.addEventListener("mouseenter", () => { if (!nav.classList.contains("collapsed")) return; clearTimeout(t); t = setTimeout(() => nav.classList.add("peek"), 180); });
-  nav.addEventListener("mouseleave", () => { clearTimeout(t); if (!state.navOverlay && !$("#pop .label-menu")) nav.classList.remove("peek"); });
-  narrowMQ.addEventListener("change", () => { state.navOverlay = false; renderNav(); });
+  nav.addEventListener("mouseleave", () => { clearTimeout(t); if (!$("#pop .label-menu")) nav.classList.remove("peek"); });
   mobileMQ.addEventListener("change", () => { closeDrawer(); renderNav(); });
 })();
 
@@ -1031,7 +976,7 @@ function tabsHTML() {
   return `<div class="tabs">${TABS.map(t => {
     const n = mails.filter(m => m.folder === "inbox" && m.tab === t.id && m.unread).length, active = state.tab === t.id;
     const senders = t.id === "primary" ? "" : [...new Set(mails.filter(m => m.folder === "inbox" && m.tab === t.id && m.unread).map(m => contacts[m.msgs.at(-1).from].name))].join(", ");
-    return `<button class="tab ${active ? "active" : ""}" data-tab="${t.id}" style="--tabc:${t.color}">${t.icon}<span class="t"><b>${t.name}${n && !active && t.id !== "primary" ? ` <span class="badge" style="background:${t.color}">${n} new</span>` : ""}</b>${senders && !active ? `<small>${esc(senders)}</small>` : ""}</span></button>`;
+    return `<button class="tab ${active ? "active" : ""}" data-tab="${t.id}" style="--tabc:${t.color}">${t.icon}<span class="t"><b>${t.name}${n && !active && t.id !== "primary" ? ` <span class="badge" style="background:${t.color}">${n}<span class="nw"> new</span></span>` : ""}</b>${senders && !active ? `<small>${esc(senders)}</small>` : ""}</span></button>`;
   }).join("")}</div>`;
 }
 
@@ -1122,8 +1067,6 @@ function inviteHTML(m) {
 
 function renderMain() {
   const main = $("#main");
-  if (state.view === "chat") return renderChat();
-  if (state.view === "meet") return renderMeet();
   const list = visible();
   const open = state.open && mails.find(m => m.id === state.open);
   if (state.pane === "right") {
@@ -1138,7 +1081,7 @@ function renderMain() {
   document.title = `${state.query ? `Search results` : state.label || FOLDERS.find(f => f.id === state.folder).name}${state.folder === "inbox" && unreadIn() ? ` (${unreadIn()})` : ""} - ${contacts[ME].email} - Casuro Mail`;
 }
 
-function renderAll() { renderHeader(); renderRail(); renderNav(); renderMain(); renderSide(); document.body.className = state.density === "default" ? "" : state.density; }
+function renderAll() { renderHeader(); renderNav(); renderMain(); renderSide(); document.body.className = state.density === "default" ? "" : state.density; }
 
 // ---------- Actions ----------
 let lastUndo = null;
@@ -1253,39 +1196,10 @@ function scheduleReply(thread, who) {
     const lines = ["Thanks, sounds good!", "Got it, I'll take a look this afternoon.", "Perfect, see you then 👍", "Makes sense. Let's go with that."];
     thread.msgs.push({ from: who, to: [ME], date: new Date(), body: P(lines[Math.floor(Math.random() * lines.length)]) + sig(who) });
     thread.folder = "inbox"; thread.tab = "primary"; thread.unread = state.open !== thread.id;
-    renderRail(); renderNav();
-    if (state.view === "mail") { const keep = $("#replyText")?.value; renderMain(); if (keep && $("#replyText")) $("#replyText").value = keep; }
+    renderNav();
+    const keep = $("#replyText")?.value; renderMain(); if (keep && $("#replyText")) $("#replyText").value = keep;
     snack(`New message from ${contacts[who].name}`, [{ label: "Open", fn: () => { state.folder = "inbox"; state.tab = "primary"; state.query = ""; state.label = null; openMail(thread.id); } }]);
   }, 5000);
-}
-
-// ---------- Chat & Meet ----------
-const chats = [
-  { with: "hana", unread: true, msgs: [["hana", "Did you see my email about the 1:1?"], ["hana", "4pm works if you're free"]] },
-  { with: "marcus", msgs: [["marcus", "Latency report is in your inbox"], [ME, "Nice, reading now"]] },
-  { with: "dev", msgs: [["dev", "Pushed the batched backfill"]] },
-  { with: "lena", msgs: [["lena", "See you at the review!"]] },
-];
-function renderChat() {
-  const c = chats.find(x => x.with === state.chatWith);
-  c.unread = false; renderRail();
-  $("#main").innerHTML = `<div class="toolbar" style="padding-left:20px"><b style="font-family:'Google Sans',Roboto,sans-serif;font-size:18px;font-weight:400">Chat</b><span class="grow"></span><button class="icon-btn" data-snack="New chat" data-tip="New chat">${IC.plus}</button></div>
-    <div class="chat-wrap"><div class="chat-list">${chats.map(x => `<button class="chat-item ${x.with === state.chatWith ? "active" : ""} ${x.unread ? "unread" : ""}" data-chatwith="${x.with}">${av(x.with)}<span class="b"><b style="font-weight:500">${contacts[x.with].name}</b><small>${esc(x.msgs.at(-1)[1])}</small></span></button>`).join("")}</div>
-      <div class="chat-conv"><div class="scroll" id="chatScroll">${c.msgs.map(([w, t]) => `<div class="cm ${w === ME ? "mine" : ""}">${w === ME ? "" : av(w)}<div><div class="h">${w === ME ? "" : `<b>${contacts[w].name}</b>`}</div><span class="bub">${esc(t)}</span></div></div>`).join("")}</div>
-        <div class="chat-in"><input id="chatIn" placeholder="Message ${contacts[c.with].name}" autocomplete="off"><button class="icon-btn" data-chatsend data-tip="Send message">${IC.send}</button></div></div></div>`;
-  const s = $("#chatScroll"); s.scrollTop = s.scrollHeight;
-  $("#chatIn").addEventListener("keydown", e => { if (e.key === "Enter") sendChat(); });
-}
-function sendChat() {
-  const i = $("#chatIn"), t = i.value.trim(); if (!t) return;
-  const c = chats.find(x => x.with === state.chatWith);
-  c.msgs.push([ME, t]); renderChat(); $("#chatIn").focus();
-  setTimeout(() => { c.msgs.push([c.with, ["Sounds good!", "On it 👍", "Thanks!", "Haha yes"][Math.floor(Math.random() * 4)]]); if (state.view === "chat" && state.chatWith === c.with) { const v = $("#chatIn").value; renderChat(); $("#chatIn").value = v; $("#chatIn").focus(); } else { c.unread = true; renderRail(); } }, 1800);
-}
-function renderMeet() {
-  $("#main").innerHTML = `<div class="meet-hero"><div><h2>Video calls and meetings for everyone</h2><p>Connect, collaborate and celebrate from anywhere with Google Meet.</p>
-    <div class="meet-actions"><button class="btn-filled" data-snack="Meeting link copied: meet.google.com/cas-uroq-v4r">${IC.video}New meeting</button><input class="code-in" id="meetCode" placeholder="Enter a code or link"><button class="pill-btn" data-snack="Enter a valid meeting code" style="border:0;color:var(--primary)">Join</button></div></div>
-    <div class="meet-art">${["lena", "hana", "dev"].map((p, i) => `<span class="ph" style="${["left:14%;top:18%", "right:12%;top:30%", "left:30%;bottom:10%"][i]}"><img src="${contacts[p].photo}" alt=""></span>`).join("")}</div></div>`;
 }
 
 // ---------- Popovers ----------
@@ -1300,7 +1214,7 @@ function closePop() {
   $("#popHost").innerHTML = "";
   document.querySelectorAll(".kebab.open").forEach(k => k.classList.remove("open"));
   const nav = $("#nav");
-  if (!nav.matches(":hover") && !state.navOverlay) nav.classList.remove("peek");
+  if (!nav.matches(":hover")) nav.classList.remove("peek");
 }
 
 function renderQS() {
@@ -1322,16 +1236,14 @@ document.addEventListener("click", e => {
   const t = e.target.closest("button, a, [data-open], [data-expand], [data-label], .c-head");
   const snackEl = $("#snack");
   if ($("#pop") && !e.target.closest("#pop") && !e.target.closest("#appsBtn, #meBtn, [data-selectall], [data-labelmenu]")) closePop();
-  if (state.navOverlay && !e.target.closest("#nav, #menuBtn")) { state.navOverlay = false; renderNav(); }
   if (!t) return;
   const d = t.dataset;
   if (t.tagName === "A" && t.getAttribute("href") === "#") e.preventDefault();
 
   if (d.snackact !== undefined) { const a = snackEl._actions[+d.snackact]; snackEl.classList.remove("show"); a.fn(); return; }
   if (t === snackEl.querySelector(".x")) { snackEl.classList.remove("show"); return; }
-  if (d.view) { state.view = d.view; state.open = null; renderAll(); return; }
   if ("compose" in d) { openCompose(); return; }
-  if (d.folder) { Object.assign(state, { view: "mail", folder: d.folder, label: null, query: "", open: null, hasAtt: false, navOverlay: false }); state.selected.clear(); $("#search").value = ""; $("#searchClear").hidden = true; closeDrawer(); renderAll(); return; }
+  if (d.folder) { Object.assign(state, { folder: d.folder, label: null, query: "", open: null, hasAtt: false }); state.selected.clear(); $("#search").value = ""; $("#searchClear").hidden = true; closeDrawer(); renderAll(); return; }
   if (d.labelmenu) { e.stopPropagation(); openLabelMenu(t, d.labelmenu); return; }
   if (d.labelcolor) { const [l, c] = d.labelcolor.split("|"); LABELS[l] = c; closePop(); renderAll(); return; }
   if (d.labeledit) { const l = d.labeledit, i = l.lastIndexOf("/"); closePop(); labelNameDialog({ title: "Edit label", ok: "Save", initial: labelShort(l), parent: i > 0 ? l.slice(0, i) : "", editing: l }); return; }
@@ -1343,7 +1255,7 @@ document.addEventListener("click", e => {
   }
   if ("newlabel" in d) { labelNameDialog({ title: "New label", ok: "Create" }); return; }
   if ("navmore" in d) { state.moreOpen = !state.moreOpen; try { localStorage.setItem("gmail.moreOpen", state.moreOpen ? "1" : "0"); } catch {} renderNav(); return; }
-  if (d.label) { Object.assign(state, { view: "mail", label: d.label, query: "", open: null, navOverlay: false }); state.selected.clear(); closeDrawer(); renderAll(); return; }
+  if (d.label) { Object.assign(state, { label: d.label, query: "", open: null }); state.selected.clear(); closeDrawer(); renderAll(); return; }
   if (d.tab) { state.tab = d.tab; state.selected.clear(); renderMain(); return; }
   if (d.star) { e.stopPropagation(); const m = mails.find(x => x.id === +d.star); m.starred = !m.starred; renderMain(); return; }
   if (d.imp) { e.stopPropagation(); const m = mails.find(x => x.id === +d.imp); m.important = !m.important; snack(m.important ? "Marked as important." : "Marked as not important."); renderMain(); return; }
@@ -1392,8 +1304,6 @@ document.addEventListener("click", e => {
   if (d.pane) { state.pane = d.pane; renderAll(); renderQS(); return; }
   if (d.quick === "pane") { state.pane = state.pane === "right" ? "none" : "right"; renderAll(); return; }
   if (d.hasatt !== undefined) { state.hasAtt = !state.hasAtt; renderMain(); return; }
-  if (d.chatwith) { state.chatWith = d.chatwith; renderChat(); return; }
-  if ("chatsend" in d) { sendChat(); return; }
   if (d.snack) { closePop(); snack(d.snack); return; }
 });
 $("#snack").addEventListener("click", e => { const b = e.target.closest(".x"); if (b) $("#snack").classList.remove("show"); });
@@ -1401,8 +1311,7 @@ $("#snack").addEventListener("click", e => { const b = e.target.closest(".x"); i
 function closeDrawer() { $("#nav").classList.remove("open"); $("#scrim").hidden = true; }
 $("#menuBtn").onclick = () => {
   if (innerWidth <= 760) { $("#nav").classList.add("open"); $("#scrim").hidden = false; }
-  else if (narrowMQ.matches) { state.navOverlay = !state.navOverlay; renderNav(); }
-  else { state.navCollapsed = !state.navCollapsed; state.navOverlay = false; renderNav(); }
+  else { state.navCollapsed = !state.navCollapsed; renderNav(); }
 };
 $("#scrim").onclick = closeDrawer;
 $("#fab").onclick = () => openCompose();
@@ -1411,7 +1320,7 @@ $("#helpBtn").onclick = () => snack("Help center opened in a new tab");
 $("#appsBtn").onclick = e => popover(e.currentTarget, [["Account", `<img src="${contacts[ME].photo}" style="width:40px;height:40px;border-radius:50%;object-fit:cover">`], ["Drive", LOGOS.drive], ["Gmail", LOGOS.gmail], ["Calendar", LOGOS.calendar], ["Meet", LOGOS.meet], ["Chat", LOGOS.chat], ["Keep", LOGOS.keep], ["Tasks", LOGOS.tasks]].map(([n, l]) => `<button data-snack="${n}">${l}<span>${n}</span></button>`).join(""), "apps-pop");
 $("#meBtn").onclick = e => popover(e.currentTarget, `<div class="em">${contacts[ME].email}</div><img src="${contacts[ME].photo}" alt=""><div class="hi">Hi, Naman!</div><button class="manage" data-snack="Manage your Google Account">Manage your Google Account</button><p style="font-size:12px;color:var(--text-3);margin-top:16px">Managed by casuro.com</p>`, "acct-pop");
 $("#searchOpts").onclick = e => { e.preventDefault(); snack("Advanced search: From, To, Subject, Has the words, Size, Date within"); };
-const doSearch = () => { const q = $("#search").value.trim(); Object.assign(state, { view: "mail", query: q, open: null, label: null }); state.selected.clear(); $("#searchClear").hidden = !q; renderAll(); };
+const doSearch = () => { const q = $("#search").value.trim(); Object.assign(state, { query: q, open: null, label: null }); state.selected.clear(); $("#searchClear").hidden = !q; renderAll(); };
 $("#search").addEventListener("keydown", e => { if (e.key === "Enter") doSearch(); if (e.key === "Escape") { $("#search").value = ""; $("#search").blur(); } });
 $("#search").addEventListener("input", e => { $("#searchClear").hidden = !e.target.value; });
 $("#searchGo").onclick = e => { e.preventDefault(); doSearch(); };
