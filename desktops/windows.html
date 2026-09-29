@@ -1,0 +1,508 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Windows 11 Desktop Mockup</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22%3E%3Cdefs%3E%3ClinearGradient id=%22g%22 x1=%220%22 y1=%220%22 x2=%221%22 y2=%221%22%3E%3Cstop offset=%220%22 stop-color=%22%233ccbf4%22/%3E%3Cstop offset=%221%22 stop-color=%22%230067c0%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath fill=%22url%28%23g%29%22 d=%22M2 2h9.5v9.5H2zM12.5 2H22v9.5h-9.5zM2 12.5h9.5V22H2zM12.5 12.5H22V22h-9.5z%22/%3E%3C/svg%3E">
+<style>
+  :root {
+    color-scheme: light; --font: "Segoe UI Variable", "Segoe UI", system-ui, sans-serif; --text: #1b1b1b;
+    --text-2: #5c5c5c; --text-3: #8a8a8a; --accent: #005fb8; --accent-hover: #196ebf; --on-accent: #ffffff;
+    --taskbar: rgba(238, 242, 248, .82); --flyout: rgba(242, 244, 248, .88);
+    --flyout-foot: rgba(233, 236, 242, .75); --card: rgba(255, 255, 255, .72);
+    --card-hover: rgba(255, 255, 255, .9); --hover: rgba(0, 0, 0, .045); --press: rgba(0, 0, 0, .075);
+    --stroke: rgba(0, 0, 0, .08); --stroke-2: rgba(0, 0, 0, .14); --field: rgba(255, 255, 255, .8);
+    --field-line: rgba(0, 0, 0, .12); --mica: #eef1f7; --mica-inactive: #f6f7fa; --win-bg: #ffffff;
+    --pill: #8a8a8a;
+    --shadow-win: 0 0 0 1px rgba(0, 0, 0, .09), 0 12px 32px rgba(0, 0, 0, .24), 0 2px 8px rgba(0, 0, 0, .1);
+    --shadow-win-inactive: 0 0 0 1px rgba(0, 0, 0, .07), 0 6px 18px rgba(0, 0, 0, .14);
+    --shadow-flyout: 0 0 0 1px rgba(0, 0, 0, .1), 0 16px 48px rgba(0, 0, 0, .22); --select: rgba(0, 95, 184, .16);
+    --select-line: rgba(0, 95, 184, .45);
+  }
+  /* Light is the default; dark only applies when picked in Settings */
+  :root[data-theme="dark"] {
+    color-scheme: dark; --text: #ffffff; --text-2: #c8c8c8; --text-3: #9a9a9a; --accent: #60cdff;
+    --accent-hover: #5ab9e6; --on-accent: #000000; --taskbar: rgba(28, 31, 38, .84);
+    --flyout: rgba(36, 38, 44, .9); --flyout-foot: rgba(28, 30, 35, .7); --card: rgba(255, 255, 255, .06);
+    --card-hover: rgba(255, 255, 255, .1); --hover: rgba(255, 255, 255, .06); --press: rgba(255, 255, 255, .04);
+    --stroke: rgba(255, 255, 255, .08); --stroke-2: rgba(255, 255, 255, .14); --field: rgba(255, 255, 255, .06);
+    --field-line: rgba(255, 255, 255, .1); --mica: #1f2229; --mica-inactive: #25272c; --win-bg: #1c1c1c;
+    --pill: #9d9d9d;
+    --shadow-win: 0 0 0 1px rgba(255, 255, 255, .1), 0 12px 32px rgba(0, 0, 0, .5), 0 2px 8px rgba(0, 0, 0, .3);
+    --shadow-win-inactive: 0 0 0 1px rgba(255, 255, 255, .07), 0 6px 18px rgba(0, 0, 0, .35);
+    --shadow-flyout: 0 0 0 1px rgba(255, 255, 255, .09), 0 16px 48px rgba(0, 0, 0, .5);
+    --select: rgba(96, 205, 255, .16); --select-line: rgba(96, 205, 255, .45);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body { font-family: var(--font); font-size: 14px; line-height: 20px; color: var(--text); background: #0b2b66; overflow: hidden; -webkit-font-smoothing: antialiased; user-select: none; -webkit-user-select: none; }
+  button { font: inherit; color: inherit; background: none; border: 0; cursor: default; }
+  input, textarea { font: inherit; color: inherit; }
+  svg { flex: none; }
+  .fbtn { border-radius: 4px; transition: background .08s; }
+  .fbtn:hover { background: var(--hover); }
+  .fbtn:active { background: var(--press); }
+
+  /* ---------- Wallpaper + desktop ---------- */
+  .wallpaper { position: fixed; inset: 0; overflow: hidden; }
+  .wallpaper svg { width: 100%; height: 100%; display: block; }
+  .wp-dark { display: none; }
+  [data-theme="dark"] .wp-light { display: none; } [data-theme="dark"] .wp-dark { display: inline; }
+  .desktop { position: fixed; inset: 0 0 48px 0; }
+
+  /* ---------- Taskbar ---------- */
+  .taskbar { position: fixed; left: 0; right: 0; bottom: 0; height: 48px; z-index: 9000; background: var(--taskbar); backdrop-filter: blur(40px) saturate(1.6); -webkit-backdrop-filter: blur(40px) saturate(1.6); border-top: 1px solid var(--stroke); display: flex; align-items: center; }
+  .tb-center { position: absolute; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 4px; height: 100%; }
+  .tb-btn, .tray-btn { position: relative; height: 40px; border-radius: 4px; border: 1px solid transparent; transition: background .1s; }
+  .tb-btn { width: 40px; display: grid; place-items: center; }
+  .tb-btn:hover, .tb-btn.open, .tray-btn:hover { background: var(--card-hover); border-color: var(--stroke); }
+  :root[data-theme="dark"] :is(.tb-btn:hover, .tb-btn.open, .tray-btn:hover) { background: rgba(255, 255, 255, .07); }
+  .tb-btn > svg { width: 24px; height: 24px; transition: transform .12s; }
+  .tb-btn:active > svg { transform: scale(.86); }
+  .tb-btn .ind { position: absolute; bottom: 1px; left: 50%; width: 6px; height: 3px; margin-left: -3px; border-radius: 2px; background: var(--pill); opacity: 0; transition: width .2s cubic-bezier(.2, .8, .2, 1), margin .2s cubic-bezier(.2, .8, .2, 1), background .2s; }
+  .tb-btn.running .ind { opacity: 1; }
+  .tb-btn.running.active { background: var(--card); border-color: var(--stroke); }
+  .tb-btn.running.active .ind { width: 16px; margin-left: -8px; background: var(--accent); }
+  .tb-search { width: auto; display: flex; gap: 8px; height: 36px; padding: 0 14px 0 10px; border-radius: 18px; background: var(--field); border: 1px solid var(--field-line); color: var(--text-2); font-size: 13px; margin: 0 2px; }
+  .tb-search svg { width: 16px; height: 16px; }
+  .tray { margin-left: auto; display: flex; align-items: center; height: 100%; padding-right: 8px; gap: 2px; }
+  .tray-btn { min-width: 32px; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 0 8px; }
+  .tray-btn svg { width: 16px; height: 16px; }
+  .tray-btn.clock { flex-direction: column; align-items: flex-end; gap: 0; font-size: 12px; line-height: 16px; padding: 0 10px; }
+
+  /* ---------- Windows ---------- */
+  .win { position: absolute; display: flex; flex-direction: column; border-radius: 8px; background: var(--win-bg); box-shadow: var(--shadow-win-inactive); animation: winIn .2s cubic-bezier(.1, .9, .2, 1); }
+  .win.active { box-shadow: var(--shadow-win); }
+  .win.minimized { visibility: hidden; pointer-events: none; }
+  .win.max { border-radius: 0; box-shadow: none; }
+  .win.anim { transition: left .22s, top .22s, width .22s, height .22s; transition-timing-function: cubic-bezier(.1, .9, .2, 1); }
+  @keyframes winIn { from { opacity: 0; transform: scale(.94); } }
+  .titlebar { height: 32px; flex: none; display: flex; align-items: center; background: var(--mica-inactive); border-radius: 8px 8px 0 0; color: var(--text-3); }
+  .win.active .titlebar { background: var(--mica); color: var(--text); }
+  .t-ic { width: 16px; height: 16px; margin: 0 10px 0 14px; display: grid; place-items: center; }
+  .t-ic svg { width: 16px; height: 16px; }
+  .t-name { flex: 1; min-width: 0; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .cap { width: 46px; height: 32px; display: grid; place-items: center; transition: background .08s; }
+  .cap svg { width: 10px; height: 10px; }
+  .cap:hover { background: var(--hover); }
+  .cap:active { background: var(--press); }
+  .cap.close { border-top-right-radius: 8px; }
+  .cap.close:hover { background: #c42b1c; color: #fff; }
+  .cap.close:active { background: #c83c31; color: rgba(255, 255, 255, .8); }
+  .win.max :is(.titlebar, .cap.close, .wbody) { border-radius: 0; }
+  .wbody { flex: 1; min-height: 0; border-radius: 0 0 8px 8px; overflow: hidden; }
+  .rz { position: absolute; z-index: 2; }
+  .win.max .rz { display: none; }
+  .rz-n, .rz-s { left: 8px; right: 8px; height: 8px; cursor: ns-resize; }
+  .rz-e, .rz-w { top: 8px; bottom: 8px; width: 8px; cursor: ew-resize; }
+  .rz-n { top: -4px; } .rz-s { bottom: -4px; } .rz-e { right: -4px; } .rz-w { left: -4px; }
+  .rz-ne, .rz-nw, .rz-se, .rz-sw { width: 14px; height: 14px; }
+  .rz-ne { top: -4px; right: -4px; cursor: nesw-resize; } .rz-sw { bottom: -4px; left: -4px; cursor: nesw-resize; }
+  .rz-nw { top: -4px; left: -4px; cursor: nwse-resize; } .rz-se { bottom: -4px; right: -4px; cursor: nwse-resize; }
+  body.rz-n, body.rz-s { cursor: ns-resize; } body.rz-e, body.rz-w { cursor: ew-resize; }
+  body.rz-ne, body.rz-sw { cursor: nesw-resize; } body.rz-nw, body.rz-se { cursor: nwse-resize; }
+
+  /* ---------- Start menu ---------- */
+  .flyout { position: fixed; z-index: 9100; background: var(--flyout); backdrop-filter: blur(60px) saturate(1.8); -webkit-backdrop-filter: blur(60px) saturate(1.8); border-radius: 8px; box-shadow: var(--shadow-flyout); }
+  .flyout { bottom: 60px; overflow: hidden; opacity: 0; visibility: hidden; transform: translateY(24px); transition: transform .22s cubic-bezier(.1, .9, .2, 1), opacity .15s, visibility 0s .22s; }
+  .flyout.open { opacity: 1; visibility: visible; transform: none; transition: transform .26s cubic-bezier(.1, .9, .2, 1), opacity .12s, visibility 0s; }
+  .search-box { height: 36px; border-radius: 18px; background: var(--field); box-shadow: inset 0 0 0 1px var(--field-line); display: flex; align-items: center; gap: 10px; padding: 0 16px; }
+  .search-box:focus-within { background: var(--win-bg); box-shadow: inset 0 0 0 1px var(--field-line), inset 0 -2px 0 var(--accent); }
+  .search-box svg { width: 16px; height: 16px; color: var(--text-2); }
+  .search-box input { flex: 1; min-width: 0; border: 0; outline: 0; background: none; font-size: 14px; }
+  .search-box input::placeholder { color: var(--text-2); }
+  .start { left: 50%; width: 642px; margin-left: -321px; }
+  .start .search-box { margin: 32px 32px 20px; }
+  .sect-h { display: flex; align-items: center; height: 32px; padding: 0 52px; font-size: 14px; font-weight: 600; }
+  .grid { display: grid; grid-template-columns: repeat(6, 96px); justify-content: center; gap: 4px 2px; padding: 4px 0 28px; min-height: 124px; }
+  .tile { width: 96px; height: 84px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; font-size: 12px; line-height: 16px; }
+  .tile svg { width: 32px; height: 32px; }
+  .tile.hit { background: var(--card); box-shadow: 0 0 0 1px var(--stroke); }
+  .no-results { grid-column: 1 / -1; align-self: center; text-align: center; color: var(--text-2); font-size: 13px; }
+  .start-foot { height: 64px; display: flex; align-items: center; justify-content: space-between; padding: 0 40px; background: var(--flyout-foot); border-top: 1px solid var(--stroke); }
+  .user { display: flex; align-items: center; gap: 12px; height: 40px; padding: 0 12px; font-size: 12px; }
+  .avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #8430ce, #5b5fc7); color: #fff; display: grid; place-items: center; font-size: 12px; font-weight: 600; }
+  .power { width: 40px; height: 40px; display: grid; place-items: center; }
+  .power svg { width: 16px; height: 16px; }
+
+  /* ---------- Placeholder app content ---------- */
+  .app { height: 100%; display: flex; flex-direction: column; background: var(--win-bg); color: var(--text); font-size: 13px; }
+  .bar { display: flex; align-items: center; gap: 4px; padding: 6px 10px; flex: none; background: var(--mica); }
+  .win:not(.active) .bar { background: var(--mica-inactive); }
+  .bar .fbtn { height: 32px; min-width: 32px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 0 8px; }
+  .bar .fbtn:disabled { opacity: .4; }
+  .bar svg { width: 16px; height: 16px; }
+  .field { flex: 1; min-width: 0; height: 32px; border-radius: 4px; background: var(--field); box-shadow: inset 0 0 0 1px var(--field-line); display: flex; align-items: center; gap: 6px; padding: 0 10px; white-space: nowrap; overflow: hidden; }
+  .field svg { width: 14px; height: 14px; color: var(--text-2); }
+  .files { flex: 1; padding: 8px; border-top: 1px solid var(--stroke); display: grid; grid-template-columns: repeat(auto-fill, 96px); grid-auto-rows: 100px; gap: 4px; align-content: start; overflow-y: auto; }
+  .file { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 10px 4px 6px; border: 1px solid transparent; font-size: 12px; }
+  .file svg { width: 48px; height: 48px; }
+  .file.sel { background: var(--select); border-color: var(--select-line); }
+  .status { height: 26px; flex: none; display: flex; align-items: center; gap: 16px; padding: 0 14px; font-size: 12px; color: var(--text-2); border-top: 1px solid var(--stroke); }
+  .page { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 28px; background: linear-gradient(160deg, #e9f1fb, #f7f3fb); border-top: 1px solid var(--stroke); }
+  :root[data-theme="dark"] .page { background: linear-gradient(160deg, #1b2533, #231d2b); }
+  .page .search-box { width: min(560px, 80%); height: 44px; border-radius: 22px; background: var(--win-bg); box-shadow: 0 2px 12px rgba(0, 0, 0, .1); }
+  .menubar { display: flex; gap: 2px; padding: 4px 6px; background: var(--mica); }
+  .menubar .fbtn { height: 28px; padding: 0 10px; font-size: 13px; }
+  .notepad textarea { flex: 1; resize: none; border: 0; outline: 0; padding: 10px 14px; background: var(--win-bg); font: 15px/1.5 Consolas, "Cascadia Mono", ui-monospace, monospace; border-top: 1px solid var(--stroke); user-select: text; }
+  .term { background: #0c0c0c; color: #cccccc; }
+  .term .tabs { display: flex; align-items: center; gap: 4px; height: 36px; padding: 4px 8px 0; background: #1f1f1f; }
+  .term .tab { height: 32px; display: flex; align-items: center; gap: 8px; padding: 0 12px; border-radius: 6px 6px 0 0; background: #0c0c0c; font-size: 12px; color: #fff; }
+  .term .tab svg { width: 14px; height: 14px; }
+  .term pre { flex: 1; overflow-y: auto; padding: 8px 12px; font: 14px/1.45 "Cascadia Mono", Consolas, ui-monospace, monospace; white-space: pre-wrap; user-select: text; outline: 0; }
+  .term .caret { display: inline-block; width: 8px; height: 16px; background: #cccccc; vertical-align: -3px; animation: blink 1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  .st { background: var(--mica); }
+  .st-body { flex: 1; overflow-y: auto; padding: 18px 28px 24px; }
+  .st-body h1 { font-size: 28px; line-height: 36px; font-weight: 600; margin-bottom: 20px; }
+  .card { display: flex; align-items: center; gap: 16px; min-height: 68px; padding: 12px 16px; border-radius: 6px; background: var(--card); box-shadow: 0 0 0 1px var(--stroke); margin-bottom: 4px; }
+  .card > svg { width: 20px; height: 20px; }
+  .card div { flex: 1; min-width: 0; }
+  .card small { display: block; font-size: 12px; color: var(--text-2); }
+  .card label { display: inline-flex; align-items: center; gap: 8px; margin-left: 16px; }
+  .card input { accent-color: var(--accent); width: 18px; height: 18px; margin: 0; }
+
+  /* ---------- Phone: Start becomes the home screen, windows open full screen ---------- */
+  @media (max-width: 759px) {
+    .taskbar, .cap.min, .cap.max, .rz { display: none; }
+    .desktop { inset: 0; z-index: 9200; pointer-events: none; }
+    .win { pointer-events: auto; }
+    .start { inset: 0; width: auto; margin: 0; border-radius: 0; opacity: 1; visibility: visible; transform: none; display: flex; flex-direction: column; }
+    .start .search-box { margin: 20px 16px 12px; }
+    .sect-h { padding: 0 20px; }
+    .grid { grid-template-columns: repeat(4, 1fr); padding: 4px 8px; }
+    .tile { width: auto; }
+    .start-foot { margin-top: auto; padding: 0 12px; }
+    .win { inset: 0 !important; width: auto !important; height: auto !important; z-index: 9500 !important; border-radius: 0; }
+    .titlebar, .cap.close { height: 44px; border-radius: 0; }
+  }
+</style>
+</head>
+<body>
+<div class="wallpaper" id="wallpaper" aria-hidden="true"></div>
+
+<main class="desktop" id="desktop">
+  <div id="windows"></div>
+</main>
+
+<nav class="taskbar" aria-label="Taskbar">
+  <div class="tb-center" id="tbCenter"></div>
+  <div class="tray">
+    <div class="tray-btn" aria-label="Network, volume and battery">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"><path d="M1.6 6.2a9.2 9.2 0 0 1 12.8 0"/><path d="M3.8 8.6a6 6 0 0 1 8.4 0"/><path d="M6 11a2.8 2.8 0 0 1 4 0"/><circle cx="8" cy="13.2" r=".6" fill="currentColor" stroke="none"/></svg>
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round"><path d="M2 6h2.4L8 3v10L4.4 10H2z"/><path d="M10.5 5.6a3.4 3.4 0 0 1 0 4.8"/><path d="M12.4 3.8a6 6 0 0 1 0 8.4"/></svg>
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.1"><rect x="1.5" y="4.5" width="11.5" height="7" rx="1.6"/><rect x="3" y="6" width="6.4" height="4" rx=".6" fill="currentColor" stroke="none"/><path d="M14.4 6.8v2.4" stroke-width="1.4" stroke-linecap="round"/></svg>
+    </div>
+    <div class="tray-btn clock"><span id="clockTime"></span><span id="clockDate"></span></div>
+  </div>
+</nav>
+
+<section class="flyout start" id="start" aria-label="Start">
+  <label class="search-box"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><circle cx="6.8" cy="6.8" r="4.8"/><path d="M10.4 10.4l4 4"/></svg><input id="startQ" placeholder="Search for apps, settings, and documents" autocomplete="off" spellcheck="false"></label>
+  <div class="sect-h" id="startTitle">Pinned</div>
+  <div class="grid" id="pinned"></div>
+  <footer class="start-foot">
+    <span class="user"><span class="avatar">NS</span>Naman Shukla</span>
+    <button class="power fbtn" id="powerBtn" aria-label="Sleep" title="Sleep"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"><path d="M8 1.5v6"/><path d="M4.6 3.6a5.6 5.6 0 1 0 6.8 0"/></svg></button>
+  </footer>
+</section>
+
+<script>
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+const svg = (vb, body, attrs = "") => `<svg viewBox="${vb}" ${attrs}>${body}</svg>`;
+const line = (d, w = 1.1) => svg("0 0 16 16", `<path d="${d}"/>`, `fill="none" stroke="currentColor" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round"`);
+
+/* Fluent-style icons, drawn by hand. Gradient ids get a per-copy suffix so copies never collide. */
+let uid = 0;
+const grad = (id, a, b, x2 = 1, y2 = 1) => `<linearGradient id="${id}" x1="0" y1="0" x2="${x2}" y2="${y2}"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient>`;
+const ICONS = {
+  start: k => svg("0 0 24 24", `<defs>${grad("w" + k, "#3ccbf4", "#0067c0")}</defs><path fill="url(#w${k})" d="M2 2h9.5v9.5H2zM12.5 2H22v9.5h-9.5zM2 12.5h9.5V22H2zM12.5 12.5H22V22h-9.5z"/>`),
+  explorer: k => svg("0 0 24 24", `<defs>${grad("f" + k, "#ffd966", "#f5b52e", 0)}</defs><path fill="#e3a21a" d="M2 5.5A1.5 1.5 0 0 1 3.5 4h5.2l2.6 2h9.2A1.5 1.5 0 0 1 22 7.5V18a1.5 1.5 0 0 1-1.5 1.5h-17A1.5 1.5 0 0 1 2 18z"/><path fill="url(#f${k})" d="M2 9a1.5 1.5 0 0 1 1.5-1.5h17A1.5 1.5 0 0 1 22 9v9a1.5 1.5 0 0 1-1.5 1.5h-17A1.5 1.5 0 0 1 2 18z"/><path fill="#1482dc" d="M2 15.5h20V18a1.5 1.5 0 0 1-1.5 1.5h-17A1.5 1.5 0 0 1 2 18z"/>`),
+  edge: k => svg("0 0 24 24", `<defs>${grad("e" + k, "#3fd0f5", "#0a5fb4")}${grad("g" + k, "#2fa84f", "#9be15d", 1, 0)}</defs><circle cx="12" cy="12" r="10" fill="url(#e${k})"/><path fill="url(#g${k})" d="M4.2 15.6C5 11 8.6 8.4 12.6 8.4c3.2 0 5.6 1.9 5.6 4.1 0 1.5-1.2 2.2-2.5 2.2h-4.3c.3 2.6 2.6 4.1 5.3 4.1 1.6 0 3.2-.5 4.6-1.4A10 10 0 0 1 4.2 15.6z"/><path fill="#fff" fill-opacity=".85" d="M11.3 12.8c.2-1.6 1.2-2.5 2.6-2.5s2.3.9 2.3 2.5z"/>`),
+  notepad: k => svg("0 0 24 24", `<defs>${grad("n" + k, "#6cc4ff", "#1f7fd6", 0)}</defs><rect x="4" y="3" width="16" height="19" rx="2.2" fill="url(#n${k})"/><rect x="6" y="6.5" width="12" height="13.5" rx="1" fill="#fff"/><path d="M8.5 10h7M8.5 13h7M8.5 16h4.5" stroke="#8aa4bd" stroke-width="1.2" stroke-linecap="round"/><path d="M8 2v3M12 2v3M16 2v3" stroke="#0f5aa6" stroke-width="1.6" stroke-linecap="round"/>`),
+  terminal: k => svg("0 0 24 24", `<defs>${grad("t" + k, "#4a4a4a", "#1c1c1c", 0)}</defs><rect x="2" y="4" width="20" height="16" rx="3" fill="url(#t${k})"/><path d="M6.5 9l3 3-3 3" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M11.5 15.5h5" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/>`),
+  settings: k => svg("0 0 24 24", `<defs>${grad("s" + k, "#8d99a8", "#5a6574")}</defs><g fill="url(#s${k})"><circle cx="12" cy="12" r="7.4"/>${[0, 45, 90, 135].map(r => `<rect x="10.3" y="1.6" width="3.4" height="20.8" rx="1" transform="rotate(${r} 12 12)"/>`).join("")}</g><circle cx="12" cy="12" r="3.6" fill="#1f86dc"/><circle cx="12" cy="12" r="1.7" fill="#e8f3ff"/>`),
+  folder: (k, c) => svg("0 0 16 16", `<path fill="${c}" d="M1.5 4a1 1 0 0 1 1-1h3.3l1.4 1.3h6.3a1 1 0 0 1 1 1V12a1 1 0 0 1-1 1h-11a1 1 0 0 1-1-1z"/><path fill="#fff" fill-opacity=".28" d="M1.5 6h13v6a1 1 0 0 1-1 1h-11a1 1 0 0 1-1-1z"/>`)
+};
+const icon = (name, arg) => ICONS[name](++uid, arg);
+const G = {
+  search: svg("0 0 16 16", '<circle cx="6.8" cy="6.8" r="4.8"/><path d="M10.4 10.4l4 4"/>', 'fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"'),
+  back: line("M13.5 8h-11M7 3.5L2.5 8 7 12.5"), fwd: line("M2.5 8h11M9 3.5L13.5 8 9 12.5"), up: line("M8 13.5v-11M3.5 7L8 2.5 12.5 7"),
+  refresh: line("M13.5 8A5.5 5.5 0 1 1 11.7 3.9M12 1.2v3h-3"), home: line("M2.5 7L8 2.5 13.5 7v6.5h-4v-4h-3v4h-4z"), chev: line("M6 3.5L10.5 8 6 12.5"),
+  min: svg("0 0 10 10", '<path d="M0 5.5h10" stroke="currentColor"/>'),
+  max: svg("0 0 10 10", '<rect x=".5" y=".5" width="9" height="9" rx="1.2" fill="none" stroke="currentColor"/>'),
+  restore: svg("0 0 10 10", '<rect x=".5" y="2.5" width="7" height="7" rx="1"/><path d="M2.5 2.5v-.8A1.2 1.2 0 0 1 3.7.5h4.6a1.2 1.2 0 0 1 1.2 1.2v4.6a1.2 1.2 0 0 1-1.2 1.2h-.8"/>', 'fill="none" stroke="currentColor"'),
+  close: svg("0 0 10 10", '<path d="M.6.6l8.8 8.8M9.4.6L.6 9.4" stroke="currentColor" stroke-linecap="round"/>')
+};
+
+/* Bloom wallpaper: layered translucent petals around one point, in a light and a dark variant */
+function bloom(k, [bg1, bg2, bg3], outer, inner, fold) {
+  const petal = (a, L, W, g) => `<g transform="translate(1010 560) rotate(${a})" filter="url(#${k}sh)"><path fill="url(#${k}${g})" fill-opacity=".86" d="M0 0C${L * .18} ${-W * 1.15} ${L * .72} ${-W * 1.35} ${L * .96} ${-W * .45}Q${L * 1.04} ${-W * .05} ${L * .9} ${W * .3}C${L * .66} ${W * .8} ${L * .22} ${W * .62} 0 0z"/><path fill="url(#${k}fold)" d="M0 0C${L * .18} ${-W * 1.15} ${L * .72} ${-W * 1.35} ${L * .96} ${-W * .45}C${L * .7} ${-W * .55} ${L * .3} ${-W * .35} 0 0z"/></g>`;
+  const stops = (id, c) => `<linearGradient id="${k}${id}" x1="0" y1="0" x2="1" y2=".3">${c.map((s, i) => `<stop offset="${i / 2}" stop-color="${s}"/>`).join("")}</linearGradient>`;
+  return `<defs><radialGradient id="${k}bg" cx="52%" cy="52%" r="70%"><stop offset="0" stop-color="${bg1}"/><stop offset=".55" stop-color="${bg2}"/><stop offset="1" stop-color="${bg3}"/></radialGradient>${stops("o", outer)}${stops("i", inner)}
+    <linearGradient id="${k}fold" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="${fold}" stop-opacity="0"/><stop offset="1" stop-color="${fold}" stop-opacity=".5"/></linearGradient>
+    <radialGradient id="${k}core"><stop offset="0" stop-color="#f2f9ff"/><stop offset="1" stop-color="#f2f9ff" stop-opacity="0"/></radialGradient>
+    <filter id="${k}sh" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur in="SourceAlpha" stdDeviation="10"/><feOffset dy="6"/><feComponentTransfer><feFuncA type="linear" slope=".16"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+    <rect width="1920" height="1080" fill="url(#${k}bg)"/>` +
+    [-200, -150, -100, -48, 2, 52, 104, 156].map((a, i) => petal(a, 640 - (i % 2) * 60, 150, "o")).join("") +
+    [-175, -122, -72, -22, 28, 80, 132].map((a, i) => petal(a, 420 - (i % 2) * 40, 112, "i")).join("") +
+    [-160, -88, -16, 56, 128].map(a => petal(a, 220, 66, "i")).join("") +
+    `<circle cx="1010" cy="560" r="90" fill="url(#${k}core)"/>`;
+}
+$("#wallpaper").innerHTML = `<svg viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice"><g class="wp-light">${bloom("wl", ["#f1f6fd", "#cfe0f5", "#9dbfe8"], ["#0b46b8", "#2d86ea", "#a9d6ff"], ["#1a56cc", "#4a9ef2", "#cfe8ff"], "#fff")}</g><g class="wp-dark">${bloom("wd", ["#0d2358", "#07122e", "#010309"], ["#03124a", "#0e3aa6", "#3a86ea"], ["#082a86", "#2566d8", "#6fb2ff"], "#bfe3ff")}</g></svg>`;
+
+/* ---------- Apps: placeholder content ---------- */
+const FOLDERS = [["Desktop", "#3a96dd"], ["Documents", "#6b7b8c"], ["Downloads", "#1f9e5a"], ["Pictures", "#c239b3"], ["Music", "#ca5010"], ["Videos", "#7a5af8"], ["Casuro", "#f5b52e"]];
+const TERM_HEAD = "Windows PowerShell\nCopyright (C) Microsoft Corporation. All rights reserved.\n\n";
+const PROMPT = "PS C:\\Users\\naman> ";
+const APPS = [
+  { id: "explorer", name: "File Explorer", w: 880, h: 540, body: () => `<div class="app">
+    <div class="bar"><button class="fbtn" disabled aria-label="Back">${G.back}</button><button class="fbtn" disabled aria-label="Forward">${G.fwd}</button><button class="fbtn" aria-label="Up">${G.up}</button><button class="fbtn" aria-label="Refresh">${G.refresh}</button>
+      <div class="field">${G.home}${G.chev}<span>Home</span></div></div>
+    <div class="files">${FOLDERS.map(([n, c]) => `<button class="file fbtn">${icon("folder", c)}<span>${n}</span></button>`).join("")}</div>
+    <div class="status">${FOLDERS.length} items</div></div>` },
+  { id: "edge", name: "Microsoft Edge", w: 1040, h: 660, body: () => `<div class="app">
+    <div class="bar"><button class="fbtn" disabled aria-label="Back">${G.back}</button><button class="fbtn" aria-label="Refresh">${G.refresh}</button><div class="field">${G.search}<span>Search or enter web address</span></div></div>
+    <div class="page"><label class="search-box">${G.search}<input placeholder="Search the web"></label></div></div>` },
+  { id: "notepad", name: "Notepad", w: 720, h: 480, body: () => `<div class="app notepad">
+    <div class="menubar">${["File", "Edit", "View"].map(m => `<button class="fbtn">${m}</button>`).join("")}</div>
+    <textarea spellcheck="false" aria-label="Text editor">Casuro - notes for this week
+
+- Review the Q4 roadmap draft
+- Record the episode builder demo
+- Send the hiring plan to the team
+
+Anything typed here stays in this window.</textarea>
+    <div class="status">Ln 1, Col 1<span>100%</span><span>Windows (CRLF)</span><span>UTF-8</span></div></div>` },
+  { id: "terminal", name: "Terminal", w: 760, h: 460, body: () => `<div class="app term">
+    <div class="tabs"><span class="tab">${icon("terminal")}Windows PowerShell</span></div>
+    <pre tabindex="0" aria-label="Terminal">${TERM_HEAD}${PROMPT}<span class="caret"></span></pre></div>` },
+  { id: "settings", name: "Settings", w: 720, h: 400, body: () => `<div class="app st"><div class="st-body"><h1>Personalization</h1>
+      <div class="card">${line("M8 2a6 6 0 1 0 0 12A6 6 0 0 0 8 2zM8 2v12")}<div>Choose your mode<small>Change the colors that appear in Windows</small></div>
+        ${["light", "dark"].map(t => `<label><input type="radio" class="theme-radio" name="mode${uid}" value="${t}"${document.documentElement.dataset.theme === t ? " checked" : ""}>${t === "light" ? "Light" : "Dark"}</label>`).join("")}</div>
+      <div class="card">${line("M1.5 4a1.5 1.5 0 0 1 1.5-1.5h10A1.5 1.5 0 0 1 14.5 4v8a1.5 1.5 0 0 1-1.5 1.5H3A1.5 1.5 0 0 1 1.5 12zM1.5 11l4-4 3 3 2-2 4 4")}<div>Background<small>Bloom</small></div></div></div></div>` }
+];
+const BY_ID = Object.fromEntries(APPS.map(a => [a.id, a]));
+
+function wireApp(root, id) {
+  if (id === "settings") root.querySelectorAll(".theme-radio").forEach(r => r.addEventListener("change", () => setTheme(r.value)));
+  if (id === "explorer") root.querySelector(".files").addEventListener("click", e => root.querySelectorAll(".file").forEach(f => f.classList.toggle("sel", f === e.target.closest(".file"))));
+}
+
+/* ---------- Window manager ---------- */
+const TB_H = 48;
+const WM = { wins: new Map(), z: 10, active: null, n: 0 };
+const desk = () => ({ w: innerWidth, h: innerHeight - TB_H });
+
+function openApp(id) {
+  closeFlyouts();
+  const w = WM.wins.get(id);
+  if (w) return w.min ? restore(w) : focus(w);
+  const app = BY_ID[id], el = document.createElement("section");
+  el.className = "win";
+  el.setAttribute("aria-label", app.name);
+  el.innerHTML = `<header class="titlebar"><span class="t-ic">${icon(id)}</span><span class="t-name">${esc(app.name)}</span><button class="cap min" aria-label="Minimize">${G.min}</button><button class="cap max" aria-label="Maximize">${G.max}</button><button class="cap close" aria-label="Close">${G.close}</button></header>
+    <div class="wbody">${app.body()}</div>${["n", "s", "e", "w", "ne", "nw", "se", "sw"].map(d => `<div class="rz rz-${d}" data-dir="${d}"></div>`).join("")}`;
+  const d = desk(), W = Math.min(app.w, d.w - 80), H = Math.min(app.h, d.h - 48), k = WM.n++ % 6;
+  Object.assign(el.style, { left: Math.max(8, Math.round((d.w - W) / 2) - 80 + k * 32) + "px", top: Math.max(8, Math.min(40 + k * 30, d.h - H - 8)) + "px", width: W + "px", height: H + "px" });
+  $("#windows").append(el);
+  const win = { id, el, min: false, max: false, prev: null };
+  WM.wins.set(id, win);
+  wireWin(win);
+  wireApp(el, id);
+  focus(win);
+}
+
+function focus(w) {
+  WM.active = w ? w.id : null;
+  if (w) w.el.style.zIndex = ++WM.z;
+  WM.wins.forEach(o => o.el.classList.toggle("active", o === w));
+  renderTaskbar();
+}
+const topWin = () => [...WM.wins.values()].filter(w => !w.min).sort((a, b) => b.el.style.zIndex - a.el.style.zIndex)[0] || null;
+
+function wireWin(w) {
+  const el = w.el, tb = el.querySelector(".titlebar");
+  el.addEventListener("pointerdown", () => { if (WM.active !== w.id) focus(w); }, true);
+  tb.addEventListener("dblclick", e => { if (!e.target.closest(".cap")) toggleMax(w); });
+  tb.addEventListener("pointerdown", e => { if (e.button === 0 && !e.target.closest(".cap")) drag(w, e); });
+  el.querySelector(".min").onclick = () => minimize(w);
+  el.querySelector(".max").onclick = () => toggleMax(w);
+  el.querySelector(".close").onclick = () => closeWin(w);
+  el.querySelectorAll(".rz").forEach(h => h.addEventListener("pointerdown", e => resize(w, e, h.dataset.dir)));
+}
+
+/* Pointer-captured gesture: calls move(dx, dy, event) until release, then done() */
+function gesture(e, move, done = () => {}, cls = "") {
+  const t = e.currentTarget, sx = e.clientX, sy = e.clientY;
+  t.setPointerCapture(e.pointerId);
+  document.body.classList.add("dragging", ...cls.split(" ").filter(Boolean));
+  const mv = ev => move(ev.clientX - sx, ev.clientY - sy, ev);
+  const up = () => { t.removeEventListener("pointermove", mv); t.removeEventListener("pointerup", up); t.removeEventListener("pointercancel", up); document.body.className = ""; done(); };
+  t.addEventListener("pointermove", mv); t.addEventListener("pointerup", up); t.addEventListener("pointercancel", up);
+}
+function drag(w, e) {
+  const el = w.el;
+  let ox = el.offsetLeft, oy = el.offsetTop, moved = false, snap = false;
+  gesture(e, (dx, dy, ev) => {
+    if (!moved && Math.hypot(dx, dy) < 4) return;
+    if (!moved && w.max) { const r = e.clientX / innerWidth; unmax(w, false); ox = Math.round(e.clientX - el.offsetWidth * r); oy = 0; }
+    moved = true;
+    const d = desk();
+    el.style.left = Math.min(Math.max(ox + dx, 96 - el.offsetWidth), d.w - 96) + "px";
+    el.style.top = Math.min(Math.max(oy + dy, 0), d.h - 40) + "px";
+    snap = ev.clientY <= 2;
+  }, () => snap && maximize(w));
+}
+function resize(w, e, dir) {
+  if (e.button !== 0) return;
+  e.stopPropagation();
+  const el = w.el, r = { l: el.offsetLeft, t: el.offsetTop, w: el.offsetWidth, h: el.offsetHeight }, MW = 360, MH = 240;
+  gesture(e, (dx, dy) => {
+    let { l, t, w: W, h: H } = r;
+    if (dir.includes("e")) W = Math.max(MW, r.w + dx);
+    if (dir.includes("s")) H = Math.max(MH, Math.min(r.h + dy, desk().h - r.t));
+    if (dir.includes("w")) { W = Math.max(MW, r.w - dx); l = r.l + r.w - W; }
+    if (dir.includes("n")) { H = Math.max(MH, r.h - Math.max(dy, -r.t)); t = r.t + r.h - H; }
+    Object.assign(el.style, { left: l + "px", top: t + "px", width: W + "px", height: H + "px" });
+  }, undefined, "rz-" + dir);
+}
+
+function animateBox(w) { w.el.classList.add("anim"); clearTimeout(w.t); w.t = setTimeout(() => w.el.classList.remove("anim"), 240); }
+function setMax(w, on, animate = true) {
+  if (w.max === on) return;
+  w.max = on;
+  if (animate) animateBox(w);
+  const s = w.el.style;
+  if (on) { w.prev = { left: s.left, top: s.top, width: s.width, height: s.height }; Object.assign(s, { left: "0px", top: "0px", width: "100%", height: "100%" }); }
+  else Object.assign(s, w.prev);
+  w.el.classList.toggle("max", on);
+  const b = w.el.querySelector(".max");
+  b.innerHTML = on ? G.restore : G.max;
+  b.setAttribute("aria-label", on ? "Restore down" : "Maximize");
+}
+const maximize = w => setMax(w, true), unmax = (w, a) => setMax(w, false, a), toggleMax = w => setMax(w, !w.max);
+
+/* Minimize and restore fly the window to and from its taskbar button */
+function flyTo(w, out) {
+  const r = w.el.getBoundingClientRect(), b = tbBtn(w.id).getBoundingClientRect();
+  const k = [{ transform: "none", opacity: 1 }, { transform: `translate(${b.left + b.width / 2 - r.left - r.width / 2}px, ${b.top - r.top - r.height / 2}px) scale(.12)`, opacity: 0 }];
+  return w.el.animate(out ? k : k.reverse(), { duration: 240, easing: out ? "cubic-bezier(.5, 0, .9, .6)" : "cubic-bezier(.1, .9, .2, 1)" });
+}
+function minimize(w) {
+  w.min = true;
+  flyTo(w, true).onfinish = () => { if (w.min) w.el.classList.add("minimized"); };
+  focus(WM.active === w.id ? topWin() : WM.wins.get(WM.active));
+}
+function restore(w) {
+  w.min = false;
+  w.el.classList.remove("minimized");
+  flyTo(w, false);
+  focus(w);
+}
+function closeWin(w) {
+  WM.wins.delete(w.id);
+  w.el.style.pointerEvents = "none";
+  w.el.animate([{ opacity: 1 }, { transform: "scale(.96)", opacity: 0 }], { duration: 140, easing: "ease-in" }).onfinish = () => w.el.remove();
+  focus(WM.active === w.id ? topWin() : WM.wins.get(WM.active));
+}
+
+/* ---------- Taskbar ---------- */
+const tbBtn = id => $(`#tbCenter [data-app="${id}"]`);
+$("#tbCenter").innerHTML = `<button class="tb-btn" id="startBtn" aria-label="Start">${icon("start")}</button><button class="tb-btn tb-search" id="searchBtn" aria-label="Search">${G.search}<span>Search</span></button>` +
+  APPS.map(a => `<button class="tb-btn" data-app="${a.id}" aria-label="${a.name}">${icon(a.id)}<span class="ind"></span></button>`).join("");
+function renderTaskbar() {
+  APPS.forEach(({ id }) => {
+    const w = WM.wins.get(id), b = tbBtn(id);
+    b.classList.toggle("running", !!w);
+    b.classList.toggle("active", !!w && !w.min && WM.active === id);
+  });
+}
+$("#tbCenter").addEventListener("click", e => {
+  const b = e.target.closest("button");
+  if (!b) return;
+  if (b.id === "startBtn" || b.id === "searchBtn") return toggleStart(b.id === "searchBtn" || undefined);
+  closeFlyouts();
+  const w = WM.wins.get(b.dataset.app);
+  if (!w) openApp(b.dataset.app);
+  else if (w.min) restore(w);
+  else if (WM.active === w.id) minimize(w);
+  else focus(w);
+});
+function tick() {
+  const now = new Date();
+  $("#clockTime").textContent = now.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
+  $("#clockDate").textContent = now.toLocaleDateString("en-US");
+}
+tick(); setInterval(tick, 1000);
+
+/* ---------- Start ---------- */
+const tiles = list => list.map(a => `<button class="tile fbtn" data-app="${a.id}">${icon(a.id)}<span>${a.name}</span></button>`).join("");
+const matches = q => APPS.filter(a => a.name.toLowerCase().includes(q.trim().toLowerCase()));
+function renderGrid(q, grid, title) {
+  const m = matches(q);
+  $(title).textContent = q.trim() ? "Best match" : "Pinned";
+  $(grid).innerHTML = m.length ? tiles(m) : `<p class="no-results">No results for "${esc(q.trim())}"</p>`;
+  if (q.trim()) $(grid).firstElementChild.classList.add("hit");
+}
+function toggleStart(force) {
+  const open = force ?? !$("#start").classList.contains("open");
+  closeFlyouts();
+  if (!open) return;
+  $("#start").classList.add("open");
+  $("#startBtn").classList.add("open");
+  $("#startQ").value = "";
+  renderGrid("", "#pinned", "#startTitle");
+  setTimeout(() => $("#startQ").focus(), 30);
+}
+function closeFlyouts() {
+  $("#start").classList.remove("open");
+  $("#startBtn").classList.remove("open");
+  $("#startQ").blur();
+}
+$("#startQ").addEventListener("input", e => renderGrid(e.target.value, "#pinned", "#startTitle"));
+$("#startQ").addEventListener("keydown", e => { if (e.key === "Enter" && matches(e.target.value)[0]) openApp(matches(e.target.value)[0].id); });
+$("#start").addEventListener("click", e => { const t = e.target.closest("[data-app]"); if (t) openApp(t.dataset.app); });
+document.addEventListener("pointerdown", e => {
+  if (!e.target.closest("#start, #startBtn, #searchBtn")) closeFlyouts();
+});
+/* A click inside a window's iframe never reaches this page: close Start when focus leaves it */
+addEventListener("blur", closeFlyouts);
+
+function sleep() {
+  closeFlyouts();
+  const o = document.createElement("div");
+  o.style.cssText = "position:fixed;inset:0;z-index:9900;background:#000;color:#666;display:grid;place-items:center;font-size:13px";
+  o.textContent = "Click anywhere to wake";
+  o.onclick = () => o.remove();
+  document.body.append(o);
+}
+$("#powerBtn").onclick = sleep;
+
+function setTheme(t) {
+  document.documentElement.dataset.theme = t;
+  $$(".theme-radio").forEach(r => (r.checked = r.value === t));
+}
+
+/* ---------- Keyboard: Win or Ctrl+Esc for Start, Esc closes it, Alt+F4 or Ctrl+W closes the window ---------- */
+let metaAlone = false;
+document.addEventListener("keydown", e => {
+  metaAlone = e.key === "Meta" || e.key === "OS";
+  if (e.ctrlKey && e.key === "Escape") { e.preventDefault(); toggleStart(); }
+  else if (e.key === "Escape") closeFlyouts();
+  else if ((e.altKey && e.key === "F4") || (e.ctrlKey && e.key.toLowerCase() === "w")) {
+    const w = WM.wins.get(WM.active);
+    if (w) { e.preventDefault(); closeWin(w); }
+  }
+});
+document.addEventListener("keyup", e => { if ((e.key === "Meta" || e.key === "OS") && metaAlone) toggleStart(); metaAlone = false; });
+
+renderGrid("", "#pinned", "#startTitle");
+renderTaskbar();
+</script>
+</body>
+</html>

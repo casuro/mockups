@@ -1,0 +1,212 @@
+/*
+ * Windows 11's look, from desktops/windows.html. Scoped to .kit-windows so it
+ * neither leaks into the page around it nor picks up the page's styles. The
+ * scope stops at each window's content (.kw-content > *), so whatever runs in
+ * a window keeps its own styles. Plain CSS: edit it like any stylesheet.
+ */
+@scope (.kit-windows) to (.kw-content > *) {
+  /* The page's element styles (a CSS reset, Tailwind's preflight) stop at the
+     desktop's edge. SVG is left alone: its drawing attributes count as styles. */
+  :where(:scope, :scope *:not(svg, svg *)) { all: revert; }
+
+  :scope {
+    color-scheme: light;
+    --text: #1b1b1b; --text-2: #5c5c5c; --text-3: #8a8a8a;
+    --accent: #005fb8; --on-accent: #fff;
+    --taskbar: rgba(238, 242, 248, .82); --flyout: rgba(242, 244, 248, .88); --flyout-foot: rgba(233, 236, 242, .75);
+    --card: rgba(255, 255, 255, .72); --card-hover: rgba(255, 255, 255, .9);
+    --hover: rgba(0, 0, 0, .045); --press: rgba(0, 0, 0, .075);
+    --stroke: rgba(0, 0, 0, .08); --field: rgba(255, 255, 255, .8); --field-line: rgba(0, 0, 0, .12);
+    --mica: #eef1f7; --mica-inactive: #f6f7fa; --win-bg: #fff; --pill: #8a8a8a;
+    --shadow-win: 0 0 0 1px rgba(0, 0, 0, .09), 0 12px 32px rgba(0, 0, 0, .24), 0 2px 8px rgba(0, 0, 0, .1);
+    --shadow-win-inactive: 0 0 0 1px rgba(0, 0, 0, .07), 0 6px 18px rgba(0, 0, 0, .14);
+    --shadow-flyout: 0 0 0 1px rgba(0, 0, 0, .1), 0 16px 48px rgba(0, 0, 0, .22);
+    --acrylic: blur(60px) saturate(1.8);
+
+    position: relative; width: 100%; height: 100%; overflow: hidden; container: kw / inline-size;
+    font: 14px/20px "Segoe UI Variable", "Segoe UI", system-ui, sans-serif; color: var(--text);
+    background: #0b2b66; -webkit-font-smoothing: antialiased; user-select: none; -webkit-user-select: none;
+  }
+  /* Light is the default; dark only applies when the desktop's theme is set to dark */
+  :scope[data-theme="dark"] {
+    color-scheme: dark;
+    --text: #fff; --text-2: #c8c8c8; --text-3: #9a9a9a;
+    --accent: #60cdff; --on-accent: #000;
+    --taskbar: rgba(28, 31, 38, .84); --flyout: rgba(36, 38, 44, .9); --flyout-foot: rgba(28, 30, 35, .7);
+    --card: rgba(255, 255, 255, .06); --card-hover: rgba(255, 255, 255, .1);
+    --hover: rgba(255, 255, 255, .06); --press: rgba(255, 255, 255, .04);
+    --stroke: rgba(255, 255, 255, .08); --field: rgba(255, 255, 255, .06); --field-line: rgba(255, 255, 255, .1);
+    --mica: #1f2229; --mica-inactive: #25272c; --win-bg: #1c1c1c; --pill: #9d9d9d;
+    --shadow-win: 0 0 0 1px rgba(255, 255, 255, .1), 0 12px 32px rgba(0, 0, 0, .5), 0 2px 8px rgba(0, 0, 0, .3);
+    --shadow-win-inactive: 0 0 0 1px rgba(255, 255, 255, .07), 0 6px 18px rgba(0, 0, 0, .35);
+    --shadow-flyout: 0 0 0 1px rgba(255, 255, 255, .09), 0 16px 48px rgba(0, 0, 0, .5);
+  }
+  * { box-sizing: border-box; }
+  button { font: inherit; color: inherit; background: none; border: 0; padding: 0; margin: 0; cursor: default; }
+  input { font: inherit; color: inherit; }
+  svg { flex: none; }
+  .kw-btn, .kw-cap { border-radius: 4px; transition: background .08s; }
+  .kw-btn:hover { background: var(--hover); }
+  .kw-btn:active { background: var(--press); }
+
+  /* Wallpaper: the gradient stops are colored here so the theme can switch them */
+  .kw-wallpaper { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .kw-bg0 { stop-color: #f1f6fd; } .kw-bg1 { stop-color: #cfe0f5; } .kw-bg2 { stop-color: #9dbfe8; } .kw-fold { stop-color: #fff; }
+  :scope[data-theme="dark"] {
+    .kw-bg0 { stop-color: #0d2358; } .kw-bg1 { stop-color: #07122e; } .kw-bg2 { stop-color: #010309; } .kw-fold { stop-color: #bfe3ff; }
+    .kw-o0 { stop-color: #03124a; } .kw-o1 { stop-color: #0e3aa6; } .kw-o2 { stop-color: #3a86ea; }
+    .kw-i0 { stop-color: #082a86; } .kw-i1 { stop-color: #2566d8; } .kw-i2 { stop-color: #6fb2ff; }
+  }
+  .kw-desktop { position: absolute; inset: 0 0 48px 0; }
+
+  /* Taskbar */
+  .kw-taskbar { position: absolute; left: 0; right: 0; bottom: 0; height: 48px; z-index: 9000; display: flex; align-items: center; background: var(--taskbar); backdrop-filter: blur(40px) saturate(1.6); -webkit-backdrop-filter: blur(40px) saturate(1.6); border-top: 1px solid var(--stroke); }
+  .kw-tb-center { position: absolute; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 4px; height: 100%; }
+  .kw-tb, .kw-tray-btn { position: relative; height: 40px; border-radius: 4px; border: 1px solid transparent; transition: background .1s; }
+  .kw-tb { width: 40px; display: grid; place-items: center; }
+  .kw-tb:hover, .kw-tb.open { background: var(--card-hover); border-color: var(--stroke); }
+  :scope[data-theme="dark"] :is(.kw-tb:hover, .kw-tb.open) { background: rgba(255, 255, 255, .07); }
+  .kw-tb > svg { width: 24px; height: 24px; transition: transform .12s; }
+  .kw-tb:active > svg { transform: scale(.86); }
+  .kw-ind { position: absolute; bottom: 1px; left: 50%; width: 6px; height: 3px; margin-left: -3px; border-radius: 2px; background: var(--pill); opacity: 0; transition: width .2s, margin .2s, background .2s; }
+  .kw-tb.running .kw-ind { opacity: 1; }
+  .kw-tb.running.active { background: var(--card); border-color: var(--stroke); }
+  .kw-tb.running.active .kw-ind { width: 16px; margin-left: -8px; background: var(--accent); }
+  .kw-tb-search { width: auto; display: flex; gap: 8px; height: 36px; padding: 0 14px 0 10px; border-radius: 18px; background: var(--field); border-color: var(--field-line); color: var(--text-2); font-size: 13px; margin: 0 2px; }
+  .kw-tb-search > svg { width: 16px; height: 16px; }
+  .kw-tray { margin-left: auto; display: flex; align-items: center; gap: 2px; padding-right: 8px; }
+  .kw-tray-btn { display: flex; align-items: center; gap: 8px; padding: 0 8px; }
+  .kw-tray-btn svg { width: 16px; height: 16px; }
+  .kw-clock { flex-direction: column; align-items: flex-end; justify-content: center; gap: 0; padding: 0 10px; font-size: 12px; line-height: 16px; }
+
+  /* Windows */
+  .kw-win { position: absolute; display: flex; flex-direction: column; border-radius: 8px; background: var(--win-bg); box-shadow: var(--shadow-win-inactive); animation: kw-in .2s cubic-bezier(.1, .9, .2, 1); }
+  .kw-win.active { box-shadow: var(--shadow-win); }
+  .kw-win.minimized { visibility: hidden; pointer-events: none; }
+  .kw-win.max { inset: 0; border-radius: 0; box-shadow: none; }
+  .kw-win.anim { transition: left .22s, top .22s, width .22s, height .22s, inset .22s; transition-timing-function: cubic-bezier(.1, .9, .2, 1); }
+  @keyframes kw-in { from { opacity: 0; transform: scale(.94); } }
+  .kw-titlebar { height: 32px; flex: none; display: flex; align-items: center; background: var(--mica-inactive); border-radius: 8px 8px 0 0; color: var(--text-3); }
+  .kw-win.active .kw-titlebar { background: var(--mica); color: var(--text); }
+  .kw-t-ic { width: 16px; height: 16px; margin: 0 10px 0 14px; display: grid; place-items: center; }
+  .kw-t-ic svg { width: 16px; height: 16px; }
+  .kw-t-name { flex: 1; min-width: 0; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .kw-cap { width: 46px; height: 32px; display: grid; place-items: center; border-radius: 0; }
+  .kw-cap svg { width: 10px; height: 10px; }
+  .kw-cap:hover { background: var(--hover); }
+  .kw-cap:active { background: var(--press); }
+  .kw-cap.close { border-top-right-radius: 8px; }
+  .kw-cap.close:hover { background: #c42b1c; color: #fff; }
+  .kw-cap.close:active { background: #c83c31; color: rgba(255, 255, 255, .8); }
+  .kw-win.max :is(.kw-titlebar, .kw-cap.close, .kw-content) { border-radius: 0; }
+  .kw-content { flex: 1; min-height: 0; position: relative; border-radius: 0 0 8px 8px; overflow: hidden; }
+  :scope.kw-gesture .kw-content { pointer-events: none; }
+  .kw-rz { position: absolute; z-index: 2; }
+  .kw-win.max .kw-rz { display: none; }
+  .kw-rz-n, .kw-rz-s { left: 8px; right: 8px; height: 8px; cursor: ns-resize; }
+  .kw-rz-e, .kw-rz-w { top: 8px; bottom: 8px; width: 8px; cursor: ew-resize; }
+  .kw-rz-n { top: -4px; } .kw-rz-s { bottom: -4px; } .kw-rz-e { right: -4px; } .kw-rz-w { left: -4px; }
+  .kw-rz-ne, .kw-rz-nw, .kw-rz-se, .kw-rz-sw { width: 14px; height: 14px; }
+  .kw-rz-ne { top: -4px; right: -4px; cursor: nesw-resize; } .kw-rz-sw { bottom: -4px; left: -4px; cursor: nesw-resize; }
+  .kw-rz-nw { top: -4px; left: -4px; cursor: nwse-resize; } .kw-rz-se { bottom: -4px; right: -4px; cursor: nwse-resize; }
+  :scope[data-cursor="n"], :scope[data-cursor="s"] { cursor: ns-resize; }
+  :scope[data-cursor="e"], :scope[data-cursor="w"] { cursor: ew-resize; }
+  :scope[data-cursor="ne"], :scope[data-cursor="sw"] { cursor: nesw-resize; }
+  :scope[data-cursor="nw"], :scope[data-cursor="se"] { cursor: nwse-resize; }
+
+  /* Start */
+  .kw-flyout, .kw-toast { position: absolute; z-index: 9100; background: var(--flyout); backdrop-filter: var(--acrylic); -webkit-backdrop-filter: var(--acrylic); border-radius: 8px; box-shadow: var(--shadow-flyout); }
+  .kw-flyout { bottom: 60px; overflow: hidden; opacity: 0; visibility: hidden; transform: translateY(24px); transition: transform .22s cubic-bezier(.1, .9, .2, 1), opacity .15s, visibility 0s .22s; }
+  .kw-flyout.open { opacity: 1; visibility: visible; transform: none; transition: transform .26s cubic-bezier(.1, .9, .2, 1), opacity .12s, visibility 0s; }
+  .kw-start { left: 50%; width: 642px; margin-left: -321px; }
+  .kw-search { display: flex; align-items: center; gap: 10px; height: 36px; margin: 32px 32px 20px; padding: 0 16px; border-radius: 18px; background: var(--field); box-shadow: inset 0 0 0 1px var(--field-line); }
+  .kw-search:focus-within { background: var(--win-bg); box-shadow: inset 0 0 0 1px var(--field-line), inset 0 -2px 0 var(--accent); }
+  .kw-search svg { width: 16px; height: 16px; color: var(--text-2); }
+  .kw-search input { flex: 1; min-width: 0; border: 0; outline: 0; background: none; padding: 0; font-size: 14px; }
+  .kw-search input::placeholder { color: var(--text-2); }
+  .kw-sect { height: 32px; display: flex; align-items: center; padding: 0 52px; font-size: 14px; font-weight: 600; }
+  .kw-grid { display: grid; grid-template-columns: repeat(6, 96px); justify-content: center; gap: 4px 2px; min-height: 124px; padding: 4px 0 28px; }
+  .kw-tile { width: 96px; height: 84px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; font-size: 12px; line-height: 16px; }
+  .kw-tile > svg { width: 32px; height: 32px; }
+  .kw-tile span { max-width: 90px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .kw-tile.hit { background: var(--card); box-shadow: 0 0 0 1px var(--stroke); }
+  .kw-empty { grid-column: 1 / -1; align-self: center; margin: 0; text-align: center; color: var(--text-2); font-size: 13px; }
+  .kw-start-foot { height: 64px; display: flex; align-items: center; justify-content: space-between; padding: 0 40px; background: var(--flyout-foot); border-top: 1px solid var(--stroke); }
+  .kw-user { display: flex; align-items: center; gap: 12px; padding: 0 12px; font-size: 12px; }
+  .kw-avatar { width: 32px; height: 32px; border-radius: 50%; overflow: hidden; display: grid; place-items: center; background: linear-gradient(135deg, #8430ce, #5b5fc7); color: #fff; font-size: 12px; font-weight: 600; }
+  .kw-avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .kw-power { width: 40px; height: 40px; display: grid; place-items: center; }
+  .kw-power svg { width: 16px; height: 16px; }
+
+  /* Toasts and sleep */
+  .kw-toasts { position: absolute; right: 12px; bottom: 60px; z-index: 9150; display: flex; flex-direction: column; gap: 8px; }
+  .kw-toast { position: relative; width: 364px; padding: 14px 16px 16px; text-align: left; animation: kw-toast .3s cubic-bezier(.1, .9, .2, 1); }
+  @keyframes kw-toast { from { transform: translateX(calc(100% + 24px)); } }
+  .kw-toast-h { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; font-size: 12px; color: var(--text-2); }
+  .kw-toast-h svg { width: 16px; height: 16px; }
+  .kw-toast b { display: block; font-weight: 600; }
+  .kw-toast small { display: block; margin-top: 2px; font-size: 13px; color: var(--text-2); }
+  .kw-sleep { position: absolute; inset: 0; z-index: 9900; background: #000; color: #666; font-size: 13px; }
+
+  /* Narrow boxes: Start is the home screen and windows open full screen */
+  @container kw (max-width: 759px) {
+    .kw-taskbar, .kw-cap:not(.close), .kw-rz { display: none; }
+    .kw-desktop { inset: 0; z-index: 9200; pointer-events: none; }
+    .kw-win { inset: 0 !important; width: auto !important; height: auto !important; border-radius: 0; pointer-events: auto; }
+    .kw-titlebar, .kw-cap.close { height: 44px; border-radius: 0; }
+    .kw-start { inset: 0; width: auto; margin: 0; border-radius: 0; display: flex; flex-direction: column; opacity: 1; visibility: visible; transform: none; }
+    .kw-search { margin: 20px 16px 12px; }
+    .kw-sect { padding: 0 20px; }
+    .kw-grid { grid-template-columns: repeat(4, 1fr); padding: 4px 8px; }
+    .kw-tile { width: auto; }
+    .kw-start-foot { margin-top: auto; padding: 0 12px; }
+  }
+}
+
+/* The placeholder apps (apps.tsx). Their own scope, since window content sits outside the desktop's. */
+@scope (.kw-app) {
+  :where(:scope, :scope *:not(svg, svg *)) { all: revert; }
+  :scope { height: 100%; display: flex; flex-direction: column; background: var(--win-bg); color: var(--text); font-size: 13px; }
+  * { box-sizing: border-box; }
+  button { font: inherit; color: inherit; background: none; border: 0; padding: 0; margin: 0; cursor: default; }
+  input, textarea { font: inherit; color: inherit; }
+  svg { flex: none; }
+  .kw-btn { border-radius: 4px; transition: background .08s; }
+  .kw-btn:hover { background: var(--hover); }
+  .kw-btn:active { background: var(--press); }
+  .kw-bar { display: flex; align-items: center; gap: 4px; padding: 6px 10px; background: var(--mica); }
+  .kw-bar .kw-btn { width: 32px; height: 32px; display: grid; place-items: center; }
+  .kw-bar .kw-btn:disabled { opacity: .4; background: none; }
+  .kw-bar svg { width: 16px; height: 16px; }
+  .kw-field { flex: 1; min-width: 0; height: 32px; display: flex; align-items: center; gap: 6px; padding: 0 10px; border-radius: 4px; background: var(--field); box-shadow: inset 0 0 0 1px var(--field-line); white-space: nowrap; overflow: hidden; }
+  .kw-field svg { width: 14px; height: 14px; color: var(--text-2); }
+  .kw-files { flex: 1; display: grid; grid-template-columns: repeat(auto-fill, 96px); grid-auto-rows: 100px; gap: 4px; align-content: start; padding: 8px; overflow-y: auto; border-top: 1px solid var(--stroke); }
+  .kw-file { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 10px 4px 6px; font-size: 12px; }
+  .kw-file svg { width: 48px; height: 48px; }
+  .kw-file:focus { background: rgba(0, 95, 184, .16); outline: 1px solid rgba(0, 95, 184, .45); }
+  .kw-status { height: 26px; display: flex; align-items: center; gap: 16px; padding: 0 14px; font-size: 12px; color: var(--text-2); border-top: 1px solid var(--stroke); }
+  .kw-page { flex: 1; display: grid; place-items: center; background: linear-gradient(160deg, #e9f1fb, #f7f3fb); border-top: 1px solid var(--stroke); }
+  .kw-web-search { width: min(560px, 80%); height: 44px; display: flex; align-items: center; gap: 10px; padding: 0 18px; border-radius: 22px; background: var(--win-bg); box-shadow: 0 2px 12px rgba(0, 0, 0, .1); }
+  .kw-web-search svg { width: 16px; height: 16px; color: var(--text-2); }
+  .kw-web-search input { flex: 1; min-width: 0; border: 0; outline: 0; background: none; padding: 0; font-size: 14px; }
+  .kw-menubar { display: flex; gap: 2px; padding: 4px 6px; background: var(--mica); }
+  .kw-menubar .kw-btn { height: 28px; padding: 0 10px; }
+  .kw-notepad { flex: 1; resize: none; margin: 0; border: 0; border-top: 1px solid var(--stroke); outline: 0; padding: 10px 14px; background: var(--win-bg); font: 15px/1.5 Consolas, "Cascadia Mono", ui-monospace, monospace; user-select: text; }
+  :scope.kw-term { background: #0c0c0c; color: #ccc; }
+  .kw-tabs { height: 36px; display: flex; align-items: flex-end; padding: 0 8px; background: #1f1f1f; }
+  .kw-tab { height: 32px; display: flex; align-items: center; gap: 8px; padding: 0 12px; border-radius: 6px 6px 0 0; background: #0c0c0c; color: #fff; font-size: 12px; }
+  .kw-tab svg { width: 14px; height: 14px; }
+  pre { flex: 1; margin: 0; padding: 8px 12px; overflow-y: auto; font: 14px/1.45 "Cascadia Mono", Consolas, ui-monospace, monospace; white-space: pre-wrap; user-select: text; outline: 0; }
+  .kw-caret { display: inline-block; width: 8px; height: 16px; background: #ccc; vertical-align: -3px; animation: kw-blink 1s steps(1) infinite; }
+  @keyframes kw-blink { 50% { opacity: 0; } }
+  :scope.kw-settings { padding: 18px 28px 24px; background: var(--mica); overflow-y: auto; }
+  h1 { margin: 0 0 20px; font-size: 28px; line-height: 36px; font-weight: 600; }
+  .kw-card { display: flex; align-items: center; gap: 16px; min-height: 68px; margin-bottom: 4px; padding: 12px 16px; border-radius: 6px; background: var(--card); box-shadow: 0 0 0 1px var(--stroke); }
+  .kw-card > svg { width: 20px; height: 20px; }
+  .kw-card div { flex: 1; min-width: 0; }
+  .kw-card small { display: block; font-size: 12px; color: var(--text-2); }
+  .kw-card label { display: inline-flex; align-items: center; gap: 8px; margin-left: 16px; }
+  .kw-card input { width: 18px; height: 18px; margin: 0; accent-color: var(--accent); }
+  /* The desktop's theme reaches in from outside this scope */
+  .kit-windows[data-theme="dark"] .kw-page { background: linear-gradient(160deg, #1b2533, #231d2b); }
+}
