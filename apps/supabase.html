@@ -1,0 +1,1468 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Supabase UI Mockup</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg viewBox=%220 0 109 113%22 fill=%22none%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cpath d=%22M63.7076 110.284C60.8481 113.885 55.0502 111.912 54.9813 107.314L53.9738 40.0627L99.1935 40.0627C107.384 40.0627 111.952 49.5228 106.859 55.9374L63.7076 110.284Z%22 fill=%22url%28%23paint0_linear%29%22/%3E%3Cpath d=%22M63.7076 110.284C60.8481 113.885 55.0502 111.912 54.9813 107.314L53.9738 40.0627L99.1935 40.0627C107.384 40.0627 111.952 49.5228 106.859 55.9374L63.7076 110.284Z%22 fill=%22url%28%23paint1_linear%29%22 fill-opacity=%220.2%22/%3E%3Cpath d=%22M45.317 2.07103C48.1765 -1.53037 53.9745 0.442937 54.0434 5.041L54.4849 72.2922H9.83113C1.64038 72.2922 -2.92775 62.8321 2.1655 56.4175L45.317 2.07103Z%22 fill=%22%233ECF8E%22/%3E%3Cdefs%3E%3ClinearGradient id=%22paint0_linear%22 x1=%2253.9738%22 y1=%2254.974%22 x2=%2294.1635%22 y2=%2271.8295%22 gradientUnits=%22userSpaceOnUse%22%3E%3Cstop stop-color=%22%23249361%22/%3E%3Cstop offset=%221%22 stop-color=%22%233ECF8E%22/%3E%3C/linearGradient%3E%3ClinearGradient id=%22paint1_linear%22 x1=%2236.1558%22 y1=%2230.578%22 x2=%2254.4844%22 y2=%2265.0806%22 gradientUnits=%22userSpaceOnUse%22%3E%3Cstop/%3E%3Cstop offset=%221%22 stop-opacity=%220%22/%3E%3C/linearGradient%3E%3C/defs%3E%3C/svg%3E">
+<style>
+  :root {
+    color-scheme: light;
+    --bg: #fcfcfc;
+    --bg-alt: #f8f8f8;
+    --surface: #ffffff;
+    --surface-2: #f3f3f3;
+    --surface-3: #ededed;
+    --control: #fafafa;
+    --border: #dfdfdf;
+    --border-muted: #ededed;
+    --border-strong: #cfcfcf;
+    --text: #171717;
+    --text-2: #525252;
+    --text-3: #707070;
+    --text-4: #a3a3a3;
+    --brand: #3ecf8e;
+    --brand-link: #0e9f60;
+    --brand-btn: #72e3ad;
+    --brand-btn-hover: #62d9a0;
+    --brand-btn-border: #3ecf8e;
+    --brand-btn-text: #171717;
+    --brand-soft: #e9f9f1;
+    --brand-soft-border: #b5ecd2;
+    --row-sel: #eef9f3;
+    --row-hover: #f6f6f6;
+    --warn: #b35a00;
+    --warn-bg: #fff8eb;
+    --warn-border: #f5d49a;
+    --warn-icon: #e38b00;
+    --danger: #d4343a;
+    --danger-bg: #fff2f2;
+    --danger-border: #f5c1c3;
+    --danger-btn: #e5484d;
+    --focus: #3ecf8e;
+    --scrim: rgba(0,0,0,.28);
+    --shadow-1: 0 1px 2px rgba(0,0,0,.05);
+    --shadow-2: 0 6px 20px rgba(0,0,0,.1), 0 0 0 1px rgba(0,0,0,.04);
+    --shadow-3: 0 16px 48px rgba(0,0,0,.18);
+    --tip-bg: #171717;
+    --tip-text: #fafafa;
+    --kw: #7a3cf0;
+    --str: #b35a00;
+    --num: #0b7fb8;
+    --com: #8f8f8f;
+    --fn: #0e9f60;
+    --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --bg: #121212;
+    --bg-alt: #171717;
+    --surface: #1c1c1c;
+    --surface-2: #1f1f1f;
+    --surface-3: #292929;
+    --control: #1a1a1a;
+    --border: #2e2e2e;
+    --border-muted: #242424;
+    --border-strong: #3e3e3e;
+    --text: #ededed;
+    --text-2: #b4b4b4;
+    --text-3: #898989;
+    --text-4: #5c5c5c;
+    --brand-link: #3ecf8e;
+    --brand-btn: #006239;
+    --brand-btn-hover: #007a47;
+    --brand-btn-border: #1a8f5c;
+    --brand-btn-text: #fafafa;
+    --brand-soft: rgba(62,207,142,.1);
+    --brand-soft-border: rgba(62,207,142,.35);
+    --row-sel: rgba(62,207,142,.08);
+    --row-hover: #1a1a1a;
+    --warn: #ffb224;
+    --warn-bg: rgba(255,178,36,.08);
+    --warn-border: rgba(255,178,36,.3);
+    --warn-icon: #ffb224;
+    --danger: #ff6369;
+    --danger-bg: rgba(229,72,77,.1);
+    --danger-border: rgba(229,72,77,.4);
+    --danger-btn: #c93c41;
+    --scrim: rgba(0,0,0,.6);
+    --shadow-1: 0 1px 2px rgba(0,0,0,.4);
+    --shadow-2: 0 8px 24px rgba(0,0,0,.5), 0 0 0 1px rgba(255,255,255,.04);
+    --shadow-3: 0 18px 50px rgba(0,0,0,.7);
+    --tip-bg: #ededed;
+    --tip-text: #171717;
+    --kw: #bda4ff;
+    --str: #ffcda1;
+    --num: #8fd6ff;
+    --com: #6b6b6b;
+    --fn: #3ecf8e;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: var(--sans); font-size: 14px; line-height: 20px; color: var(--text); background: var(--bg);
+    -webkit-font-smoothing: antialiased; overflow: hidden;
+  }
+  button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; text-align: inherit; }
+  input, textarea, select { font: inherit; color: inherit; }
+  svg { flex: none; }
+  .i { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+  .i.sm { width: 14px; height: 14px; }
+  [hidden] { display: none !important; }
+  :focus-visible { outline: 2px solid var(--focus); outline-offset: 1px; }
+  ::selection { background: rgba(62,207,142,.3); }
+  .mono { font-family: var(--mono); }
+  .muted { color: var(--text-3); }
+
+  /* ---------- Buttons, inputs ---------- */
+  .btn {
+    height: 26px; padding: 0 10px; border: 1px solid var(--border); border-radius: 6px; background: var(--surface);
+    display: inline-flex; align-items: center; gap: 6px; font-size: 12px; line-height: 16px; white-space: nowrap; color: var(--text); flex: none;
+    box-shadow: var(--shadow-1); transition: background .12s, border-color .12s;
+  }
+  .btn:hover { background: var(--surface-2); border-color: var(--border-strong); }
+  .btn .i { width: 14px; height: 14px; color: var(--text-3); }
+  .btn.primary { background: var(--brand-btn); border-color: var(--brand-btn-border); color: var(--brand-btn-text); }
+  .btn.primary:hover { background: var(--brand-btn-hover); }
+  .btn.primary .i { color: inherit; }
+  .btn.danger { background: var(--danger-btn); border-color: var(--danger-btn); color: #fff; }
+  .btn.danger:hover { filter: brightness(1.06); }
+  .btn.danger-outline { color: var(--danger); border-color: var(--danger-border); background: var(--danger-bg); }
+  .btn.danger-outline .i { color: var(--danger); }
+  .btn.ghost { border-color: transparent; background: transparent; box-shadow: none; }
+  .btn.ghost:hover { background: var(--surface-3); }
+  .btn.on { background: var(--brand-soft); border-color: var(--brand-soft-border); }
+  .btn.on .i { color: var(--brand-link); }
+  .btn.lg { height: 32px; padding: 0 14px; font-size: 13px; }
+  .btn kbd { font-family: var(--sans); font-size: 11px; color: inherit; opacity: .7; }
+  .icon-btn {
+    width: 28px; height: 28px; border-radius: 6px; display: inline-grid; place-items: center; color: var(--text-3); flex: none;
+    transition: background .12s, color .12s;
+  }
+  .icon-btn:hover { background: var(--surface-3); color: var(--text); }
+  .input {
+    height: 30px; width: 100%; padding: 0 10px; border: 1px solid var(--border); border-radius: 6px; background: var(--control);
+    font-size: 13px; color: var(--text); outline: none; transition: border-color .12s, box-shadow .12s;
+  }
+  .input::placeholder, textarea::placeholder { color: var(--text-4); }
+  .input:focus { border-color: var(--border-strong); box-shadow: 0 0 0 2px rgba(62,207,142,.25); }
+  .input:disabled { opacity: .65; cursor: not-allowed; }
+  textarea.input { height: auto; padding: 7px 10px; resize: vertical; line-height: 18px; }
+  select.input { appearance: none; padding-right: 28px; cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23898989' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m7 15 5 5 5-5M7 9l5-5 5 5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 8px center; }
+  .input.mono { font-family: var(--mono); font-size: 12px; }
+  .input.err { border-color: var(--danger); }
+  .badge {
+    display: inline-flex; align-items: center; height: 18px; padding: 0 6px; border-radius: 999px; font-size: 10.5px; font-weight: 500;
+    letter-spacing: .02em; border: 1px solid var(--border); color: var(--text-2); background: var(--surface-2); white-space: nowrap; flex: none;
+  }
+  .badge.warn { color: var(--warn); background: var(--warn-bg); border-color: var(--warn-border); text-transform: uppercase; }
+  .badge.brand { color: var(--brand-link); background: var(--brand-soft); border-color: var(--brand-soft-border); }
+  .badge.danger { color: var(--danger); background: var(--danger-bg); border-color: var(--danger-border); }
+  .av { width: 26px; height: 26px; border-radius: 50%; object-fit: cover; display: block; flex: none; }
+  .kbd { display: inline-grid; place-items: center; min-width: 18px; height: 18px; padding: 0 4px; border: 1px solid var(--border); border-radius: 4px; font-size: 11px; color: var(--text-3); background: var(--surface); }
+  .cbx { appearance: none; width: 14px; height: 14px; border: 1px solid var(--border-strong); border-radius: 3px; background: var(--control); display: grid; place-items: center; cursor: pointer; flex: none; }
+  .cbx:checked { background: var(--brand-btn); border-color: var(--brand-btn-border); }
+  .cbx:checked::after { content: ""; width: 7px; height: 4px; border: solid var(--brand-btn-text); border-width: 0 0 1.6px 1.6px; transform: translateY(-1px) rotate(-45deg); }
+  .cbx:indeterminate { background: var(--brand-btn); border-color: var(--brand-btn-border); }
+  .cbx:indeterminate::after { content: ""; width: 7px; height: 1.6px; background: var(--brand-btn-text); }
+
+  /* ---------- App frame ---------- */
+  .app { display: flex; flex-direction: column; height: 100vh; height: 100dvh; overflow: hidden; background: var(--bg); }
+  .body { flex: 1; min-height: 0; display: flex; position: relative; }
+
+  /* ---------- Top bar ---------- */
+  .top {
+    height: 48px; flex: none; display: flex; align-items: center; gap: 4px; padding: 0 12px 0 0; border-bottom: 1px solid var(--border);
+    background: var(--bg-alt); position: relative; z-index: 30;
+  }
+  .top-logo { width: 48px; height: 48px; display: grid; place-items: center; flex: none; }
+  .top-logo svg { width: 20px; height: 21px; }
+  .crumb { display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 6px; border-radius: 6px; font-size: 13px; color: var(--text); white-space: nowrap; min-width: 0; }
+  .crumb:hover { background: var(--surface-3); }
+  .crumb .i { width: 14px; height: 14px; color: var(--text-3); }
+  .crumb .org-av { width: 18px; height: 18px; border-radius: 4px; display: grid; place-items: center; font-size: 10px; font-weight: 600; background: var(--text); color: var(--bg); }
+  .slash { width: 16px; height: 20px; color: var(--border-strong); flex: none; }
+  .top-sp { flex: 1; min-width: 8px; }
+  .search-btn {
+    height: 28px; width: 200px; display: flex; align-items: center; gap: 8px; padding: 0 6px 0 10px; border: 1px solid var(--border);
+    border-radius: 6px; background: var(--control); color: var(--text-4); font-size: 12px;
+  }
+  .search-btn:hover { border-color: var(--border-strong); color: var(--text-3); }
+  .search-btn .sl { flex: 1; text-align: left; }
+  .top-av { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; margin-left: 4px; }
+  .top-av img { width: 26px; height: 26px; }
+  .mb-only { display: none !important; }
+
+  /* ---------- Rail (product navigation) ---------- */
+  .rail { width: 48px; flex: none; position: relative; z-index: 25; }
+  .rail-nav {
+    position: absolute; inset: 0 auto 0 0; width: 48px; background: var(--bg-alt); border-right: 1px solid var(--border);
+    display: flex; flex-direction: column; padding: 8px 0; overflow: hidden; transition: width .18s ease, box-shadow .18s ease;
+  }
+  .rail:hover .rail-nav, .rail:focus-within .rail-nav { width: 208px; box-shadow: var(--shadow-2); transition-delay: .12s; }
+  .rail-group { display: flex; flex-direction: column; gap: 2px; padding: 0 8px; }
+  .rail-sep { height: 1px; background: var(--border); margin: 8px 12px; flex: none; }
+  .rail-item {
+    height: 32px; display: flex; align-items: center; gap: 12px; padding: 0 8px; border-radius: 6px; color: var(--text-3);
+    white-space: nowrap; font-size: 13px; width: 100%;
+  }
+  .rail-item .i { width: 16px; height: 16px; }
+  .rail-item:hover { color: var(--text); background: var(--surface-3); }
+  .rail-item.on { color: var(--text); background: var(--surface-3); }
+  .rail-item .lbl { opacity: 0; transition: opacity .12s; }
+  .rail:hover .rail-item .lbl, .rail:focus-within .rail-item .lbl { opacity: 1; transition-delay: .15s; }
+  .rail-bottom { margin-top: auto; }
+</style>
+<style>
+  /* ---------- Product menu (table list, snippet list) ---------- */
+  .menu-side {
+    width: 256px; flex: none; display: flex; flex-direction: column; border-right: 1px solid var(--border); background: var(--bg-alt); min-height: 0;
+  }
+  .ms-head { height: 48px; flex: none; display: flex; align-items: center; padding: 0 16px; border-bottom: 1px solid var(--border); }
+  .ms-head h1 { font-size: 15px; font-weight: 400; flex: 1; }
+  .ms-tools { padding: 12px 12px 8px; display: flex; flex-direction: column; gap: 8px; flex: none; }
+  .schema-btn {
+    height: 28px; display: flex; align-items: center; gap: 6px; padding: 0 8px; border: 1px solid var(--border); border-radius: 6px;
+    background: var(--surface); font-size: 12px; box-shadow: var(--shadow-1); width: 100%;
+  }
+  .schema-btn:hover { border-color: var(--border-strong); }
+  .schema-btn .k { color: var(--text-3); }
+  .schema-btn b { font-weight: 400; flex: 1; text-align: left; }
+  .schema-btn .i { width: 13px; height: 13px; color: var(--text-3); }
+  .new-btn { justify-content: flex-start; width: 100%; height: 28px; }
+  .ms-search { position: relative; }
+  .ms-search .i { position: absolute; left: 9px; top: 7px; width: 14px; height: 14px; color: var(--text-3); pointer-events: none; }
+  .ms-search .input { height: 28px; padding-left: 30px; font-size: 12px; }
+  .ms-list { flex: 1; min-height: 0; overflow: auto; padding: 0 8px 12px; }
+  .ms-label { font-size: 11px; color: var(--text-3); letter-spacing: .06em; text-transform: uppercase; padding: 10px 8px 6px; display: flex; gap: 6px; }
+  .ms-item {
+    height: 28px; width: 100%; display: flex; align-items: center; gap: 8px; padding: 0 8px; border-radius: 6px; font-size: 13px; color: var(--text-2);
+  }
+  .ms-item .i { width: 14px; height: 14px; color: var(--text-3); }
+  .ms-item span.n { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: left; }
+  .ms-item:hover { background: var(--surface-3); color: var(--text); }
+  .ms-item.on { background: var(--surface-3); color: var(--text); }
+  .ms-item.on .i { color: var(--text-2); }
+  .ms-item .rls-off { display: grid; }
+  .ms-item .rls-off .i { color: var(--warn-icon); }
+  .ms-empty { padding: 20px 8px; font-size: 12px; color: var(--text-3); text-align: center; }
+
+  /* ---------- Editor area ---------- */
+  .editor { flex: 1; min-width: 0; display: flex; flex-direction: column; background: var(--bg); position: relative; }
+  .tabs { height: 36px; flex: none; display: flex; align-items: stretch; border-bottom: 1px solid var(--border); background: var(--bg-alt); overflow-x: auto; scrollbar-width: none; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab {
+    display: flex; align-items: center; gap: 7px; padding: 0 8px 0 12px; font-size: 12px; color: var(--text-3); border-right: 1px solid var(--border);
+    white-space: nowrap; position: relative; flex: none; max-width: 240px;
+  }
+  .tab .tl { overflow: hidden; text-overflow: ellipsis; }
+  .tab:hover { color: var(--text); }
+  .tab.on { background: var(--bg); color: var(--text); }
+  .tab.on::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 1px; background: var(--bg); }
+  .tab.on::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 2px; background: var(--brand); }
+  .tab .i { width: 13px; height: 13px; }
+  .tab .x { width: 18px; height: 18px; border-radius: 4px; display: grid; place-items: center; color: var(--text-3); opacity: 0; }
+  .tab:hover .x, .tab.on .x { opacity: 1; }
+  .tab .x:hover { background: var(--surface-3); color: var(--text); }
+  .tab .x .i { width: 12px; height: 12px; }
+
+  .toolbar { min-height: 44px; flex: none; display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-bottom: 1px solid var(--border); }
+  .toolbar .sep { width: 1px; height: 18px; background: var(--border); flex: none; }
+  .toolbar .sp { flex: 1; min-width: 4px; }
+  .sel-count { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text); white-space: nowrap; }
+  .rls-btn.off { color: var(--danger); border-color: var(--danger-border); background: var(--danger-bg); }
+  .rls-btn.off .i { color: var(--danger); }
+  .rls-btn .cnt { display: inline-grid; place-items: center; min-width: 16px; height: 16px; border-radius: 999px; background: var(--surface-3); font-size: 10.5px; padding: 0 4px; color: var(--text-2); }
+
+  .banner {
+    margin: 10px 12px 0; flex: none; display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; border: 1px solid var(--warn-border);
+    background: var(--warn-bg); border-radius: 6px; font-size: 12.5px; line-height: 18px;
+  }
+  .banner > .i { color: var(--warn-icon); margin-top: 1px; }
+  .banner .bt { flex: 1; min-width: 0; }
+  .banner b { font-weight: 500; display: block; color: var(--text); }
+  .banner p { color: var(--text-2); }
+  .banner code { font-family: var(--mono); font-size: 11.5px; }
+  .banner .ba { display: flex; gap: 8px; flex: none; align-self: center; }
+
+  /* ---------- Grid ---------- */
+  .grid-wrap { flex: 1; min-height: 0; overflow: auto; position: relative; margin-top: 10px; border-top: 1px solid var(--border); }
+  .grid-wrap.flush { margin-top: 0; border-top: 0; }
+  table.grid { border-collapse: separate; border-spacing: 0; table-layout: fixed; font-size: 12px; min-width: 100%; width: max-content; }
+  .grid th, .grid td { height: 34px; padding: 0 10px; border-right: 1px solid var(--border-muted); border-bottom: 1px solid var(--border-muted); text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .grid th { position: sticky; top: 0; z-index: 2; background: var(--surface-2); font-weight: 400; border-bottom-color: var(--border); border-right-color: var(--border); }
+  .grid td { font-family: var(--mono); color: var(--text); background: var(--bg); cursor: pointer; }
+  .grid .ck { width: 64px; min-width: 64px; padding: 0 0 0 14px; position: sticky; left: 0; z-index: 1; }
+  .grid th.ck { z-index: 3; }
+  .ck-in { display: flex; align-items: center; gap: 8px; }
+  .ck-in .exp { width: 20px; height: 20px; border-radius: 4px; display: grid; place-items: center; color: var(--text-3); opacity: 0; }
+  .ck-in .exp .i { width: 12px; height: 12px; }
+  .ck-in .exp:hover { background: var(--surface-3); color: var(--text); }
+  .grid tr:hover td { background: var(--row-hover); }
+  .grid tr:hover .exp { opacity: 1; }
+  .grid tr.sel td { background: var(--row-sel); }
+  .grid tr.flash td { animation: sb-flash 1.6s ease-out; }
+  @keyframes sb-flash { from { background: var(--brand-soft); } to { background: var(--bg); } }
+  .th-in { display: flex; align-items: center; gap: 6px; min-width: 0; }
+  .th-in .i.key { width: 12px; height: 12px; color: var(--warn-icon); }
+  .th-in .cn { color: var(--text); font-size: 12px; font-weight: 500; overflow: hidden; text-overflow: ellipsis; }
+  .th-in .ct { color: var(--text-3); font-family: var(--mono); font-size: 11px; }
+  .th-in .sp { flex: 1; }
+  .th-in .th-sort { width: 12px; height: 12px; color: var(--brand-link); }
+  .th-menu { width: 20px; height: 20px; border-radius: 4px; display: grid; place-items: center; color: var(--text-3); opacity: 0; }
+  .th-menu .i { width: 13px; height: 13px; }
+  .grid th:hover .th-menu, .th-menu[aria-expanded="true"] { opacity: 1; }
+  .th-menu:hover { background: var(--surface-3); color: var(--text); }
+  .null { color: var(--text-4); }
+  .v-bool { text-transform: uppercase; }
+  .grid-empty { padding: 60px 20px; text-align: center; color: var(--text-3); font-size: 13px; }
+  .grid-empty b { display: block; color: var(--text); font-weight: 500; margin-bottom: 4px; }
+  .grid-wrap.loading table { opacity: .45; transition: opacity .1s; }
+
+  .foot { height: 40px; flex: none; display: flex; align-items: center; gap: 8px; padding: 0 12px; border-top: 1px solid var(--border); font-size: 12px; color: var(--text-2); background: var(--bg-alt); }
+  .foot .sp { flex: 1; }
+  .foot .icon-btn { width: 26px; height: 26px; border: 1px solid var(--border); background: var(--surface); }
+  .foot .icon-btn:disabled { opacity: .45; cursor: default; background: var(--surface); }
+  .foot .i { width: 14px; height: 14px; }
+  .seg { display: inline-flex; border: 1px solid var(--border); border-radius: 6px; overflow: hidden; background: var(--surface); flex: none; }
+  .seg button { height: 24px; padding: 0 10px; font-size: 12px; color: var(--text-3); display: inline-flex; align-items: center; gap: 6px; }
+  .seg button + button { border-left: 1px solid var(--border); }
+  .seg button.on { background: var(--surface-3); color: var(--text); }
+  .seg .i { width: 13px; height: 13px; }
+
+  /* ---------- Definition, code ---------- */
+  .code { flex: 1; min-height: 0; overflow: auto; font-family: var(--mono); font-size: 12.5px; line-height: 20px; display: flex; background: var(--bg); }
+  .code .gut { padding: 12px 10px 12px 16px; text-align: right; color: var(--text-4); user-select: none; flex: none; white-space: pre; }
+  .code pre { padding: 12px 16px 12px 6px; font: inherit; color: var(--text); white-space: pre; flex: 1; }
+  .t-kw { color: var(--kw); } .t-str { color: var(--str); } .t-num { color: var(--num); } .t-com { color: var(--com); font-style: italic; } .t-fn { color: var(--fn); }
+
+  /* ---------- SQL editor ---------- */
+  .sql-area { flex: 1; min-height: 120px; display: flex; align-items: flex-start; overflow: auto; background: var(--bg); font-family: var(--mono); font-size: 13px; line-height: 20px; }
+  .sql-area .gut { padding: 12px 10px 12px 16px; text-align: right; color: var(--text-4); user-select: none; white-space: pre; flex: none; }
+  .sql-ed { position: relative; flex: 1 0 auto; min-height: 100%; }
+  .sql-ed pre, .sql-ed textarea {
+    margin: 0; padding: 12px 16px 12px 6px; font: inherit; white-space: pre; tab-size: 2; border: 0;
+  }
+  .sql-ed pre { color: var(--text); pointer-events: none; }
+  .sql-ed textarea {
+    position: absolute; inset: 0; width: 100%; height: 100%; resize: none; background: transparent; color: transparent; caret-color: var(--text);
+    outline: none; overflow: hidden;
+  }
+  .sql-ed textarea::selection { background: rgba(62,207,142,.28); color: transparent; }
+  .results { height: 42%; min-height: 150px; flex: none; display: flex; flex-direction: column; border-top: 1px solid var(--border); background: var(--bg); }
+  .res-head { height: 40px; flex: none; display: flex; align-items: center; gap: 4px; padding: 0 12px; border-bottom: 1px solid var(--border); background: var(--bg-alt); }
+  .res-tab { height: 26px; padding: 0 10px; border-radius: 6px; font-size: 12px; color: var(--text-3); }
+  .res-tab:hover { color: var(--text); }
+  .res-tab.on { background: var(--surface-3); color: var(--text); }
+  .res-head .sp { flex: 1; }
+  .res-meta { font-size: 12px; color: var(--text-3); display: flex; gap: 6px; align-items: center; margin-right: 6px; white-space: nowrap; }
+  .res-body { flex: 1; min-height: 0; overflow: auto; position: relative; }
+  .res-msg { padding: 14px 16px; font-family: var(--mono); font-size: 12.5px; color: var(--text-2); }
+  .res-msg.err { color: var(--danger); white-space: pre-wrap; }
+  .res-hint { height: 100%; display: grid; place-items: center; color: var(--text-3); font-size: 13px; text-align: center; padding: 16px; }
+  .res-foot { height: 32px; flex: none; display: flex; align-items: center; padding: 0 12px; border-top: 1px solid var(--border); font-size: 12px; color: var(--text-3); background: var(--bg-alt); }
+  .grid.res td { cursor: default; }
+  .spin { width: 14px; height: 14px; border: 2px solid var(--border-strong); border-top-color: var(--brand); border-radius: 50%; animation: sb-spin .7s linear infinite; }
+  @keyframes sb-spin { to { transform: rotate(360deg); } }
+
+  /* ---------- Side panel ---------- */
+  .scrim { position: fixed; inset: 0; background: var(--scrim); z-index: 60; animation: sb-fade .15s ease-out; }
+  @keyframes sb-fade { from { opacity: 0; } }
+  .panel {
+    position: fixed; top: 0; right: 0; bottom: 0; width: min(600px, 100vw); background: var(--surface); border-left: 1px solid var(--border);
+    box-shadow: var(--shadow-3); z-index: 61; display: flex; flex-direction: column; animation: sb-slide .2s ease-out;
+  }
+  @keyframes sb-slide { from { transform: translateX(24px); opacity: 0; } }
+  .panel-head { height: 52px; flex: none; display: flex; align-items: center; gap: 8px; padding: 0 12px 0 20px; border-bottom: 1px solid var(--border); background: var(--bg-alt); }
+  .panel-head h2 { flex: 1; font-size: 14px; font-weight: 400; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .panel-head h2 code { font-family: var(--mono); font-size: 13px; background: var(--surface-3); border: 1px solid var(--border); border-radius: 4px; padding: 1px 5px; }
+  .panel-body { flex: 1; min-height: 0; overflow: auto; }
+  .p-sec { padding: 20px; border-bottom: 1px solid var(--border); }
+  .p-sec h3 { font-size: 13px; font-weight: 500; margin-bottom: 14px; }
+  .field { display: grid; grid-template-columns: 180px 1fr; gap: 16px; padding: 10px 0; }
+  .field + .field { border-top: 1px dashed var(--border-muted); }
+  .f-lbl { display: flex; flex-direction: column; gap: 2px; padding-top: 5px; min-width: 0; }
+  .f-lbl label { font-size: 13px; color: var(--text-2); overflow: hidden; text-overflow: ellipsis; }
+  .f-lbl .ft { font-family: var(--mono); font-size: 11px; color: var(--text-3); }
+  .f-in { min-width: 0; display: flex; flex-direction: column; gap: 5px; }
+  .f-hint { font-size: 11.5px; color: var(--text-3); }
+  .f-err { font-size: 11.5px; color: var(--danger); }
+  .f-check { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-2); padding: 6px 0; }
+  .panel-foot { height: 56px; flex: none; display: flex; align-items: center; justify-content: flex-end; gap: 8px; padding: 0 20px; border-top: 1px solid var(--border); background: var(--bg-alt); }
+
+  /* ---------- Dialogs, popovers, menus ---------- */
+  .dlg-wrap { position: fixed; inset: 0; z-index: 70; display: grid; place-items: center; padding: 16px; background: var(--scrim); animation: sb-fade .15s ease-out; }
+  .dlg { width: min(440px, 100%); background: var(--surface); border: 1px solid var(--border); border-radius: 8px; box-shadow: var(--shadow-3); overflow: hidden; }
+  .dlg.wide { width: min(620px, 100%); }
+  .dlg-head { padding: 16px 20px 0; display: flex; align-items: center; gap: 8px; }
+  .dlg-head h2 { font-size: 15px; font-weight: 500; flex: 1; }
+  .dlg-body { padding: 10px 20px 18px; font-size: 13px; color: var(--text-2); line-height: 20px; }
+  .dlg-body p + p { margin-top: 8px; }
+  .dlg-foot { display: flex; justify-content: flex-end; gap: 8px; padding: 12px 20px; border-top: 1px solid var(--border); background: var(--bg-alt); }
+  .conn { margin-top: 12px; display: flex; flex-direction: column; gap: 6px; }
+  .conn label { font-size: 12px; color: var(--text-3); }
+  .conn-row { display: flex; gap: 6px; }
+  .conn-row code { flex: 1; min-width: 0; font-family: var(--mono); font-size: 12px; padding: 7px 10px; border: 1px solid var(--border); border-radius: 6px; background: var(--control); color: var(--text); overflow-x: auto; white-space: nowrap; }
+
+  .pop { position: fixed; z-index: 80; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; box-shadow: var(--shadow-2); min-width: 180px; font-size: 13px; animation: sb-pop .12s ease-out; }
+  @keyframes sb-pop { from { opacity: 0; transform: translateY(-3px); } }
+  .mi { width: 100%; min-height: 32px; display: flex; align-items: center; gap: 10px; padding: 6px 12px; color: var(--text-2); font-size: 13px; text-align: left; }
+  .mi:hover, .mi:focus-visible { background: var(--surface-3); color: var(--text); outline: none; }
+  .mi .i { width: 15px; height: 15px; color: var(--text-3); }
+  .mi .mt { display: flex; flex-direction: column; min-width: 0; }
+  .mi .mt small { font-size: 11.5px; color: var(--text-3); line-height: 15px; }
+  .mi.on { color: var(--text); }
+  .mi .ok { margin-left: auto; color: var(--brand-link); }
+  .m-sep { height: 1px; background: var(--border); margin: 4px 0; }
+  .m-list { padding: 4px 0; }
+  .m-head { padding: 8px 12px 4px; font-size: 11px; color: var(--text-3); text-transform: uppercase; letter-spacing: .06em; }
+  .um-head { display: flex; gap: 10px; align-items: center; padding: 12px; border-bottom: 1px solid var(--border); }
+  .um-head img { width: 32px; height: 32px; }
+  .um-head b { display: block; font-weight: 500; font-size: 13px; }
+  .um-head span { font-size: 12px; color: var(--text-3); }
+  .um-theme { padding: 10px 12px; border-bottom: 1px solid var(--border); }
+  .um-theme h6 { font-size: 11px; font-weight: 400; color: var(--text-3); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 6px; }
+  .um-theme .seg { width: 100%; }
+  .um-theme .seg button { flex: 1; justify-content: center; }
+
+  .fp { width: min(560px, calc(100vw - 16px)); }
+  .fp-rows { padding: 10px 12px; display: flex; flex-direction: column; gap: 8px; }
+  .fp-row { display: grid; grid-template-columns: 1.3fr .8fr 1.4fr 28px; gap: 6px; align-items: center; }
+  .fp-row.s { grid-template-columns: 1fr auto 28px; }
+  .fp-row .input { height: 28px; font-size: 12px; }
+  .fp-empty { font-size: 12px; color: var(--text-3); padding: 4px 2px; }
+  .fp-foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 8px 12px; border-top: 1px solid var(--border); }
+  .asc { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-2); white-space: nowrap; }
+
+  .palette { position: fixed; inset: 0; z-index: 90; background: var(--scrim); display: flex; justify-content: center; align-items: flex-start; padding: 12vh 16px 16px; animation: sb-fade .12s ease-out; }
+  .pal { width: min(560px, 100%); background: var(--surface); border: 1px solid var(--border); border-radius: 10px; box-shadow: var(--shadow-3); overflow: hidden; }
+  .pal-in { display: flex; align-items: center; gap: 10px; padding: 0 14px; border-bottom: 1px solid var(--border); }
+  .pal-in .i { color: var(--text-3); }
+  .pal-in input { flex: 1; height: 46px; border: 0; background: none; outline: none; font-size: 14px; }
+  .pal-list { max-height: 340px; overflow: auto; padding: 6px 0; }
+  .pal-list .mi.act { background: var(--surface-3); color: var(--text); }
+
+  .toasts { position: fixed; right: 16px; bottom: 16px; z-index: 100; display: flex; flex-direction: column; gap: 8px; align-items: flex-end; pointer-events: none; }
+  .toast {
+    display: flex; align-items: center; gap: 10px; padding: 12px 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+    box-shadow: var(--shadow-2); font-size: 13px; max-width: 360px; animation: sb-toast .2s ease-out; pointer-events: auto;
+  }
+  .toast .i { color: var(--brand-link); }
+  .toast.out { opacity: 0; transform: translateY(6px); transition: all .2s; }
+  @keyframes sb-toast { from { opacity: 0; transform: translateY(8px); } }
+  .tip { position: fixed; z-index: 110; background: var(--tip-bg); color: var(--tip-text); font-size: 12px; padding: 4px 8px; border-radius: 5px; pointer-events: none; opacity: 0; transition: opacity .1s; white-space: nowrap; }
+  .tip.show { opacity: 1; }
+
+  /* ---------- Phone ---------- */
+  .drawer-scrim, .mb-bar { display: none; }
+  @media (max-width: 759px) {
+    .mb-only { display: inline-flex !important; }
+    .mb-bar { display: flex; }
+    .dt-only { display: none !important; }
+    .top { padding: 0 8px; gap: 2px; }
+    .top-logo { width: 32px; }
+    .rail { display: none; }
+    .rail.open { display: block; position: fixed; inset: 0; z-index: 90; width: auto; }
+    .rail.open .rail-nav { width: 264px; box-shadow: var(--shadow-3); overflow-y: auto; }
+    .rail.open .rail-item .lbl { opacity: 1; }
+    .rail.open .drawer-scrim { display: block; position: absolute; inset: 0 0 0 264px; background: var(--scrim); }
+    .rail-drawer-head { display: flex !important; }
+    .menu-side { position: fixed; top: 0; bottom: 0; left: 0; width: 280px; z-index: 85; transform: translateX(-100%); transition: transform .2s ease; box-shadow: none; }
+    .menu-side.open { transform: none; box-shadow: var(--shadow-3); }
+    .list-scrim { position: fixed; inset: 0; z-index: 84; background: var(--scrim); }
+    .toolbar { overflow-x: auto; scrollbar-width: none; flex-wrap: nowrap; }
+    .toolbar::-webkit-scrollbar { display: none; }
+    .toolbar .lbl-hide { display: none; }
+    .banner { flex-wrap: wrap; }
+    .banner .ba { width: 100%; padding-left: 26px; }
+    .foot { gap: 6px; padding: 0 8px; }
+    .field { grid-template-columns: 1fr; gap: 6px; }
+    .f-lbl { flex-direction: row; gap: 8px; align-items: baseline; padding-top: 0; }
+    .panel { width: 100vw; border-left: 0; }
+    .results { height: 48%; }
+    .res-meta { display: none; }
+    .toasts { left: 12px; right: 12px; align-items: stretch; }
+    .toast { max-width: none; }
+  }
+  .rail-drawer-head { display: none; align-items: center; gap: 10px; padding: 6px 16px 12px; border-bottom: 1px solid var(--border); margin-bottom: 8px; }
+  .rail-drawer-head svg { width: 18px; height: 19px; }
+  .rail-drawer-head div { display: flex; flex-direction: column; font-size: 13px; line-height: 17px; }
+  .rail-drawer-head span { font-size: 12px; color: var(--text-3); }
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <header class="top" id="top"></header>
+  <div class="body">
+    <nav class="rail" id="rail" aria-label="Project navigation"></nav>
+    <aside class="menu-side" id="side"></aside>
+    <div class="list-scrim" id="listScrim" data-act="list-close" hidden></div>
+    <main class="editor" id="editor"></main>
+  </div>
+</div>
+<div id="overlay"></div>
+<div class="toasts" id="toasts" aria-live="polite"></div>
+<div class="tip" id="tip" role="tooltip"></div>
+<script>
+/* ---------- Helpers ---------- */
+const $ = (s, el = document) => el.querySelector(s);
+const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const fmtN = n => n.toLocaleString("en-US");
+const MIN = 60e3, HR = 60 * MIN, DAY = 24 * HR;
+const NOW = Date.now();
+
+const svg = (d, cls = "i") => `<svg class="${cls}" viewBox="0 0 24 24" aria-hidden="true">${d}</svg>`;
+const IC = {
+  home: svg('<path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .7-1.5l7-6a2 2 0 0 1 2.6 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>'),
+  table: svg('<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/>'),
+  sql: svg('<rect x="3" y="3" width="18" height="18" rx="2"/><path d="m7 9 3 3-3 3M13 15h4"/>'),
+  database: svg('<ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/>'),
+  auth: svg('<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>'),
+  storage: svg('<rect width="20" height="5" x="2" y="3" rx="1"/><path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8"/><path d="M10 12h4"/>'),
+  functions: svg('<path d="m18 16 4-4-4-4"/><path d="m6 8-4 4 4 4"/><path d="m14.5 4-5 16"/>'),
+  realtime: svg('<path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9"/><path d="M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.5"/><circle cx="12" cy="12" r="2"/><path d="M16.2 7.8c2.3 2.3 2.3 6.1 0 8.5"/><path d="M19.1 4.9C23 8.8 23 15.1 19.1 19"/>'),
+  advisors: svg('<path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6M10 22h4"/>'),
+  logs: svg('<path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>'),
+  docs: svg('<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8M16 13H8M16 17H8"/>'),
+  settings: svg('<path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/>'),
+  updown: svg('<path d="m7 15 5 5 5-5M7 9l5-5 5 5"/>'),
+  down: svg('<path d="m6 9 6 6 6-6"/>'),
+  left: svg('<path d="m15 18-6-6 6-6"/>'),
+  right: svg('<path d="m9 18 6-6-6-6"/>'),
+  plug: svg('<path d="M12 22v-5M9 8V2M15 8V2M18 8v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8Z"/>'),
+  search: svg('<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>'),
+  help: svg('<circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3M12 17h.01"/>'),
+  inbox: svg('<path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/>'),
+  branch: svg('<path d="M6 3v12"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/>'),
+  plus: svg('<path d="M5 12h14M12 5v14"/>'),
+  x: svg('<path d="M18 6 6 18M6 6l12 12"/>'),
+  filter: svg('<path d="M3 6h18M7 12h10M10 18h4"/>'),
+  sort: svg('<path d="m3 16 4 4 4-4M7 20V4M21 8l-4-4-4 4M17 4v16"/>'),
+  refresh: svg('<path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/>'),
+  key: svg('<path d="m15.5 7.5 2.3 2.3a1 1 0 0 0 1.4 0l2.1-2.1a1 1 0 0 0 0-1.4L19 4"/><path d="m21 2-9.6 9.6"/><circle cx="7.5" cy="15.5" r="5.5"/>', "i key"),
+  lock: svg('<rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>'),
+  unlock: svg('<rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/>'),
+  shield: svg('<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/>'),
+  warn: svg('<path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4M12 17h.01"/>'),
+  trash: svg('<path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>'),
+  download: svg('<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>'),
+  upload: svg('<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/>'),
+  expand: svg('<path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>'),
+  check: svg('<path d="M20 6 9 17l-5-5"/>'),
+  checkCircle: svg('<circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/>'),
+  play: svg('<path d="M6 3l14 9-14 9z"/>'),
+  copy: svg('<rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2"/>'),
+  file: svg('<path d="M10 12.5 8 15l2 2.5M14 12.5l2 2.5-2 2.5"/><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/>'),
+  menu: svg('<path d="M4 6h16M4 12h16M4 18h16"/>'),
+  sun: svg('<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>'),
+  moon: svg('<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>'),
+  logout: svg('<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>'),
+  user: svg('<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>'),
+  feedback: svg('<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>'),
+  rows: svg('<rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 12h18"/>'),
+  cols: svg('<rect width="18" height="18" x="3" y="3" rx="2"/><path d="M12 3v18"/>'),
+  up: svg('<path d="M12 19V5M5 12l7-7 7 7"/>'),
+  dn: svg('<path d="M12 5v14M19 12l-7 7-7-7"/>'),
+  more: svg('<circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/>'),
+  code: svg('<path d="m16 18 6-6-6-6M8 6l-6 6 6 6"/>'),
+};
+const SLASH = `<svg class="slash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true"><path d="M16 3 8 21"/></svg>`;
+let logoN = 0;
+const LOGO_SRC = `<svg viewBox="0 0 109 113" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M63.7076 110.284C60.8481 113.885 55.0502 111.912 54.9813 107.314L53.9738 40.0627L99.1935 40.0627C107.384 40.0627 111.952 49.5228 106.859 55.9374L63.7076 110.284Z" fill="url(#paint0_linear)"/><path d="M63.7076 110.284C60.8481 113.885 55.0502 111.912 54.9813 107.314L53.9738 40.0627L99.1935 40.0627C107.384 40.0627 111.952 49.5228 106.859 55.9374L63.7076 110.284Z" fill="url(#paint1_linear)" fill-opacity="0.2"/><path d="M45.317 2.07103C48.1765 -1.53037 53.9745 0.442937 54.0434 5.041L54.4849 72.2922H9.83113C1.64038 72.2922 -2.92775 62.8321 2.1655 56.4175L45.317 2.07103Z" fill="#3ECF8E"/><defs><linearGradient id="paint0_linear" x1="53.9738" y1="54.974" x2="94.1635" y2="71.8295" gradientUnits="userSpaceOnUse"><stop stop-color="#249361"/><stop offset="1" stop-color="#3ECF8E"/></linearGradient><linearGradient id="paint1_linear" x1="36.1558" y1="30.578" x2="54.4844" y2="65.0806" gradientUnits="userSpaceOnUse"><stop/><stop offset="1" stop-opacity="0"/></linearGradient></defs></svg>`;
+const logo = () => { const n = ++logoN; return LOGO_SRC.replace(/paint(\d)_linear/g, `sb${n}-g$1`).replace("<svg ", '<svg aria-hidden="true" '); };
+const PHOTOS = { naman: "data:image/jpeg;base64,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" };
+</script>
+<script>
+/* ---------- Data: casuro-core's public schema ---------- */
+// Rows are made on first use from a seeded generator, so the numbers and ids
+// never change between loads. The story: migration #912 added
+// assessment_spaces.owner_id and is backfilling it from the legacy
+// space_owner column; RLS on the table waits for that (CAS-924).
+function prng(str) {
+  let h = 2166136261 >>> 0;
+  for (const c of str) { h ^= c.charCodeAt(0); h = Math.imul(h, 16777619); }
+  let a = h >>> 0;
+  return () => { a = (a + 0x6d2b79f5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+}
+const pick = (r, list) => list[Math.floor(r() * list.length)];
+const int = (r, a, b) => a + Math.floor(r() * (b - a + 1));
+function uuid(r) {
+  const h = () => Math.floor(r() * 16).toString(16);
+  const n = k => Array.from({ length: k }, h).join("");
+  return `${n(8)}-${n(4)}-4${n(3)}-${"89ab"[Math.floor(r() * 4)]}${n(3)}-${n(12)}`;
+}
+const tsz = ms => { const s = new Date(ms).toISOString(); return `${s.slice(0, 10)} ${s.slice(11, 23)}+00`; };
+
+const ORG = { name: "Casuro", plan: "Pro" };
+const PROJECT = { name: "casuro-core", ref: "kqzvbndfrhxmyetwlpso", region: "us-east-1", branch: "main" };
+const ME = { name: "Naman Shukla", email: "naman@casuro.com" };
+
+const FIRST = ["Ava", "Liam", "Maya", "Noah", "Zara", "Ethan", "Priya", "Owen", "Leila", "Jonas", "Mei", "Tariq", "Elena", "Kofi", "Ines", "Ravi", "Sana", "Theo", "Yuki", "Mateo", "Amara", "Felix", "Nadia", "Omar", "Clara", "Diego", "Hugo", "Isla", "Kenji", "Lucia"];
+const LAST = ["Moreau", "Okoye", "Lindqvist", "Tanaka", "Haddad", "Novak", "Ferreira", "Brennan", "Castillo", "Ibrahim", "Varga", "Nakamura", "Quinn", "Sato", "Delgado", "Achebe", "Rossi", "Kowalski", "Mbeki", "Larsen"];
+const ORGS = [
+  ["Casuro", "casuro", "enterprise"], ["Northwind Labs", "northwind-labs", "team"], ["Brightline Health", "brightline", "pro"], ["Kestrel Robotics", "kestrel", "team"],
+  ["Harbor & Pine", "harbor-pine", "pro"], ["Lumen Freight", "lumen-freight", "free"], ["Quillfield", "quillfield", "pro"], ["Orbital Parcel", "orbital-parcel", "team"],
+  ["Tessellate AI", "tessellate", "enterprise"], ["Fernway Bank", "fernway", "enterprise"], ["Cobalt Studio", "cobalt-studio", "free"], ["Meridian Care", "meridian-care", "pro"],
+];
+const TEAM = [["Naman Shukla", "naman", "owner"], ["Hana Kim", "hana", "admin"], ["Marcus Chen", "marcus", "admin"], ["Sofia Alvarez", "sofia", "member"], ["Dev Patel", "dev", "admin"], ["Lena Okafor", "lena", "member"]];
+const ROLES = ["Backend Engineer", "Frontend Engineer", "Support Lead", "Data Analyst", "Product Designer", "Site Reliability Engineer", "Account Executive", "Engineering Manager", "QA Engineer", "Solutions Architect"];
+const KINDS = ["Take-home", "Live pairing", "Incident drill", "System design", "Customer escalation", "Code review"];
+
+const C = (name, type, o = {}) => ({ name, type, ...o });
+const TABLES = [
+  { name: "assessment_spaces", rls: false, policies: 0, cols: [
+    C("id", "uuid", { pk: true, def: "gen_random_uuid()" }), C("name", "text"), C("assessment_id", "uuid"), C("space_id", "int8", { nullable: true }),
+    C("owner_id", "uuid", { nullable: true, ref: "users.id" }), C("space_owner", "text", { nullable: true }), C("is_archived", "bool", { def: "false" }),
+    C("settings", "jsonb", { def: "'{}'::jsonb" }), C("created_at", "timestamptz", { def: "now()" })] },
+  { name: "audit_logs", rls: true, policies: 1, cols: [
+    C("id", "int8", { pk: true, identity: true }), C("actor_id", "uuid", { nullable: true, ref: "users.id" }), C("action", "text"), C("target", "text", { nullable: true }),
+    C("metadata", "jsonb", { def: "'{}'::jsonb" }), C("created_at", "timestamptz", { def: "now()" })] },
+  { name: "candidates", rls: true, policies: 3, cols: [
+    C("id", "uuid", { pk: true, def: "gen_random_uuid()" }), C("full_name", "text"), C("email", "text"), C("organization_id", "uuid", { ref: "organizations.id" }),
+    C("stage", "text", { def: "'applied'::text" }), C("score", "int8", { nullable: true }), C("created_at", "timestamptz", { def: "now()" })] },
+  { name: "organizations", rls: true, policies: 2, cols: [
+    C("id", "uuid", { pk: true, def: "gen_random_uuid()" }), C("name", "text"), C("slug", "text"), C("plan", "text", { def: "'free'::text" }),
+    C("seats", "int8", { def: "5" }), C("created_at", "timestamptz", { def: "now()" })] },
+  { name: "submissions", rls: true, policies: 4, cols: [
+    C("id", "uuid", { pk: true, def: "gen_random_uuid()" }), C("candidate_id", "uuid", { ref: "candidates.id" }), C("assessment_space_id", "uuid", { ref: "assessment_spaces.id" }),
+    C("status", "text", { def: "'in_progress'::text" }), C("score", "int8", { nullable: true }), C("payload", "jsonb", { def: "'{}'::jsonb" }), C("submitted_at", "timestamptz", { nullable: true })] },
+  { name: "users", rls: true, policies: 2, cols: [
+    C("id", "uuid", { pk: true }), C("email", "text"), C("full_name", "text", { nullable: true }), C("role", "text", { def: "'member'::text" }),
+    C("organization_id", "uuid", { ref: "organizations.id" }), C("is_admin", "bool", { def: "false" }), C("last_sign_in_at", "timestamptz", { nullable: true }), C("created_at", "timestamptz", { def: "now()" })] },
+];
+const TMAP = Object.fromEntries(TABLES.map(t => [t.name, t]));
+const COUNTS = { assessment_spaces: 1284, audit_logs: 4210, candidates: 3912, organizations: 12, submissions: 8406, users: 48 };
+
+const GEN = {
+  organizations() {
+    const r = prng("organizations");
+    return ORGS.map(([name, slug, plan], i) => ({ id: uuid(r), name, slug, plan, seats: plan === "free" ? 3 : plan === "pro" ? int(r, 5, 25) : int(r, 30, 400), created_at: tsz(NOW - (900 - i * 60) * DAY + int(r, 0, DAY)) }));
+  },
+  users() {
+    const r = prng("users"), orgs = rows("organizations"), out = [];
+    TEAM.forEach(([full_name, h, role], i) => out.push({ id: uuid(r), email: `${h}@casuro.com`, full_name, role, organization_id: orgs[0].id, is_admin: role !== "member", last_sign_in_at: tsz(NOW - int(r, 5, 600) * MIN), created_at: tsz(NOW - (700 - i * 20) * DAY) }));
+    for (let i = out.length; i < COUNTS.users; i++) {
+      const f = pick(r, FIRST), l = pick(r, LAST), org = orgs[1 + (i % (orgs.length - 1))];
+      out.push({ id: uuid(r), email: `${f[0].toLowerCase()}.${l.toLowerCase()}@${org.slug.replace(/-/g, "")}.com`, full_name: r() < 0.08 ? null : `${f} ${l}`, role: pick(r, ["member", "member", "recruiter", "admin"]),
+        organization_id: org.id, is_admin: r() < 0.2, last_sign_in_at: r() < 0.1 ? null : tsz(NOW - int(r, 1, 30 * 24 * 60) * MIN), created_at: tsz(NOW - int(r, 20, 600) * DAY) });
+    }
+    return out;
+  },
+  assessment_spaces() {
+    const r = prng("assessment_spaces"), users = rows("users"), assessments = Array.from({ length: 40 }, () => uuid(r)), out = [];
+    for (let i = 0; i < COUNTS.assessment_spaces; i++) {
+      const owner = users[i % 9 === 0 ? int(r, 0, 5) : int(r, 6, users.length - 1)], legacy = r() < 0.17;
+      out.push({ id: uuid(r), name: `${pick(r, ROLES)} - ${pick(r, KINDS)}`, assessment_id: pick(r, assessments), space_id: r() < 0.03 ? null : 1000 + i * 7 + int(r, 0, 6),
+        owner_id: legacy ? null : owner.id, space_owner: owner.email, is_archived: r() < 0.12,
+        settings: { time_limit: pick(r, [45, 60, 90, 120]), proctoring: r() < 0.6, language: pick(r, ["ts", "py", "go", "sql", "any"]) },
+        created_at: tsz(NOW - (COUNTS.assessment_spaces - i) * 9.5 * HR - int(r, 0, HR)) });
+    }
+    return out;
+  },
+  candidates() {
+    const r = prng("candidates"), orgs = rows("organizations"), out = [];
+    for (let i = 0; i < COUNTS.candidates; i++) {
+      const f = pick(r, FIRST), l = pick(r, LAST), stage = pick(r, ["applied", "screen", "assessment", "assessment", "onsite", "offer", "rejected"]);
+      out.push({ id: uuid(r), full_name: `${f} ${l}`, email: `${f.toLowerCase()}.${l.toLowerCase()}${int(r, 1, 99)}@example.com`, organization_id: orgs[1 + int(r, 0, orgs.length - 2)].id,
+        stage, score: stage === "applied" || stage === "screen" ? null : int(r, 38, 98), created_at: tsz(NOW - (COUNTS.candidates - i) * 3.1 * HR) });
+    }
+    return out;
+  },
+  submissions() {
+    const r = prng("submissions"), cands = rows("candidates"), spaces = rows("assessment_spaces"), out = [];
+    for (let i = 0; i < COUNTS.submissions; i++) {
+      const status = pick(r, ["graded", "graded", "graded", "submitted", "in_progress"]), total = pick(r, [12, 16, 20]), passed = int(r, Math.floor(total / 3), total);
+      out.push({ id: uuid(r), candidate_id: pick(r, cands).id, assessment_space_id: pick(r, spaces).id, status, score: status === "graded" ? Math.round((passed / total) * 100) : null,
+        payload: { language: pick(r, ["ts", "py", "go", "sql"]), tests_passed: passed, tests_total: total }, submitted_at: status === "in_progress" ? null : tsz(NOW - (COUNTS.submissions - i) * 1.4 * HR - int(r, 0, HR)) });
+    }
+    return out;
+  },
+  audit_logs() {
+    const r = prng("audit_logs"), users = rows("users"), out = [];
+    for (let i = 0; i < COUNTS.audit_logs; i++) {
+      const action = pick(r, ["space.create", "space.archive", "candidate.invite", "submission.grade", "owner.backfill", "owner.backfill", "policy.update", "user.sign_in"]);
+      const meta = action === "owner.backfill" ? { batch: 1 + Math.floor(i / 12), rows: 5000, pr: 912 } : action === "user.sign_in" ? { provider: pick(r, ["email", "google", "sso"]) } : { source: pick(r, ["dashboard", "api"]) };
+      out.push({ id: 10000 + i, actor_id: action === "owner.backfill" ? null : pick(r, users).id, action, target: action === "user.sign_in" ? null : `${action.split(".")[0]}/${uuid(r).slice(0, 8)}`, metadata: meta, created_at: tsz(NOW - (COUNTS.audit_logs - i) * 37 * MIN) });
+    }
+    return out;
+  },
+};
+const DATA = {};
+function rows(name) { return DATA[name] ??= GEN[name](); }
+const pkOf = t => t.cols.find(c => c.pk)?.name ?? t.cols[0].name;
+
+/* ---------- SQL snippets ---------- */
+const SNIPPETS = [
+  { id: "backfill", name: "Owner backfill progress", sql:
+`-- #912: how many assessment_spaces still have no owner?
+select
+  count(*) filter (where owner_id is null) as missing_owner,
+  count(*) as total,
+  round(100.0 * count(*) filter (where owner_id is not null) / count(*), 1) as pct_done
+from public.assessment_spaces;` },
+  { id: "per-owner", name: "Spaces per owner", sql:
+`select u.full_name, u.email, count(s.id) as spaces
+from public.assessment_spaces s
+join public.users u on u.id = s.owner_id
+group by u.id
+order by spaces desc
+limit 10;` },
+  { id: "owner-index", name: "Index on owner_id", sql:
+`create index concurrently if not exists assessment_spaces_owner_id_idx
+  on public.assessment_spaces (owner_id);` },
+  { id: "owner-rls", name: "Owner-scoped RLS (CAS-924)", sql:
+`alter table public.assessment_spaces enable row level security;
+
+create policy "Owners can read their spaces"
+  on public.assessment_spaces for select
+  to authenticated
+  using ((select auth.uid()) = owner_id);` },
+  { id: "recent", name: "Recent graded submissions", sql:
+`select id, status, score, submitted_at
+from public.submissions
+where status = 'graded'
+order by submitted_at desc
+limit 20;` },
+];
+const ORIGINAL_SQL = Object.fromEntries(SNIPPETS.map(s => [s.id, s.sql]));
+
+// Canned answers for the seeded snippets, computed from the data on screen.
+const CANNED = {
+  backfill() {
+    const all = rows("assessment_spaces"), missing = all.filter(r => r.owner_id === null).length;
+    return { columns: [["missing_owner", "int8"], ["total", "int8"], ["pct_done", "numeric"]], rows: [{ missing_owner: missing, total: all.length, pct_done: (Math.round(1000 * (all.length - missing) / all.length) / 10).toFixed(1) }] };
+  },
+  "per-owner"() {
+    const users = rows("users"), n = {};
+    for (const s of rows("assessment_spaces")) if (s.owner_id) n[s.owner_id] = (n[s.owner_id] ?? 0) + 1;
+    const list = users.filter(u => n[u.id]).map(u => ({ full_name: u.full_name, email: u.email, spaces: n[u.id] })).sort((a, b) => b.spaces - a.spaces).slice(0, 10);
+    return { columns: [["full_name", "text"], ["email", "text"], ["spaces", "int8"]], rows: list };
+  },
+  "owner-index"() { const t = TMAP.assessment_spaces; t.indexes = [{ name: "assessment_spaces_owner_id_idx", col: "owner_id" }]; return { message: "Success. No rows returned" }; },
+  "owner-rls"() { const t = TMAP.assessment_spaces; t.rls = true; t.policies = Math.max(1, t.policies); return { message: "Success. No rows returned" }; },
+  recent() {
+    const list = rows("submissions").filter(s => s.status === "graded").sort((a, b) => (a.submitted_at < b.submitted_at ? 1 : -1)).slice(0, 20).map(({ id, status, score, submitted_at }) => ({ id, status, score, submitted_at }));
+    return { columns: [["id", "uuid"], ["status", "text"], ["score", "int8"], ["submitted_at", "timestamptz"]], rows: list };
+  },
+};
+// Anything else: a tiny stand-in for Postgres that knows `select * from <table>`.
+function runSql(id, text) {
+  const sql = text.replace(/--.*$/gm, "").trim();
+  if (!sql) return { error: "ERROR:  42601: syntax error at end of input" };
+  if (CANNED[id] && text === ORIGINAL_SQL[id]) return CANNED[id]();
+  const m = sql.match(/^select\s+\*\s+from\s+(?:public\.)?"?(\w+)"?(?:\s+limit\s+(\d+))?\s*;?$/i);
+  if (m) {
+    const t = TMAP[m[1]];
+    if (!t) return { error: `ERROR:  42P01: relation "${m[1]}" does not exist\nLINE 1: ${sql.split("\n")[0]}` };
+    return { columns: t.cols.map(c => [c.name, c.type]), rows: rows(t.name).slice(0, Math.min(+(m[2] ?? 100), 100)) };
+  }
+  if (/^(create|alter|drop|insert|update|delete|grant|revoke|comment|truncate|vacuum|analyze|call|begin|commit|set)\b/i.test(sql)) return { message: "Success. No rows returned" };
+  const word = sql.split(/\s+/)[0];
+  if (/^select\b/i.test(sql)) {
+    const rel = sql.match(/\bfrom\s+(?:public\.)?"?(\w+)/i);
+    if (rel && !TMAP[rel[1]]) return { error: `ERROR:  42P01: relation "${rel[1]}" does not exist` };
+    return { columns: [["?column?", "int4"]], rows: [{ "?column?": 1 }] };
+  }
+  return { error: `ERROR:  42601: syntax error at or near "${word}"\nLINE 1: ${sql.split("\n")[0]}\n        ^` };
+}
+</script>
+<script>
+/* ---------- State ---------- */
+const S = {
+  view: "table",
+  table: "assessment_spaces",
+  tabs: ["assessment_spaces", "users"],
+  snippet: "backfill",
+  sqlTabs: ["backfill", "owner-rls"],
+  search: "", snipSearch: "",
+  mode: {}, page: {}, filters: {}, sorts: {},
+  selected: new Set(),
+  results: {}, running: null,
+  listOpen: false, railOpen: false,
+  flash: null, loading: false,
+};
+const PAGE = 100;
+const isMac = /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
+const mobileMQ = matchMedia("(max-width: 759px)");
+
+const NAV = [
+  [["home", "Project overview", IC.home], ["table", "Table Editor", IC.table], ["sql", "SQL Editor", IC.sql]],
+  [["database", "Database", IC.database], ["auth", "Authentication", IC.auth], ["storage", "Storage", IC.storage], ["functions", "Edge Functions", IC.functions], ["realtime", "Realtime", IC.realtime]],
+  [["advisors", "Advisors", IC.advisors], ["logs", "Logs", IC.logs], ["docs", "API Docs", IC.docs]],
+];
+
+/* ---------- Top bar and rail ---------- */
+function renderTop() {
+  $("#top").innerHTML = `
+    <button class="icon-btn mb-only" data-act="rail-open" aria-label="Open navigation">${IC.menu}</button>
+    <button class="top-logo" data-act="nav" data-k="home" aria-label="Project overview" data-tip="Project overview">${logo()}</button>
+    <button class="crumb dt-only" data-act="crumb" data-k="org" aria-label="Organization: ${esc(ORG.name)}"><span class="org-av">${esc(ORG.name[0])}</span>${esc(ORG.name)}<span class="badge">${esc(ORG.plan)}</span>${IC.updown}</button>
+    <span class="dt-only">${SLASH}</span>
+    <button class="crumb" data-act="crumb" data-k="project" aria-label="Project: ${esc(PROJECT.name)}">${esc(PROJECT.name)}${IC.updown}</button>
+    <span class="dt-only">${SLASH}</span>
+    <button class="crumb dt-only" data-act="crumb" data-k="branch" aria-label="Branch: ${esc(PROJECT.branch)}">${IC.branch}${esc(PROJECT.branch)}<span class="badge warn">Production</span>${IC.updown}</button>
+    <button class="btn dt-only" data-act="connect" style="margin-left:6px">${IC.plug}Connect</button>
+    <div class="top-sp"></div>
+    <button class="btn dt-only" data-act="soon" data-name="Feedback">Feedback</button>
+    <button class="search-btn dt-only" data-act="palette" aria-label="Search">${IC.search}<span class="sl">Search...</span><span class="kbd">${isMac ? "⌘" : "Ctrl"}</span><span class="kbd">K</span></button>
+    <button class="icon-btn mb-only" data-act="palette" aria-label="Search">${IC.search}</button>
+    <button class="icon-btn dt-only" data-act="soon" data-name="Help" aria-label="Help" data-tip="Help">${IC.help}</button>
+    <button class="icon-btn dt-only" data-act="soon" data-name="Notifications" aria-label="Notifications" data-tip="Notifications">${IC.inbox}</button>
+    <button class="top-av" data-act="user-menu" aria-label="Account: ${esc(ME.name)}"><img class="av" src="${PHOTOS.naman}" alt=""></button>`;
+}
+function renderRail() {
+  const on = k => (k === "table" && S.view === "table") || (k === "sql" && S.view === "sql");
+  const item = ([k, label, ic]) => `<button class="rail-item${on(k) ? " on" : ""}" data-act="nav" data-k="${k}" aria-label="${label}"${on(k) ? ' aria-current="page"' : ""}>${ic}<span class="lbl">${label}</span></button>`;
+  $("#rail").classList.toggle("open", S.railOpen);
+  $("#rail").innerHTML = `<div class="drawer-scrim" data-act="rail-close"></div><div class="rail-nav">
+    <div class="rail-drawer-head">${logo()}<div><b style="font-weight:500">${esc(PROJECT.name)}</b><span>${esc(ORG.name)} · ${esc(PROJECT.branch)}</span></div></div>
+    ${NAV.map(g => `<div class="rail-group">${g.map(item).join("")}</div>`).join('<div class="rail-sep"></div>')}
+    <div class="rail-group rail-bottom">${item(["settings", "Project Settings", IC.settings])}</div></div>`;
+}
+
+/* ---------- Product menu ---------- */
+function renderSide() {
+  const side = $("#side");
+  side.classList.toggle("open", S.listOpen);
+  $("#listScrim").hidden = !S.listOpen || !mobileMQ.matches;
+  if (S.view === "table") {
+    const q = S.search.trim().toLowerCase(), list = TABLES.filter(t => t.name.includes(q));
+    side.innerHTML = `<div class="ms-head"><h1>Table Editor</h1><button class="icon-btn mb-only" data-act="list-close" aria-label="Close table list">${IC.x}</button></div>
+      <div class="ms-tools">
+        <button class="schema-btn" data-act="schema" aria-label="Schema: public"><span class="k">schema</span><b>public</b>${IC.updown}</button>
+        <button class="btn new-btn" data-act="soon" data-name="New table">${IC.plus}New table</button>
+        <div class="ms-search">${IC.search}<input class="input" id="tblSearch" placeholder="Search tables..." aria-label="Search tables" value="${esc(S.search)}"></div>
+      </div>
+      <div class="ms-list" role="list">
+        <div class="ms-label">Tables <span>(${list.length})</span></div>
+        ${list.map(t => `<button class="ms-item${t.name === S.table ? " on" : ""}" role="listitem" data-act="open-table" data-t="${t.name}" aria-label="${t.name}${t.rls ? "" : " (RLS disabled)"}"${t.name === S.table ? ' aria-current="true"' : ""}>${IC.table}<span class="n">${t.name}</span>${t.rls ? "" : `<span class="rls-off" data-tip="RLS disabled">${IC.unlock}</span>`}</button>`).join("")}
+        ${list.length ? "" : `<div class="ms-empty">No tables match "${esc(S.search)}"</div>`}
+      </div>`;
+  } else {
+    const q = S.snipSearch.trim().toLowerCase(), list = SNIPPETS.filter(s => s.name.toLowerCase().includes(q));
+    side.innerHTML = `<div class="ms-head"><h1>SQL Editor</h1><button class="icon-btn mb-only" data-act="list-close" aria-label="Close query list">${IC.x}</button></div>
+      <div class="ms-tools">
+        <button class="btn new-btn" data-act="new-query">${IC.plus}New query</button>
+        <div class="ms-search">${IC.search}<input class="input" id="snipSearch" placeholder="Search queries..." aria-label="Search queries" value="${esc(S.snipSearch)}"></div>
+      </div>
+      <div class="ms-list" role="list">
+        <div class="ms-label">Private <span>(${list.length})</span></div>
+        ${list.map(s => `<button class="ms-item${s.id === S.snippet ? " on" : ""}" role="listitem" data-act="open-snippet" data-s="${s.id}" aria-label="${esc(s.name)}"${s.id === S.snippet ? ' aria-current="true"' : ""}>${IC.file}<span class="n">${esc(s.name)}</span></button>`).join("")}
+        ${list.length ? "" : `<div class="ms-empty">No queries match "${esc(S.snipSearch)}"</div>`}
+        <div class="ms-label" style="margin-top:8px">Community</div>
+        <button class="ms-item" role="listitem" data-act="soon" data-name="Templates">${IC.docs}<span class="n">Templates</span></button>
+        <button class="ms-item" role="listitem" data-act="soon" data-name="Quickstarts">${IC.play}<span class="n">Quickstarts</span></button>
+      </div>`;
+  }
+}
+
+/* ---------- Table data helpers ---------- */
+const WIDTH = { uuid: 300, text: 200, int8: 110, int4: 100, numeric: 110, bool: 110, jsonb: 300, timestamptz: 240 };
+const colWidth = c => (c.name === "name" || c.name === "email" || c.name === "full_name" ? 240 : WIDTH[c.type] ?? 180);
+function cellHTML(v, type) {
+  if (v === null || v === undefined) return `<span class="null">NULL</span>`;
+  if (type === "bool" || typeof v === "boolean") return `<span class="v-bool">${v}</span>`;
+  if (typeof v === "object") return esc(JSON.stringify(v));
+  return esc(v);
+}
+const OPS = [["=", "equals"], ["<>", "not equal"], [">", "greater than"], ["<", "less than"], [">=", "greater than or equal"], ["<=", "less than or equal"], ["~~", "like"], ["~~*", "ilike"], ["is", "is"]];
+function matches(row, f, col) {
+  const v = row[f.col], val = f.val.trim();
+  if (f.op === "is") {
+    const k = val.toLowerCase();
+    return k === "not null" ? v !== null : k === "true" ? v === true : k === "false" ? v === false : v === null;
+  }
+  if (v === null || v === undefined) return false;
+  const s = typeof v === "object" ? JSON.stringify(v) : String(v);
+  if (f.op === "~~" || f.op === "~~*") {
+    const re = new RegExp("^" + val.replace(/[.*+?^${}()|[\]\\]/g, "\\$&").replace(/%/g, ".*").replace(/_/g, ".") + "$", f.op === "~~*" ? "i" : "");
+    return re.test(s);
+  }
+  const num = col && ["int8", "int4", "numeric"].includes(col.type);
+  const a = num ? Number(s) : s, b = num ? Number(val) : val;
+  switch (f.op) { case "=": return a === b; case "<>": return a !== b; case ">": return a > b; case "<": return a < b; case ">=": return a >= b; case "<=": return a <= b; }
+  return true;
+}
+function viewRows(t) {
+  const cm = Object.fromEntries(t.cols.map(c => [c.name, c]));
+  let list = rows(t.name).filter(r => (S.filters[t.name] ?? []).every(f => matches(r, f, cm[f.col])));
+  const sorts = S.sorts[t.name] ?? [];
+  if (sorts.length) list = [...list].sort((x, y) => {
+    for (const s of sorts) {
+      const a = x[s.col], b = y[s.col];
+      if (a === b) continue;
+      if (a === null) return 1; if (b === null) return -1;
+      const c = typeof a === "object" ? JSON.stringify(a).localeCompare(JSON.stringify(b)) : a < b ? -1 : 1;
+      return s.asc ? c : -c;
+    }
+    return 0;
+  });
+  return list;
+}
+</script>
+<script>
+/* ---------- SQL highlighting ---------- */
+const KW = new Set(("select from where and or not null is as on join left right inner outer full cross group by order desc asc limit offset create table index if exists concurrently alter enable disable row level security policy policies for to using with check insert into values update set delete returning primary key foreign references constraint default true false filter begin commit rollback drop tablespace generated identity unique case when then else end in like ilike distinct having union all authenticated anon public bigint text uuid boolean jsonb timestamp time zone numeric integer grant revoke on cascade procedure function language returns call view materialized").split(" "));
+function hl(src) {
+  let out = "", last = 0;
+  const re = /--[^\n]*|'(?:[^']|'')*'?|"[^"\n]*"?|\b\d+(?:\.\d+)?\b|\b[A-Za-z_]\w*\b/g;
+  for (const m of src.matchAll(re)) {
+    out += esc(src.slice(last, m.index));
+    const w = m[0], ch = w[0];
+    let cls = "";
+    if (w.startsWith("--")) cls = "t-com";
+    else if (ch === "'") cls = "t-str";
+    else if (ch === '"') cls = "";
+    else if (/\d/.test(ch)) cls = "t-num";
+    else if (KW.has(w.toLowerCase())) cls = "t-kw";
+    else if (/^\s*\(/.test(src.slice(m.index + w.length))) cls = "t-fn";
+    out += cls ? `<span class="${cls}">${esc(w)}</span>` : esc(w);
+    last = m.index + w.length;
+  }
+  return out + esc(src.slice(last));
+}
+const PG = { int8: "bigint", int4: "integer", bool: "boolean", timestamptz: "timestamp with time zone" };
+function ddl(t) {
+  const lines = t.cols.map(c => {
+    if (c.identity) return `  ${c.name} ${PG[c.type] ?? c.type} generated by default as identity not null`;
+    const def = c.def ? ` default ${c.def.replace(/\(\)$/, " ()")}` : "";
+    return `  ${c.name} ${PG[c.type] ?? c.type}${c.nullable ? "" : " not null"}${def}`;
+  });
+  lines.push(`  constraint ${t.name}_pkey primary key (${pkOf(t)})`);
+  for (const c of t.cols) if (c.ref) { const [rt, rc] = c.ref.split("."); lines.push(`  constraint ${t.name}_${c.name}_fkey foreign key (${c.name}) references ${rt} (${rc})`); }
+  let s = `create table public.${t.name} (\n${lines.join(",\n")}\n) TABLESPACE pg_default;`;
+  for (const ix of t.indexes ?? []) s += `\n\ncreate index if not exists ${ix.name} on public.${t.name} using btree (${ix.col}) TABLESPACE pg_default;`;
+  return s;
+}
+const codeHTML = src => `<div class="gut">${src.split("\n").map((_, i) => i + 1).join("\n")}</div><pre>${hl(src)}</pre>`;
+
+/* ---------- Editor: Table Editor and SQL Editor ---------- */
+function tabsHTML() {
+  if (S.view === "table") return S.tabs.map(n => `<div class="tab${n === S.table ? " on" : ""}"><button class="tab-open" data-act="open-table" data-t="${n}" style="display:flex;align-items:center;gap:7px;height:100%" aria-label="${n}">${IC.table}<span class="tl">${n}</span></button><button class="x" data-act="close-tab" data-t="${n}" aria-label="Close ${n}">${IC.x}</button></div>`).join("");
+  return S.sqlTabs.map(id => { const s = SNIPPETS.find(x => x.id === id); return `<div class="tab${id === S.snippet ? " on" : ""}"><button data-act="open-snippet" data-s="${id}" style="display:flex;align-items:center;gap:7px;height:100%" aria-label="${esc(s.name)}">${IC.file}<span class="tl">${esc(s.name)}</span></button><button class="x" data-act="close-tab" data-s="${id}" aria-label="Close ${esc(s.name)}">${IC.x}</button></div>`; }).join("");
+}
+function renderEditor() {
+  const ed = $("#editor");
+  if (S.view === "sql") return renderSql(ed);
+  const t = TMAP[S.table];
+  if (!t) { ed.innerHTML = `<div class="tabs">${tabsHTML()}</div><div class="res-hint"><div><b style="font-weight:500;color:var(--text)">Select a table</b><br>Pick a table from the list to see its rows.</div></div>`; return; }
+  const mode = S.mode[t.name] ?? "data", list = viewRows(t), total = list.length;
+  const pages = Math.max(1, Math.ceil(total / PAGE)), page = clamp(S.page[t.name] ?? 1, 1, pages);
+  S.page[t.name] = page;
+  const slice = list.slice((page - 1) * PAGE, page * PAGE), pk = pkOf(t);
+  const sel = S.selected, nf = (S.filters[t.name] ?? []).length, ns = (S.sorts[t.name] ?? []).length;
+  const allOn = slice.length > 0 && slice.every(r => sel.has(String(r[pk]))), someOn = slice.some(r => sel.has(String(r[pk])));
+  const listBtn = `<button class="btn mb-only" data-act="list-open" aria-label="Tables: ${t.name}">${IC.table}${t.name}${IC.down}</button>`;
+  const left = sel.size
+    ? `${listBtn}<div class="sel-count"><button class="icon-btn" data-act="clear-sel" aria-label="Clear selection" style="width:24px;height:24px">${IC.x}</button>${sel.size} row${sel.size === 1 ? "" : "s"} selected</div>
+       <button class="btn danger-outline" data-act="delete-rows">${IC.trash}Delete ${sel.size} row${sel.size === 1 ? "" : "s"}</button>
+       <button class="btn" data-act="export">${IC.download}Export</button>`
+    : `${listBtn}<button class="btn${nf ? " on" : ""}" data-act="filter" aria-label="${nf ? `Filtered by ${nf} rule${nf > 1 ? "s" : ""}` : "Filter"}">${IC.filter}<span class="lbl-hide">${nf ? `Filtered by ${nf} rule${nf > 1 ? "s" : ""}` : "Filter"}</span></button>
+       <button class="btn${ns ? " on" : ""}" data-act="sort" aria-label="${ns ? `Sorted by ${ns} rule${ns > 1 ? "s" : ""}` : "Sort"}">${IC.sort}<span class="lbl-hide">${ns ? `Sorted by ${ns} rule${ns > 1 ? "s" : ""}` : "Sort"}</span></button>
+       <div class="sep"></div>
+       <button class="btn primary" data-act="insert" aria-haspopup="menu">${IC.plus}Insert${IC.down}</button>`;
+  const right = `<div class="sp"></div>
+    <button class="btn" data-act="refresh" aria-label="Refresh">${IC.refresh}<span class="lbl-hide">Refresh</span></button>
+    ${t.rls ? `<button class="btn rls-btn" data-act="policies" aria-label="${t.policies} RLS policies">${IC.shield}<span class="lbl-hide">RLS policies</span><span class="cnt">${t.policies}</span></button>`
+            : `<button class="btn rls-btn off" data-act="enable-rls">${IC.unlock}RLS disabled</button>`}`;
+  const banner = t.rls ? "" : `<div class="banner" role="alert">${IC.warn}<div class="bt"><b>Row Level Security is disabled on this table</b><p>Anyone with your project's anon key can read, modify, or delete rows in <code>public.${t.name}</code>. Enable RLS and add policies to control access.</p></div>
+    <div class="ba"><button class="btn" data-act="soon" data-name="RLS docs">Learn more</button><button class="btn primary" data-act="enable-rls">Enable RLS</button></div></div>`;
+  let body;
+  if (mode === "definition") body = `<div class="code${banner ? "" : ""}" style="border-top:${banner ? "1px solid var(--border)" : "0"};margin-top:${banner ? "10px" : "0"}" aria-label="Definition of ${t.name}">${codeHTML(ddl(t))}</div>`;
+  else {
+    const head = `<tr><th class="ck" scope="col"><div class="ck-in"><input type="checkbox" class="cbx" data-act="sel-all" aria-label="Select all rows on this page"${allOn ? " checked" : ""}></div></th>${t.cols.map(c => {
+      const s = (S.sorts[t.name] ?? []).find(x => x.col === c.name);
+      return `<th scope="col" style="width:${colWidth(c)}px"><div class="th-in">${c.pk ? IC.key : ""}<span class="cn">${c.name}</span><span class="ct">${c.type}</span><span class="sp"></span>${s ? (s.asc ? IC.up : IC.dn).replace('class="i"', 'class="i th-sort"') : ""}<button class="th-menu" data-act="col-menu" data-c="${c.name}" aria-label="Column menu: ${c.name}" aria-expanded="false">${IC.down}</button></div></th>`;
+    }).join("")}</tr>`;
+    const body_ = slice.map((r, i) => {
+      const id = String(r[pk]), on = sel.has(id);
+      return `<tr class="${on ? "sel" : ""}${S.flash === id ? " flash" : ""}" data-id="${esc(id)}"><td class="ck"><div class="ck-in"><input type="checkbox" class="cbx" data-act="sel" data-id="${esc(id)}" aria-label="Select row ${(page - 1) * PAGE + i + 1}"${on ? " checked" : ""}><button class="exp" data-act="edit-row" data-id="${esc(id)}" aria-label="Expand row ${(page - 1) * PAGE + i + 1}">${IC.expand}</button></div></td>${t.cols.map(c => `<td data-act="edit-row" data-id="${esc(id)}">${cellHTML(r[c.name], c.type)}</td>`).join("")}</tr>`;
+    }).join("");
+    const empty = total ? "" : nf ? `<div class="grid-empty"><b>No rows found</b>No rows match the filters on this table.<br><button class="btn" data-act="clear-filters" style="margin-top:12px">Remove filters</button></div>`
+      : `<div class="grid-empty"><b>This table is empty</b>Add rows with Insert.</div>`;
+    body = `<div class="grid-wrap${banner ? "" : " flush"}${S.loading ? " loading" : ""}" id="gridWrap"><table class="grid" aria-label="Rows of ${t.name}" aria-rowcount="${total}"><colgroup><col style="width:64px">${t.cols.map(c => `<col style="width:${colWidth(c)}px">`).join("")}</colgroup><thead>${head}</thead><tbody>${body_}</tbody></table>${empty}</div>`;
+  }
+  const from = total ? (page - 1) * PAGE + 1 : 0, to = Math.min(page * PAGE, total);
+  ed.innerHTML = `<div class="tabs" role="tablist" aria-label="Open tables">${tabsHTML()}</div>
+    <div class="toolbar">${left}${right}</div>${banner}${body}
+    <div class="foot">
+      <button class="icon-btn" data-act="page" data-d="-1" aria-label="Previous page"${page <= 1 || mode !== "data" ? " disabled" : ""}>${IC.left}</button>
+      <button class="icon-btn" data-act="page" data-d="1" aria-label="Next page"${page >= pages || mode !== "data" ? " disabled" : ""}>${IC.right}</button>
+      <span>${fmtN(from)} - ${fmtN(to)} of ${fmtN(total)} rows</span>
+      <span class="sp"></span>
+      <div class="seg" role="radiogroup" aria-label="View">
+        <button class="${mode === "data" ? "on" : ""}" data-act="mode" data-m="data" role="radio" aria-checked="${mode === "data"}">Data</button>
+        <button class="${mode === "definition" ? "on" : ""}" data-act="mode" data-m="definition" role="radio" aria-checked="${mode === "definition"}">Definition</button>
+      </div>
+    </div>`;
+  const all = $('[data-act="sel-all"]', ed);
+  if (all) all.indeterminate = someOn && !allOn;
+  S.flash = null;
+}
+
+function renderSql(ed) {
+  const s = SNIPPETS.find(x => x.id === S.snippet);
+  if (!s) { ed.innerHTML = `<div class="tabs">${tabsHTML()}</div><div class="res-hint"><div><b style="font-weight:500;color:var(--text)">No query open</b><br>Pick a query from the list, or start a new one.</div></div>`; return; }
+  ed.innerHTML = `<div class="tabs" role="tablist" aria-label="Open queries">${tabsHTML()}</div>
+    <div class="toolbar mb-bar"><button class="btn" data-act="list-open" aria-label="Queries: ${esc(s.name)}">${IC.file}${esc(s.name)}${IC.down}</button></div>
+    <div class="sql-area" id="sqlArea"><div class="gut" id="sqlGut"></div><div class="sql-ed"><pre id="sqlPre"></pre><textarea id="sqlText" spellcheck="false" autocapitalize="off" autocomplete="off" aria-label="SQL for ${esc(s.name)}" placeholder="Write your SQL here..."></textarea></div></div>
+    <section class="results" aria-label="Results">
+      <div class="res-head">
+        <button class="res-tab on" data-act="noop">Results</button><button class="res-tab" data-act="soon" data-name="Explain">Explain</button><button class="res-tab" data-act="soon" data-name="Chart">Chart</button>
+        <span class="sp"></span>
+        <span class="res-meta">Source <span class="badge">Primary database</span> Role <span class="badge">postgres</span></span>
+        <button class="btn primary" data-act="run" aria-label="Run query">Run <kbd>${isMac ? "⌘" : "Ctrl"} ↵</kbd></button>
+      </div>
+      <div class="res-body" id="resBody"></div>
+      <div class="res-foot" id="resFoot"></div>
+    </section>`;
+  $("#sqlText").value = s.sql;
+  paintSql();
+  renderResult();
+}
+function paintSql() {
+  const s = SNIPPETS.find(x => x.id === S.snippet), src = s.sql;
+  $("#sqlPre").innerHTML = hl(src) + (src.endsWith("\n") || !src ? " " : "");
+  $("#sqlGut").textContent = src.split("\n").map((_, i) => i + 1).join("\n");
+}
+function renderResult() {
+  const body = $("#resBody"), foot = $("#resFoot"), r = S.results[S.snippet];
+  if (!body) return;
+  if (S.running === S.snippet) { body.innerHTML = `<div class="res-hint"><div style="display:flex;gap:8px;align-items:center">${'<span class="spin"></span>'}Running...</div></div>`; foot.textContent = ""; return; }
+  if (!r) { body.innerHTML = `<div class="res-hint">Click Run to execute your query.</div>`; foot.textContent = ""; return; }
+  if (r.error) { body.innerHTML = `<div class="res-msg err" role="alert">${esc(r.error)}</div>`; foot.textContent = ""; return; }
+  if (r.message) { body.innerHTML = `<div class="res-msg">${esc(r.message)}</div>`; foot.textContent = ""; return; }
+  const cols = r.columns;
+  body.innerHTML = r.rows.length ? `<table class="grid res" aria-label="Query results"><thead><tr>${cols.map(([n, ty]) => `<th scope="col" style="width:${colWidth({ name: n, type: ty })}px"><div class="th-in"><span class="cn">${esc(n)}</span><span class="ct">${esc(ty ?? "")}</span></div></th>`).join("")}</tr></thead>
+    <tbody>${r.rows.map(row => `<tr>${cols.map(([n, ty]) => `<td>${cellHTML(row[n], ty)}</td>`).join("")}</tr>`).join("")}</tbody></table>` : `<div class="res-msg">Success. No rows returned</div>`;
+  foot.textContent = `${fmtN(r.rows.length)} row${r.rows.length === 1 ? "" : "s"}`;
+}
+function renderAll() { renderTop(); renderRail(); renderSide(); renderEditor(); }
+</script>
+<script>
+/* ---------- Popovers and menus ---------- */
+let pop = null;
+function openPop(anchor, html, { align = "start", cls = "" } = {}) {
+  closePop();
+  const el = document.createElement("div");
+  el.className = `pop ${cls}`;
+  el.innerHTML = html;
+  document.body.appendChild(el);
+  const r = anchor.getBoundingClientRect(), w = el.offsetWidth, h = el.offsetHeight;
+  let x = align === "end" ? r.right - w : r.left, y = r.bottom + 6;
+  if (y + h > innerHeight - 8) y = Math.max(8, r.top - h - 6);
+  el.style.left = clamp(x, 8, innerWidth - w - 8) + "px";
+  el.style.top = y + "px";
+  anchor.setAttribute("aria-expanded", "true");
+  pop = { el, anchor };
+  return el;
+}
+function closePop() {
+  if (!pop) return;
+  pop.anchor.setAttribute("aria-expanded", "false");
+  pop.el.remove();
+  pop = null;
+}
+const mi = (act, label, { ic = "", data = {}, sub = "", on = false } = {}) =>
+  `<button class="mi${on ? " on" : ""}" data-act="${act}" ${Object.entries(data).map(([k, v]) => `data-${k}="${esc(v)}"`).join(" ")}>${ic}<span class="mt">${label}${sub ? `<small>${sub}</small>` : ""}</span>${on ? IC.check.replace('class="i"', 'class="i ok"') : ""}</button>`;
+
+function userMenuHTML() {
+  const th = document.documentElement.dataset.theme;
+  return `<div class="um-head"><img class="av" src="${PHOTOS.naman}" alt=""><div><b>${esc(ME.name)}</b><span>${esc(ME.email)}</span></div></div>
+    <div class="um-theme"><h6>Theme</h6><div class="seg" role="radiogroup" aria-label="Theme">
+      <button class="${th === "light" ? "on" : ""}" data-act="theme" data-v="light" role="radio" aria-checked="${th === "light"}">${IC.sun}Light</button>
+      <button class="${th === "dark" ? "on" : ""}" data-act="theme" data-v="dark" role="radio" aria-checked="${th === "dark"}">${IC.moon}Dark</button></div></div>
+    <div class="m-list">${mi("soon", "Account preferences", { ic: IC.user, data: { name: "Account preferences" } })}${mi("soon", "Feature previews", { ic: IC.advisors, data: { name: "Feature previews" } })}<div class="m-sep"></div>${mi("logout", "Log out", { ic: IC.logout })}</div>`;
+}
+function crumbMenuHTML(k) {
+  if (k === "org") return `<div class="m-list"><div class="m-head">Organizations</div>${mi("pop-close", ORG.name, { on: true, sub: `${ORG.plan} plan` })}<div class="m-sep"></div>${mi("soon", "All organizations", { data: { name: "All organizations" } })}</div>`;
+  if (k === "project") return `<div class="m-list"><div class="m-head">Projects</div>${mi("pop-close", PROJECT.name, { on: true, sub: `${PROJECT.region} · ${ORG.plan}` })}${mi("soon", "casuro-staging", { sub: "us-east-1 · Paused", data: { name: "Switching projects" } })}<div class="m-sep"></div>${mi("soon", "New project", { ic: IC.plus, data: { name: "New project" } })}</div>`;
+  return `<div class="m-list"><div class="m-head">Branches</div>${mi("pop-close", "main", { on: true, sub: "Production" })}${mi("soon", "naman/owner-backfill", { sub: "Preview branch", data: { name: "Switching branches" } })}<div class="m-sep"></div>${mi("soon", "Manage branches", { ic: IC.branch, data: { name: "Branch management" } })}</div>`;
+}
+
+/* Filter and sort: edited as a draft, applied with the button. */
+let draft = [];
+function filterHTML(t) {
+  return `<div class="fp-rows">${draft.length ? draft.map((f, i) => `<div class="fp-row">
+      <select class="input" data-fi="${i}" data-k="col" aria-label="Column">${t.cols.map(c => `<option${c.name === f.col ? " selected" : ""}>${c.name}</option>`).join("")}</select>
+      <select class="input mono" data-fi="${i}" data-k="op" aria-label="Operator">${OPS.map(([o, l]) => `<option value="${o}" title="${l}"${o === f.op ? " selected" : ""}>${o}</option>`).join("")}</select>
+      <input class="input mono" data-fi="${i}" data-k="val" aria-label="Value" placeholder="${f.op === "is" ? "null, not null, true, false" : "Enter a value"}" value="${esc(f.val)}">
+      <button class="icon-btn" data-act="fp-del" data-i="${i}" aria-label="Remove filter">${IC.x}</button></div>`).join("") : `<div class="fp-empty">No filters applied to this view</div>`}</div>
+    <div class="fp-foot"><button class="btn ghost" data-act="fp-add">${IC.plus}Add filter</button><button class="btn primary" data-act="fp-apply">Apply filter</button></div>`;
+}
+function sortHTML(t) {
+  const used = new Set(draft.map(s => s.col)), free = t.cols.filter(c => !used.has(c.name));
+  return `<div class="fp-rows">${draft.length ? draft.map((s, i) => `<div class="fp-row s">
+      <span class="mono" style="font-size:12px">${s.col}</span>
+      <label class="asc"><input type="checkbox" class="cbx" data-si="${i}"${s.asc ? " checked" : ""}>ascending</label>
+      <button class="icon-btn" data-act="sp-del" data-i="${i}" aria-label="Remove sort">${IC.x}</button></div>`).join("") : `<div class="fp-empty">No sorts applied to this view</div>`}</div>
+    <div class="fp-foot"><select class="input" id="spAdd" aria-label="Pick a column to sort by" style="width:auto;height:26px;font-size:12px"><option value="">Pick a column to sort by</option>${free.map(c => `<option>${c.name}</option>`).join("")}</select><button class="btn primary" data-act="sp-apply">Apply sorting</button></div>`;
+}
+
+/* ---------- Side panel: a row, or a new column ---------- */
+let panel = null;
+const PH = { uuid: "uuid", int8: "0", text: "", bool: "", jsonb: "{}", timestamptz: "YYYY-MM-DD HH:MM:SS+00" };
+function defValue(c, t) {
+  if (c.identity) return Math.max(0, ...rows(t.name).map(r => +r[c.name])) + 1;
+  const d = c.def;
+  if (!d) return undefined;
+  if (d === "gen_random_uuid()") return uuid(Math.random);
+  if (d === "now()") return tsz(Date.now());
+  if (d === "true" || d === "false") return d === "true";
+  const q = d.match(/^'(.*)'::(\w+)$/);
+  if (q) return q[2] === "jsonb" ? JSON.parse(q[1]) : q[1];
+  return isNaN(+d) ? d : +d;
+}
+function fieldHTML(c, v, isNew) {
+  const id = `f-${c.name}`, dis = !isNew && c.pk ? " disabled" : "";
+  const defHint = isNew && c.def ? `Default: ${c.def}` : isNew && c.identity ? "Generated by default as identity" : c.nullable ? "NULL" : "";
+  let input;
+  if (c.type === "bool") input = `<select class="input" id="${id}" name="${c.name}"${dis}>${isNew ? `<option value="">${c.def ? `Default: ${c.def}` : "Select a value"}</option>` : ""}<option value="true"${v === true ? " selected" : ""}>TRUE</option><option value="false"${v === false ? " selected" : ""}>FALSE</option>${c.nullable ? `<option value="null"${!isNew && v === null ? " selected" : ""}>NULL</option>` : ""}</select>`;
+  else if (c.type === "jsonb") input = `<textarea class="input mono" id="${id}" name="${c.name}" rows="${v == null ? 3 : clamp(JSON.stringify(v, null, 2).split("\n").length, 3, 10)}" placeholder="${esc(defHint || "{}")}"${dis}>${v === undefined || v === null ? "" : esc(JSON.stringify(v, null, 2))}</textarea>`;
+  else input = `<input class="input mono" id="${id}" name="${c.name}" ${c.type === "int8" ? 'inputmode="numeric"' : ""} placeholder="${esc(defHint || PH[c.type] || "")}" value="${v === undefined || v === null ? "" : esc(v)}"${dis}>`;
+  const hint = c.pk && !isNew ? "Primary key" : c.ref ? `References ${c.ref}` : c.type === "timestamptz" ? "Format: YYYY-MM-DD HH:MM:SS+00" : "";
+  return `<div class="field"><div class="f-lbl"><label for="${id}">${c.name}</label><span class="ft">${c.type}</span></div><div class="f-in">${input}${hint ? `<span class="f-hint">${esc(hint)}</span>` : ""}<span class="f-err" data-err="${c.name}" hidden></span></div></div>`;
+}
+function openRowPanel(tableName, id) {
+  const t = TMAP[tableName], pk = pkOf(t), row = id == null ? null : rows(t.name).find(r => String(r[pk]) === id);
+  panel = { kind: "row", table: t.name, id: row ? id : null };
+  showPanel(`${row ? "Update row from" : "Add new row to"} <code>${t.name}</code>`,
+    `<div class="p-sec">${t.cols.map(c => fieldHTML(c, row ? row[c.name] : undefined, !row)).join("")}</div>`);
+}
+function openColPanel(tableName) {
+  panel = { kind: "col", table: tableName };
+  showPanel(`Add new column to <code>${tableName}</code>`, `
+    <div class="p-sec"><h3>General</h3>
+      <div class="field"><div class="f-lbl"><label for="c-name">Name</label></div><div class="f-in"><input class="input mono" id="c-name" placeholder="column_name"><span class="f-hint">Recommended to use lowercase and underscores</span><span class="f-err" data-err="name" hidden></span></div></div>
+    </div>
+    <div class="p-sec"><h3>Data Type</h3>
+      <div class="field"><div class="f-lbl"><label for="c-type">Type</label></div><div class="f-in"><select class="input" id="c-type">${["text", "int8", "bool", "uuid", "jsonb", "timestamptz"].map(x => `<option>${x}</option>`).join("")}</select></div></div>
+      <div class="field"><div class="f-lbl"><label for="c-def">Default Value</label></div><div class="f-in"><input class="input mono" id="c-def" placeholder="NULL"><span class="f-hint">Used for existing rows and when a new row leaves it empty</span><span class="f-err" data-err="def" hidden></span></div></div>
+    </div>
+    <div class="p-sec" style="border-bottom:0"><h3>Constraints</h3><label class="f-check"><input type="checkbox" class="cbx" id="c-null" checked>Is Nullable</label></div>`);
+}
+function showPanel(title, body) {
+  closePop();
+  $("#overlay").innerHTML = `<div class="scrim" data-act="panel-close"></div>
+    <aside class="panel" role="dialog" aria-modal="true" aria-label="${title.replace(/<[^>]+>/g, "")}">
+      <div class="panel-head"><h2>${title}</h2><button class="icon-btn" data-act="panel-close" aria-label="Close panel">${IC.x}</button></div>
+      <form class="panel-body" id="panelForm" novalidate>${body}</form>
+      <div class="panel-foot"><button class="btn lg" data-act="panel-close">Cancel</button><button class="btn primary lg" data-act="panel-save">Save</button></div>
+    </aside>`;
+  setTimeout(() => $("#panelForm input:not([disabled]), #panelForm textarea:not([disabled]), #panelForm select:not([disabled])")?.focus({ preventScroll: true }), 30);
+}
+function closeOverlay() { $("#overlay").innerHTML = ""; panel = null; }
+function parseField(c, raw, t, isNew) {
+  const s = raw.trim();
+  if (s === "" || (c.type === "bool" && s === "")) {
+    if (isNew) { const d = defValue(c, t); if (d !== undefined) return { v: d }; }
+    if (c.nullable) return { v: null };
+    if (c.type === "text" && !isNew) return { v: "" };
+    return { err: "This field is required" };
+  }
+  if (c.type === "bool") return { v: s === "null" ? null : s === "true" };
+  if (c.type === "int8") return /^-?\d+$/.test(s) ? { v: +s } : { err: "Must be a whole number" };
+  if (c.type === "jsonb") { try { return { v: JSON.parse(s) }; } catch { return { err: "Invalid JSON" }; } }
+  if (c.type === "uuid") return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(s) ? { v: s.toLowerCase() } : { err: "Invalid uuid" };
+  if (c.type === "timestamptz") { const ms = Date.parse(s.replace(" ", "T").replace(/\+00$/, "Z")); return isNaN(ms) ? { err: "Invalid timestamp" } : { v: tsz(ms) }; }
+  return { v: raw };
+}
+function savePanel() {
+  const t = TMAP[panel.table], form = $("#panelForm");
+  $$("[data-err]", form).forEach(e => (e.hidden = true));
+  $$(".input.err", form).forEach(e => e.classList.remove("err"));
+  const fail = (key, msg, el) => { const e = $(`[data-err="${key}"]`, form); e.textContent = msg; e.hidden = false; el?.classList.add("err"); };
+  if (panel.kind === "col") {
+    const name = $("#c-name").value.trim(), type = $("#c-type").value, nullable = $("#c-null").checked, defRaw = $("#c-def").value.trim();
+    if (!/^[a-z_][a-z0-9_]*$/.test(name)) return fail("name", name ? "Use lowercase letters, digits and underscores" : "Please provide a name for your column", $("#c-name"));
+    if (t.cols.some(c => c.name === name)) return fail("name", `A column named ${name} already exists`, $("#c-name"));
+    const col = { name, type, nullable };
+    let dv = null;
+    if (defRaw) { const p = parseField({ ...col, nullable: true }, defRaw, t, false); if (p.err) return fail("def", p.err, $("#c-def")); dv = p.v; col.def = type === "text" ? `'${defRaw}'::text` : type === "jsonb" ? `'${JSON.stringify(dv)}'::jsonb` : defRaw; }
+    if (!nullable && dv === null) return fail("def", "A column that is not nullable needs a default value for existing rows", $("#c-def"));
+    t.cols.push(col);
+    rows(t.name).forEach(r => (r[name] = dv));
+    closeOverlay(); renderEditor(); toast(`Successfully created column "${name}"`);
+    return;
+  }
+  const isNew = panel.id == null, pk = pkOf(t), out = {};
+  let bad = false;
+  for (const c of t.cols) {
+    const el = form.elements[c.name];
+    if (!isNew && c.pk) continue;
+    const p = parseField(c, el.value, t, isNew);
+    if (p.err) { fail(c.name, p.err, el); bad = true; } else out[c.name] = p.v;
+  }
+  if (bad) return;
+  const list = rows(t.name);
+  if (isNew) {
+    if (list.some(r => String(r[pk]) === String(out[pk]))) return fail(pk, "A row with this primary key already exists", form.elements[pk]);
+    list.unshift(out); S.page[t.name] = 1; S.flash = String(out[pk]);
+    closeOverlay(); renderEditor(); toast(`Successfully added a row to ${t.name}`);
+  } else {
+    Object.assign(list.find(r => String(r[pk]) === panel.id), out); S.flash = panel.id;
+    closeOverlay(); renderEditor(); toast("Successfully updated row");
+  }
+}
+
+/* ---------- Dialogs ---------- */
+function dialog(title, body, foot, cls = "") {
+  closePop();
+  $("#overlay").innerHTML = `<div class="dlg-wrap" data-act="dlg-bg"><div class="dlg ${cls}" role="dialog" aria-modal="true" aria-label="${esc(title)}">
+    <div class="dlg-head"><h2>${esc(title)}</h2><button class="icon-btn" data-act="panel-close" aria-label="Close dialog">${IC.x}</button></div>
+    <div class="dlg-body">${body}</div><div class="dlg-foot">${foot}</div></div></div>`;
+  setTimeout(() => $(".dlg-foot .btn:last-child")?.focus(), 30);
+}
+function connectDialog() {
+  const url = `postgresql://postgres:[YOUR-PASSWORD]@db.${PROJECT.ref}.supabase.co:5432/postgres`;
+  dialog("Connect to your project", `<p>Use a connection string to reach <b style="font-weight:500;color:var(--text)">${esc(PROJECT.name)}</b> from your app or a database client.</p>
+    <div class="conn"><label>Direct connection</label><div class="conn-row"><code>${esc(url)}</code><button class="btn" data-act="copy" data-v="${esc(url)}" aria-label="Copy connection string">${IC.copy}Copy</button></div></div>
+    <div class="conn"><label>Project URL</label><div class="conn-row"><code>https://${PROJECT.ref}.supabase.co</code><button class="btn" data-act="copy" data-v="https://${PROJECT.ref}.supabase.co" aria-label="Copy project URL">${IC.copy}Copy</button></div></div>`,
+    `<button class="btn lg" data-act="panel-close">Close</button>`, "wide");
+}
+
+/* ---------- Command palette ---------- */
+let palIdx = 0;
+function palItems(q) {
+  q = q.trim().toLowerCase();
+  const items = [
+    ...TABLES.map(t => ({ group: "Tables", label: t.name, ic: IC.table, act: () => openTable(t.name) })),
+    ...SNIPPETS.map(s => ({ group: "SQL snippets", label: s.name, ic: IC.file, act: () => openSnippet(s.id) })),
+    ...NAV.flat().concat([["settings", "Project Settings", IC.settings]]).map(([k, l, ic]) => ({ group: "Navigate", label: l, ic, act: () => nav(k) })),
+  ];
+  return items.filter(i => i.label.toLowerCase().includes(q));
+}
+function openPalette() {
+  closePop();
+  $("#overlay").innerHTML = `<div class="palette" data-act="dlg-bg"><div class="pal" role="dialog" aria-modal="true" aria-label="Search">
+    <div class="pal-in">${IC.search}<input id="palIn" placeholder="Search tables, queries and pages..." aria-label="Search tables, queries and pages" autocomplete="off"><span class="kbd">Esc</span></div>
+    <div class="pal-list" id="palList" role="listbox" aria-label="Results"></div></div></div>`;
+  palIdx = 0; paintPalette(); $("#palIn").focus();
+}
+function paintPalette() {
+  const list = palItems($("#palIn").value);
+  palIdx = clamp(palIdx, 0, Math.max(0, list.length - 1));
+  let g = "", html = "";
+  list.forEach((it, i) => { if (it.group !== g) { g = it.group; html += `<div class="m-head">${g}</div>`; } html += `<button class="mi${i === palIdx ? " act" : ""}" role="option" aria-selected="${i === palIdx}" data-act="pal-go" data-i="${i}">${it.ic}<span class="mt">${esc(it.label)}</span></button>`; });
+  $("#palList").innerHTML = html || `<div class="ms-empty">No results found.</div>`;
+  $("#palList .act")?.scrollIntoView({ block: "nearest" });
+}
+function palGo(i) { const it = palItems($("#palIn").value)[i]; if (!it) return; closeOverlay(); it.act(); }
+
+/* ---------- Toasts and tooltips ---------- */
+function toast(text) {
+  const host = $("#toasts"), el = document.createElement("div");
+  el.className = "toast"; el.setAttribute("role", "status");
+  el.innerHTML = IC.checkCircle + `<span>${esc(text)}</span>`;
+  host.appendChild(el);
+  while (host.children.length > 3) host.firstElementChild.remove();
+  setTimeout(() => { el.classList.add("out"); setTimeout(() => el.remove(), 220); }, 2800);
+}
+const tipEl = $("#tip");
+let tipTimer;
+document.addEventListener("mouseover", e => {
+  const t = e.target.closest("[data-tip]");
+  clearTimeout(tipTimer); tipEl.classList.remove("show");
+  if (!t || matchMedia("(hover: none)").matches) return;
+  tipTimer = setTimeout(() => {
+    if (t.closest(".rail") ) return;
+    tipEl.textContent = t.dataset.tip;
+    const r = t.getBoundingClientRect(), w = tipEl.offsetWidth, h = tipEl.offsetHeight;
+    tipEl.style.left = clamp(r.left + r.width / 2 - w / 2, 4, innerWidth - w - 4) + "px";
+    tipEl.style.top = (r.bottom + 6 + h > innerHeight ? r.top - 6 - h : r.bottom + 6) + "px";
+    tipEl.classList.add("show");
+  }, 400);
+});
+document.addEventListener("mousedown", () => { clearTimeout(tipTimer); tipEl.classList.remove("show"); });
+async function copyText(v) { try { await navigator.clipboard.writeText(v); } catch { /* the toast still confirms */ } }
+</script>
+<script>
+/* ---------- Actions ---------- */
+function openTable(name) {
+  if (!S.tabs.includes(name)) S.tabs.push(name);
+  if (S.table !== name) S.selected.clear();
+  S.view = "table"; S.table = name; S.listOpen = false; S.railOpen = false;
+  renderAll();
+}
+function openSnippet(id) {
+  if (!S.sqlTabs.includes(id)) S.sqlTabs.push(id);
+  S.view = "sql"; S.snippet = id; S.listOpen = false; S.railOpen = false;
+  renderAll();
+}
+function nav(k) {
+  closePop();
+  if (k === "table") { S.view = "table"; S.railOpen = false; renderAll(); return; }
+  if (k === "sql") { S.view = "sql"; S.railOpen = false; renderAll(); return; }
+  S.railOpen = false; renderRail();
+  const item = [...NAV.flat(), ["settings", "Project Settings"]].find(x => x[0] === k);
+  toast(`${item ? item[1] : "This page"} isn't part of this mockup`);
+}
+function run() {
+  const id = S.snippet, s = SNIPPETS.find(x => x.id === id);
+  if (!s || S.running) return;
+  S.running = id; renderResult();
+  setTimeout(() => {
+    S.results[id] = runSql(id, s.sql); S.running = null;
+    if (S.view === "sql" && S.snippet === id) renderResult();
+    if (id === "owner-rls" && !S.results[id].error) renderSide();
+  }, 350);
+}
+function setTheme(th) { document.documentElement.dataset.theme = th; }
+
+document.addEventListener("click", e => {
+  const a = e.target.closest("[data-act]");
+  if (!a || a.disabled) return;
+  const act = a.dataset.act, t = TMAP[S.table];
+  switch (act) {
+    case "nav": nav(a.dataset.k); break;
+    case "rail-open": S.railOpen = true; renderRail(); $(".rail-item.on")?.focus(); break;
+    case "rail-close": S.railOpen = false; renderRail(); break;
+    case "list-open": S.listOpen = true; renderSide(); break;
+    case "list-close": S.listOpen = false; renderSide(); break;
+    case "soon": closePop(); toast(`${a.dataset.name} isn't part of this mockup`); break;
+    case "noop": break;
+    case "pop-close": closePop(); break;
+    case "crumb": if (pop?.anchor === a) closePop(); else openPop(a, crumbMenuHTML(a.dataset.k)); break;
+    case "user-menu": if (pop?.anchor === a) closePop(); else openPop(a, userMenuHTML(), { align: "end" }); break;
+    case "theme": setTheme(a.dataset.v); $$(".um-theme .seg button").forEach(b => { b.classList.toggle("on", b.dataset.v === a.dataset.v); b.setAttribute("aria-checked", b.dataset.v === a.dataset.v); }); break;
+    case "logout": closePop(); toast("Logged out of Supabase (mockup)"); break;
+    case "connect": connectDialog(); break;
+    case "copy": copyText(a.dataset.v); toast("Copied to clipboard"); break;
+    case "palette": openPalette(); break;
+    case "pal-go": palGo(+a.dataset.i); break;
+    case "schema": if (pop?.anchor === a) closePop(); else openPop(a, `<div class="m-list"><div class="m-head">Schemas</div>${["public", "auth", "storage", "realtime"].map(s => mi(s === "public" ? "pop-close" : "soon", s, { on: s === "public", data: { name: `The ${s} schema` } })).join("")}</div>`); break;
+    case "open-table": openTable(a.dataset.t); break;
+    case "open-snippet": openSnippet(a.dataset.s); break;
+    case "close-tab": {
+      if (a.dataset.t) { S.tabs = S.tabs.filter(n => n !== a.dataset.t); if (S.table === a.dataset.t) { S.table = S.tabs[S.tabs.length - 1] ?? null; S.selected.clear(); } }
+      else { S.sqlTabs = S.sqlTabs.filter(n => n !== a.dataset.s); if (S.snippet === a.dataset.s) S.snippet = S.sqlTabs[S.sqlTabs.length - 1] ?? null; }
+      renderSide(); renderEditor(); break;
+    }
+    case "new-query": {
+      const n = SNIPPETS.filter(s => s.name.startsWith("Untitled query")).length;
+      const s = { id: `q${Date.now()}`, name: n ? `Untitled query ${n + 1}` : "Untitled query", sql: "" };
+      SNIPPETS.unshift(s); openSnippet(s.id); $("#sqlText")?.focus(); break;
+    }
+    case "run": run(); break;
+    case "mode": S.mode[S.table] = a.dataset.m; renderEditor(); break;
+    case "page": S.page[S.table] = (S.page[S.table] ?? 1) + +a.dataset.d; renderEditor(); $("#gridWrap")?.scrollTo(0, 0); break;
+    case "refresh":
+      S.loading = true; renderEditor();
+      setTimeout(() => { S.loading = false; renderEditor(); }, 450); break;
+    case "sel": {
+      const id = a.dataset.id;
+      S.selected.has(id) ? S.selected.delete(id) : S.selected.add(id);
+      renderEditor(); e.stopPropagation(); break;
+    }
+    case "sel-all": {
+      const pk = pkOf(t), page = S.page[t.name] ?? 1, slice = viewRows(t).slice((page - 1) * PAGE, page * PAGE).map(r => String(r[pk]));
+      const all = slice.every(id => S.selected.has(id));
+      slice.forEach(id => (all ? S.selected.delete(id) : S.selected.add(id)));
+      renderEditor(); break;
+    }
+    case "clear-sel": S.selected.clear(); renderEditor(); break;
+    case "edit-row": openRowPanel(S.table, a.dataset.id); break;
+    case "insert": if (pop?.anchor === a) closePop(); else openPop(a, `<div class="m-list" style="width:280px">
+      ${mi("insert-row", "Insert row", { ic: IC.rows, sub: `Insert a new row into ${t.name}` })}
+      ${mi("insert-col", "Insert column", { ic: IC.cols, sub: `Insert a new column into ${t.name}` })}
+      <div class="m-sep"></div>${mi("soon", "Import data from CSV", { ic: IC.upload, sub: "Insert new rows from a CSV", data: { name: "CSV import" } })}</div>`); break;
+    case "insert-row": closePop(); openRowPanel(S.table, null); break;
+    case "insert-col": closePop(); openColPanel(S.table); break;
+    case "panel-close": closeOverlay(); break;
+    case "panel-save": savePanel(); break;
+    case "dlg-bg": if (e.target === a) closeOverlay(); break;
+    case "delete-rows": {
+      const n = S.selected.size;
+      dialog("Confirm to delete the selected rows", `<p>Are you sure you want to delete the selected ${n} row${n === 1 ? "" : "s"} from <code class="mono">${t.name}</code>? This action cannot be undone.</p>`,
+        `<button class="btn lg" data-act="panel-close">Cancel</button><button class="btn danger lg" data-act="delete-confirm">Delete</button>`);
+      break;
+    }
+    case "delete-confirm": {
+      const pk = pkOf(t), n = S.selected.size;
+      DATA[t.name] = rows(t.name).filter(r => !S.selected.has(String(r[pk])));
+      S.selected.clear(); closeOverlay(); renderEditor(); toast(`Successfully deleted ${n} row${n === 1 ? "" : "s"}`); break;
+    }
+    case "export": toast(`Exported ${S.selected.size} rows as CSV (mockup)`); break;
+    case "enable-rls":
+      dialog("Enable Row Level Security", `<p>Once RLS is on, no rows in <code class="mono">public.${t.name}</code> can be read through the API until you add policies.</p><p>Queries from the Table Editor and the SQL Editor are not affected.</p>`,
+        `<button class="btn lg" data-act="panel-close">Cancel</button><button class="btn primary lg" data-act="rls-confirm">Enable RLS</button>`);
+      break;
+    case "rls-confirm": t.rls = true; closeOverlay(); renderSide(); renderEditor(); toast(`Row Level Security enabled on ${t.name}`); break;
+    case "policies": toast(`${t.policies} polic${t.policies === 1 ? "y" : "ies"} on ${t.name}. The policy editor isn't part of this mockup`); break;
+    case "filter": case "sort": {
+      if (pop?.anchor === a) { closePop(); break; }
+      draft = structuredClone((act === "filter" ? S.filters : S.sorts)[t.name] ?? []);
+      if (act === "filter" && !draft.length) draft.push({ col: t.cols[0].name, op: "=", val: "" });
+      openPop(a, act === "filter" ? filterHTML(t) : sortHTML(t), { cls: "fp" }).dataset.kind = act;
+      break;
+    }
+    case "fp-add": draft.push({ col: t.cols[0].name, op: "=", val: "" }); pop.el.innerHTML = filterHTML(t); break;
+    case "fp-del": draft.splice(+a.dataset.i, 1); pop.el.innerHTML = filterHTML(t); break;
+    case "fp-apply": S.filters[t.name] = draft.filter(f => f.op === "is" || f.val.trim() !== ""); S.page[t.name] = 1; S.selected.clear(); closePop(); renderEditor(); break;
+    case "clear-filters": S.filters[t.name] = []; renderEditor(); break;
+    case "sp-del": draft.splice(+a.dataset.i, 1); pop.el.innerHTML = sortHTML(t); break;
+    case "sp-apply": S.sorts[t.name] = draft; S.page[t.name] = 1; closePop(); renderEditor(); break;
+    case "col-menu": {
+      if (pop?.anchor === a) { closePop(); break; }
+      const c = a.dataset.c;
+      openPop(a, `<div class="m-list">${mi("col-sort", "Sort ascending", { ic: IC.up, data: { c, asc: 1 } })}${mi("col-sort", "Sort descending", { ic: IC.dn, data: { c, asc: 0 } })}<div class="m-sep"></div>${mi("copy", "Copy name", { ic: IC.copy, data: { v: c } })}</div>`, { align: "end" });
+      e.stopPropagation(); break;
+    }
+    case "col-sort": S.sorts[t.name] = [{ col: a.dataset.c, asc: a.dataset.asc === "1" }]; S.page[t.name] = 1; closePop(); renderEditor(); break;
+  }
+  if (act === "copy") closePop();
+});
+document.addEventListener("change", e => {
+  const el = e.target;
+  if (el.dataset.fi !== undefined) { draft[+el.dataset.fi][el.dataset.k] = el.value; if (el.dataset.k === "op") pop.el.innerHTML = filterHTML(TMAP[S.table]); }
+  if (el.dataset.si !== undefined) draft[+el.dataset.si].asc = el.checked;
+  if (el.id === "spAdd" && el.value) { draft.push({ col: el.value, asc: true }); pop.el.innerHTML = sortHTML(TMAP[S.table]); }
+});
+document.addEventListener("input", e => {
+  const el = e.target;
+  if (el.dataset.fi !== undefined && el.dataset.k === "val") draft[+el.dataset.fi].val = el.value;
+  if (el.id === "tblSearch" || el.id === "snipSearch") {
+    if (el.id === "tblSearch") S.search = el.value; else S.snipSearch = el.value;
+    const pos = el.selectionStart; renderSide();
+    const again = $("#" + el.id); again.focus(); again.setSelectionRange(pos, pos);
+  }
+  if (el.id === "sqlText") { SNIPPETS.find(x => x.id === S.snippet).sql = el.value; paintSql(); }
+  if (el.id === "palIn") { palIdx = 0; paintPalette(); }
+});
+document.addEventListener("keydown", e => {
+  const mod = e.metaKey || e.ctrlKey;
+  if (mod && e.key.toLowerCase() === "k") { e.preventDefault(); $("#palIn") ? closeOverlay() : openPalette(); return; }
+  if (mod && e.key === "Enter" && S.view === "sql" && !$("#overlay").innerHTML) { e.preventDefault(); run(); return; }
+  if (e.target.id === "palIn") {
+    const n = palItems(e.target.value).length;
+    if (e.key === "ArrowDown") { e.preventDefault(); palIdx = (palIdx + 1) % Math.max(1, n); paintPalette(); }
+    if (e.key === "ArrowUp") { e.preventDefault(); palIdx = (palIdx - 1 + n) % Math.max(1, n); paintPalette(); }
+    if (e.key === "Enter") { e.preventDefault(); palGo(palIdx); }
+  }
+  if (e.target.id === "sqlText" && e.key === "Tab") {
+    e.preventDefault();
+    const ta = e.target, p = ta.selectionStart;
+    ta.setRangeText("  ", p, ta.selectionEnd, "end"); ta.dispatchEvent(new Event("input", { bubbles: true }));
+  }
+  if (e.key === "Enter" && e.target.closest?.("#panelForm") && e.target.tagName === "INPUT") { e.preventDefault(); savePanel(); }
+  if (e.key !== "Escape") return;
+  if (pop) { const a = pop.anchor; closePop(); a.focus(); return; }
+  if ($("#overlay").innerHTML) { closeOverlay(); return; }
+  if (S.railOpen) { S.railOpen = false; renderRail(); return; }
+  if (S.listOpen) { S.listOpen = false; renderSide(); }
+});
+document.addEventListener("pointerdown", e => { if (pop && !pop.el.contains(e.target) && !pop.anchor.contains(e.target)) closePop(); });
+window.addEventListener("resize", () => closePop());
+mobileMQ.addEventListener("change", () => { S.listOpen = false; S.railOpen = false; renderAll(); });
+
+/* ---------- Boot ---------- */
+renderAll();
+</script>
+</body>
+</html>
