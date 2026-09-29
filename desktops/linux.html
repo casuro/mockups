@@ -1,0 +1,506 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ubuntu Desktop</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 xmlns:xlink=%22http://www.w3.org/1999/xlink%22 viewBox=%220 0 100 100%22%3E%3Ccircle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%23f47421%22/%3E%3Ccircle cx=%2250%22 cy=%2250%22 r=%2221.8%22 fill=%22none%22 stroke=%22%23fff%22 stroke-width=%228.6%22/%3E%3Cg id=%22a%22%3E%3Ccircle cx=%2219.4%22 cy=%2250%22 r=%228.4%22 fill=%22%23f47421%22/%3E%3Cpath stroke=%22%23f47421%22 stroke-width=%223.2%22 d=%22M67 50h10%22/%3E%3Ccircle cx=%2219.4%22 cy=%2250%22 r=%226%22 fill=%22%23fff%22/%3E%3C/g%3E%3Cuse xlink:href=%22%23a%22 transform=%22rotate%28120 50 50%29%22/%3E%3Cuse xlink:href=%22%23a%22 transform=%22rotate%28240 50 50%29%22/%3E%3C/svg%3E">
+<style>
+:root {
+  color-scheme: light;
+  --font: "Ubuntu", "Cantarell", system-ui, sans-serif;
+  --accent: #e95420;
+  --panel-h: 32px;
+  --cell: clamp(40px, calc((100vh - 120px) / 8), 56px);
+  --dock-w: calc(var(--cell) + 12px);
+  /* Shell (always dark in Yaru) */
+  --shell-bg: #2b2b2b;
+  --shell-card: #3a3a3a;
+  --shell-hover: #474747;
+  --shell-dim: rgba(255, 255, 255, .62);
+  /* App surfaces (libadwaita / Yaru) */
+  --win-bg: #fafafa;
+  --win-fg: #303030;
+  --win-dim: #6b6b6b;
+  --head-bg: #ebebeb;
+  --head-bg-back: #f4f4f4;
+  --line: rgba(0, 0, 0, .09);
+  --btn: rgba(0, 0, 0, .08);
+  --btn-hover: rgba(0, 0, 0, .14);
+  --side-bg: #ebebeb;
+  --row-hover: rgba(0, 0, 0, .06);
+  --row-sel: color-mix(in srgb, var(--accent) 18%, transparent);
+  --shadow: 0 0 0 1px rgba(0, 0, 0, .12), 0 6px 22px rgba(0, 0, 0, .28);
+  --shadow-back: 0 0 0 1px rgba(0, 0, 0, .1), 0 3px 12px rgba(0, 0, 0, .2);
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --win-bg: #242424;
+  --win-fg: #f2f2f2;
+  --win-dim: #a8a8a8;
+  --head-bg: #303030;
+  --head-bg-back: #262626;
+  --line: rgba(0, 0, 0, .36);
+  --btn: rgba(255, 255, 255, .1);
+  --btn-hover: rgba(255, 255, 255, .16);
+  --side-bg: #2e2e2e;
+  --row-hover: rgba(255, 255, 255, .07);
+  --shadow: 0 0 0 1px rgba(0, 0, 0, .6), 0 6px 22px rgba(0, 0, 0, .5);
+  --shadow-back: 0 0 0 1px rgba(0, 0, 0, .55), 0 3px 12px rgba(0, 0, 0, .35);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; overflow: hidden; }
+body { font: 14px/1.4 var(--font); background: #2c001e; color: #fff; -webkit-font-smoothing: antialiased; user-select: none; }
+button { font: inherit; color: inherit; border: 0; background: none; padding: 0; }
+svg { display: block; }
+.ic { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+.ico { display: grid; flex: none; }
+.ico svg { width: 100%; height: 100%; filter: drop-shadow(0 1px 1.5px rgba(0, 0, 0, .3)); }
+
+/* Wallpaper */
+#wall { position: fixed; inset: 0; transition: filter .25s; }
+#wall svg { width: 100%; height: 100%; }
+body.ov #wall { filter: blur(16px) brightness(.55); }
+
+/* Top bar */
+#panel { position: fixed; inset: 0 0 auto; height: var(--panel-h); background: #000; display: flex; align-items: center; justify-content: space-between; padding: 0 6px; z-index: 900; font-weight: 500; }
+.pbtn { height: 26px; padding: 0 12px; border-radius: 13px; display: flex; align-items: center; gap: 8px; }
+.pbtn:hover, .pbtn.open { background: rgba(255, 255, 255, .16); }
+#clock { position: absolute; left: 50%; transform: translateX(-50%); }
+#ws { gap: 5px; }
+#ws i { width: 7px; height: 7px; border-radius: 4px; background: rgba(255, 255, 255, .5); }
+#ws i:first-child { width: 32px; background: #fff; }
+
+/* Ubuntu Dock */
+#dock { position: fixed; left: 0; top: var(--panel-h); bottom: 0; width: var(--dock-w); background: rgba(24, 24, 24, .72); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 6px 0; z-index: 800; }
+.dk { position: relative; width: var(--cell); height: var(--cell); flex: none; border-radius: 10px; display: grid; place-items: center; }
+.dk:hover { background: rgba(255, 255, 255, .12); }
+.dk.on { background: rgba(255, 255, 255, .2); }
+.dk .ico { width: 78%; height: 78%; }
+.dk.run::before { content: ""; position: absolute; left: -5px; top: 50%; width: 5px; height: 5px; margin-top: -2.5px; border-radius: 50%; background: var(--accent); }
+#dock .grow { flex: 1; }
+.tip { position: fixed; z-index: 1000; background: #222; padding: 5px 11px; border-radius: 99px; font-size: 13.5px; pointer-events: none; white-space: nowrap; display: none; }
+
+/* Windows */
+#wins { position: fixed; inset: 0; z-index: 500; pointer-events: none; }
+.win { position: absolute; display: flex; flex-direction: column; background: var(--win-bg); color: var(--win-fg); border-radius: 12px; box-shadow: var(--shadow-back); overflow: hidden; pointer-events: auto; transition: opacity .18s, transform .2s; }
+.win.focused { box-shadow: var(--shadow); }
+.win.max { border-radius: 0; }
+.win.opening, .win.closing { opacity: 0; transform: scale(.94); }
+.win.min { display: none; }
+.hb { height: 46px; flex: none; display: flex; align-items: center; gap: 6px; padding: 0 8px; background: var(--head-bg-back); border-bottom: 1px solid var(--line); position: relative; }
+.win.focused .hb { background: var(--head-bg); }
+.win:not(.focused) .hb > * { opacity: .6; }
+.title { position: absolute; left: 130px; right: 130px; text-align: center; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; pointer-events: none; line-height: 1.15; }
+.title small { display: block; font-weight: 400; font-size: 12px; color: var(--win-dim); }
+.hb .sp { flex: 1; }
+.hbtn { height: 34px; min-width: 34px; padding: 0 9px; border-radius: 6px; display: flex; align-items: center; justify-content: center; gap: 6px; font-weight: 600; }
+.hbtn:hover { background: var(--btn-hover); }
+.ctl { display: flex; gap: 12px; margin: 0 4px 0 6px; }
+.ctl button { width: 24px; height: 24px; border-radius: 50%; background: var(--btn); display: grid; place-items: center; }
+.ctl button:hover { background: var(--btn-hover); }
+.ctl .x:hover { background: var(--accent); color: #fff; }
+.ctl .ic { width: 14px; height: 14px; stroke-width: 1.8; }
+.wbody { flex: 1; min-height: 0; display: flex; position: relative; }
+body.drag { cursor: grabbing; }
+body.drag .wbody { pointer-events: none; }
+.rz { position: absolute; z-index: 5; }
+.rz.s { left: 10px; right: 10px; bottom: 0; height: 7px; cursor: ns-resize; }
+.rz.e { top: 10px; bottom: 10px; right: 0; width: 7px; cursor: ew-resize; }
+.rz.se { right: 0; bottom: 0; width: 14px; height: 14px; cursor: nwse-resize; }
+.win.max .rz { display: none; }
+
+/* App grid (Activities / Show Apps) */
+#ov { position: fixed; top: var(--panel-h); left: var(--dock-w); right: 0; bottom: 0; z-index: 600; display: none; flex-direction: column; align-items: center; padding: 22px 32px; }
+body.ov #ov { display: flex; }
+body.ov #wins { visibility: hidden; }
+#search { width: min(340px, 100%); height: 40px; border-radius: 20px; background: rgba(255, 255, 255, .14); display: flex; align-items: center; gap: 10px; padding: 0 16px; }
+#search:focus-within { box-shadow: inset 0 0 0 2px var(--accent); }
+#search input { flex: 1; min-width: 0; background: none; border: 0; outline: 0; color: #fff; font: inherit; font-size: 15px; }
+#search input::placeholder { color: rgba(255, 255, 255, .6); }
+#grid { width: 100%; max-width: 1000px; margin-top: 40px; display: grid; grid-template-columns: repeat(auto-fill, minmax(128px, 1fr)); gap: 12px 8px; }
+.gapp { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 16px 6px 12px; border-radius: 18px; }
+.gapp .ico { width: 80px; height: 80px; }
+.gapp:hover, .gapp:focus-visible { background: rgba(255, 255, 255, .12); outline: 0; }
+#none { margin-top: 60px; color: var(--shell-dim); font-size: 17px; }
+
+/* Quick Settings */
+#qs { position: fixed; top: calc(var(--panel-h) + 6px); right: 8px; width: 360px; max-width: calc(100vw - 16px); z-index: 950; background: var(--shell-bg); border-radius: 22px; padding: 12px; box-shadow: 0 0 0 1px rgba(255, 255, 255, .08), 0 10px 32px rgba(0, 0, 0, .5); display: none; }
+#qs.open { display: block; }
+.qs-top { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.qs-top .pct { display: flex; align-items: center; gap: 6px; height: 36px; padding: 0 14px; border-radius: 18px; background: var(--shell-card); margin-right: auto; }
+.rbtn { width: 36px; height: 36px; border-radius: 50%; background: var(--shell-card); display: grid; place-items: center; }
+.rbtn:hover { background: var(--shell-hover); }
+.slider { display: flex; align-items: center; gap: 12px; height: 40px; padding: 0 8px; }
+.slider input { flex: 1; accent-color: var(--accent); }
+.tgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 6px; }
+.tog { height: 48px; border-radius: 24px; background: var(--shell-card); display: flex; align-items: center; gap: 10px; padding: 0 16px; text-align: left; }
+.tog:hover { background: var(--shell-hover); }
+.tog.on { background: var(--accent); }
+.tog b { display: block; font-weight: 600; line-height: 1.2; }
+.tog small { display: block; font-size: 12px; opacity: .78; }
+
+/* Notification banner */
+#toast { position: fixed; top: calc(var(--panel-h) + 8px); left: 50%; z-index: 980; width: min(380px, calc(100vw - 16px)); transform: translateX(-50%); background: var(--shell-bg); border-radius: 16px; padding: 12px 16px; box-shadow: 0 8px 24px rgba(0, 0, 0, .45); display: none; }
+#toast.show { display: block; }
+#toast p { margin: 2px 0 0; font-size: 13px; color: var(--shell-dim); }
+
+/* Placeholder window contents */
+.side { width: 200px; flex: none; background: var(--side-bg); padding: 8px 6px; overflow: auto; border-right: 1px solid var(--line); }
+.side button { width: 100%; height: 34px; display: flex; align-items: center; gap: 12px; padding: 0 10px; border-radius: 6px; text-align: left; }
+.side button:hover { background: var(--row-hover); }
+.side button.on { background: var(--row-sel); font-weight: 600; }
+.pane { flex: 1; min-width: 0; overflow: auto; padding: 16px; }
+.icons { display: grid; grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); align-content: start; gap: 6px; }
+.fitem { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 10px 4px; border-radius: 10px; }
+.fitem .ico { width: 60px; height: 60px; }
+.fitem:hover { background: var(--row-hover); }
+.fitem:focus { background: var(--row-sel); outline: 0; }
+.pathbar { position: absolute; left: 50%; transform: translateX(-50%); height: 34px; padding: 0 14px; border-radius: 8px; background: var(--btn); display: flex; align-items: center; gap: 6px; font-weight: 700; }
+.empty { margin: auto; text-align: center; color: var(--win-dim); }
+.empty .ico { width: 96px; height: 96px; margin: 0 auto 12px; opacity: .8; }
+.empty b { display: block; font-size: 20px; color: var(--win-fg); margin-bottom: 4px; }
+.fx { flex: 1; display: flex; flex-direction: column; }
+.fx-bar { display: flex; align-items: center; gap: 4px; padding: 6px 8px; border-bottom: 1px solid var(--line); }
+.fx-bar input, .fx-search input { flex: 1; height: 34px; border-radius: 8px; border: 0; padding: 0 12px; background: var(--btn); color: inherit; font: inherit; outline: 0; }
+.fx-bar input:focus, .fx-search input:focus { box-shadow: inset 0 0 0 2px var(--accent); }
+.fx-page { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 28px; padding: 24px; }
+.fx-page .ico { width: 84px; height: 84px; }
+.fx-search { width: min(560px, 100%); display: flex; }
+.fx-search input { height: 48px; border-radius: 12px; font-size: 15px; box-shadow: 0 1px 4px rgba(0, 0, 0, .12); }
+.fx-tab { display: flex; align-items: center; gap: 8px; height: 34px; width: 220px; padding: 0 10px; border-radius: 8px; background: var(--win-bg); box-shadow: 0 1px 3px rgba(0, 0, 0, .15); font-weight: 500; }
+.fx-tab .ico { width: 16px; height: 16px; }
+.fx-tab span:nth-child(2) { flex: 1; }
+.ed { flex: 1; resize: none; border: 0; outline: 0; padding: 18px 22px; background: var(--win-bg); color: var(--win-fg); font: 15px/1.6 "Ubuntu Mono", ui-monospace, monospace; }
+.term { flex: 1; overflow: auto; padding: 8px 10px; background: #300a24; color: #eee; font: 14.5px/1.35 "Ubuntu Mono", ui-monospace, monospace; white-space: pre-wrap; user-select: text; }
+.term .u { color: #8ae234; } .term .d { color: #729fcf; }
+.term .cur { display: inline-block; width: .6em; height: 1.1em; vertical-align: text-bottom; background: #eee; }
+.styles { display: flex; gap: 18px; }
+.styles button { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.styles i { display: block; width: 150px; height: 96px; border-radius: 10px; box-shadow: 0 0 0 1px var(--line); background: linear-gradient(135deg, #e95420, #77216f); position: relative; }
+.styles i::after { content: ""; position: absolute; inset: 20px 26px 0; border-radius: 6px 6px 0 0; background: #fafafa; }
+.styles .dark i::after { background: #303030; }
+.styles .on i { box-shadow: 0 0 0 3px var(--accent); }
+.pane h4 { margin: 8px 0 12px; font-size: 15px; }
+
+/* Phone: the app grid is home, apps open full screen */
+@media (max-width: 759px) {
+  #dock, #ws, .ctl .m, .ctl .mx, .rz, .hb .hbtn { display: none !important; }
+  #ov { display: flex; left: 0; padding: 16px; }
+  #search { display: none; }
+  #grid { margin-top: 12px; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px 6px; }
+  .gapp { padding: 8px 2px; font-size: 12.5px; text-align: center; }
+  .gapp .ico { width: 56px; height: 56px; }
+  #panel { justify-content: flex-end; }
+  body #wins { visibility: visible; z-index: 700; }
+  .win { inset: var(--panel-h) 0 0 !important; width: auto !important; height: auto !important; border-radius: 0; z-index: 1000 !important; }
+  .side { display: none; }
+}
+</style>
+</head>
+<body>
+<div id="wall"></div>
+<header id="panel">
+  <button class="pbtn" id="ws" aria-label="Activities"><i></i><i></i></button>
+  <button class="pbtn" id="clock"></button>
+  <button class="pbtn" id="status" aria-label="System menu"></button>
+</header>
+<nav id="dock" aria-label="Dock"></nav>
+<div id="wins"></div>
+<div id="ov"><label id="search"><input id="q" placeholder="Type to search" autocomplete="off" aria-label="Search apps"></label><div id="grid"></div><div id="none" hidden>No results found</div></div>
+<div id="qs" role="dialog" aria-label="Quick Settings"></div>
+<div id="toast" role="status"></div>
+<div class="tip" id="tip"></div>
+<script>
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+const pad = n => String(n).padStart(2, "0");
+let uid = 0;
+
+// Symbolic icons (Adwaita style)
+const I = d => `<svg class="ic" viewBox="0 0 16 16" aria-hidden="true">${d}</svg>`;
+const ICONS = {
+  wifi: I('<path d="M1.5 6.2a9.5 9.5 0 0 1 13 0M3.7 8.6a6.3 6.3 0 0 1 8.6 0M5.9 11a3.2 3.2 0 0 1 4.2 0"/><circle cx="8" cy="13.2" r=".9" fill="currentColor"/>'),
+  vol: I('<path d="M2 6h2.5L8 3v10L4.5 10H2z" fill="currentColor" stroke="none"/><path d="M10.5 5.5a3.5 3.5 0 0 1 0 5M12.5 3.5a6.3 6.3 0 0 1 0 9"/>'),
+  batt: I('<rect x="4.5" y="2.5" width="7" height="12" rx="1.5"/><path d="M6.5 1h3"/><rect x="6" y="7" width="4" height="6" rx=".5" fill="currentColor" stroke="none"/>'),
+  power: I('<path d="M8 1.8v6"/><path d="M4.4 4a5.3 5.3 0 1 0 7.2 0"/>'),
+  bt: I('<path d="m4.5 5 7 6L8 14V2l3.5 3-7 6"/>'),
+  moon: I('<path d="M13.5 9.6A5.6 5.6 0 1 1 6.4 2.5a4.5 4.5 0 0 0 7.1 7.1z"/>'),
+  settings: I('<circle cx="8" cy="8" r="2.2"/><path d="M8 1.5v1.7M8 12.8v1.7M1.5 8h1.7M12.8 8h1.7M3.4 3.4l1.2 1.2M11.4 11.4l1.2 1.2M3.4 12.6l1.2-1.2M11.4 4.6l1.2-1.2"/>'),
+  lock: I('<rect x="3" y="7" width="10" height="7" rx="1.5"/><path d="M5 7V5a3 3 0 0 1 6 0v2"/>'),
+  min: I('<path d="M4.5 8.5h7"/>'),
+  max: I('<rect x="4.5" y="4.5" width="7" height="7" rx="1"/>'),
+  unmax: I('<rect x="4" y="6" width="6" height="6" rx="1"/><path d="M6 4h5a1 1 0 0 1 1 1v5"/>'),
+  close: I('<path d="m5 5 6 6m0-6-6 6"/>'),
+  search: I('<circle cx="7" cy="7" r="4.5"/><path d="m10.5 10.5 3.5 3.5"/>'),
+  back: I('<path d="m10 3-5 5 5 5"/>'),
+  fwd: I('<path d="m6 3 5 5-5 5"/>'),
+  reload: I('<path d="M13.5 8A5.5 5.5 0 1 1 11.6 3.8"/><path d="M12 1.5v3h-3"/>'),
+  menu: I('<path d="M2.5 4h11M2.5 8h11M2.5 12h11"/>'),
+  grid: I('<rect x="2" y="2" width="5" height="5" rx="1"/><rect x="9" y="2" width="5" height="5" rx="1"/><rect x="2" y="9" width="5" height="5" rx="1"/><rect x="9" y="9" width="5" height="5" rx="1"/>'),
+  plus: I('<path d="M8 3v10M3 8h10"/>'),
+  down: I('<path d="m4 6 4 4 4-4"/>'),
+  home: I('<path d="M2.5 7.5 8 2.5l5.5 5M4 6.5v7h8v-7"/>'),
+  clock: I('<circle cx="8" cy="8" r="6"/><path d="M8 4.5V8l2.5 1.5"/>'),
+  star: I('<path d="m8 1.8 1.9 4 4.3.5-3.2 3 .9 4.3L8 11.4l-3.9 2.2.9-4.3-3.2-3 4.3-.5z"/>'),
+  doc: I('<path d="M4 1.5h5l3.5 3.5v9.5H4z"/><path d="M9 1.5V5h3.5"/>'),
+  dl: I('<path d="M8 2v8m-3.5-3.5L8 10l3.5-3.5M2.5 13.5h11"/>'),
+  pic: I('<rect x="1.5" y="2.5" width="13" height="11" rx="1.5"/><circle cx="5.5" cy="6" r="1.2"/><path d="m2 12 4-4 3 3 2-2 3.5 3.5"/>'),
+  trash: I('<path d="M2.5 4h11M6 4V2.5h4V4M3.8 4l.8 10h6.8l.8-10"/>'),
+};
+
+// App icons (simple Yaru-style drawings)
+const APP_ICONS = {
+  folder: g => `<svg viewBox="0 0 64 64"><defs><linearGradient id="${g}" x2="0" y2="1"><stop offset="0" stop-color="#f58a52"/><stop offset="1" stop-color="#e45f25"/></linearGradient></defs><path d="M6 14a4 4 0 0 1 4-4h14.5l5 5H54a4 4 0 0 1 4 4v4H6z" fill="#b8431b"/><rect x="6" y="19" width="52" height="37" rx="4" fill="url(#${g})"/></svg>`,
+  files: () => `<svg viewBox="0 0 64 64"><rect x="6" y="5" width="52" height="55" rx="9" fill="#dcdcdc"/><rect x="11" y="10" width="42" height="21" rx="4.5" fill="#fff"/><rect x="11" y="34" width="42" height="21" rx="4.5" fill="#fff"/><rect x="24" y="16.5" width="16" height="6" rx="3" fill="#e95420"/><rect x="24" y="40.5" width="16" height="6" rx="3" fill="#77216f"/></svg>`,
+  firefox: g => `<svg viewBox="0 0 64 64"><defs><radialGradient id="${g}a" cx=".35" cy=".35"><stop offset="0" stop-color="#b58cff"/><stop offset="1" stop-color="#3b1d8f"/></radialGradient><linearGradient id="${g}b" x2="1" y2="1"><stop offset="0" stop-color="#ffbd4f"/><stop offset=".55" stop-color="#ff7139"/><stop offset="1" stop-color="#e31587"/></linearGradient></defs><circle cx="32" cy="33" r="23" fill="url(#${g}a)"/><path d="M32 7C21 7 12 13 8.5 22c3-2.5 6.5-3.5 10-3.5-1.5 2-2.3 4.4-2.3 6.8 3.2-3 7.6-4.3 12-3.4 7.4 1.5 12.2 8.6 10.8 16-1.5 7.8-9.2 12.6-17 11 4.6 4.3 11 6.2 17.3 4.8C51 51.3 58.4 41 57 29.7 55.3 16.8 44.6 7 32 7z" fill="url(#${g}b)"/></svg>`,
+  editor: () => `<svg viewBox="0 0 64 64"><rect x="10" y="6" width="44" height="54" rx="6" fill="#fafafa"/><path d="M10 12a6 6 0 0 1 6-6h32a6 6 0 0 1 6 6v5H10z" fill="#3584e4"/><path d="M18 26h28M18 33h22M18 40h26M18 47h16" stroke="#9a9a9a" stroke-width="3" stroke-linecap="round"/></svg>`,
+  terminal: () => `<svg viewBox="0 0 64 64"><rect x="6" y="9" width="52" height="46" rx="8" fill="#3d3d3d"/><rect x="8" y="11" width="48" height="42" rx="6" fill="#300a24"/><path d="m17 25 9 7-9 7M30 40h14" fill="none" stroke="#fff" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  settings: () => `<svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="26" fill="#77767b"/><path d="M29 12h6l1.2 6.2 4 1.7 5.2-3.6 4.3 4.3-3.6 5.2 1.7 4 6.2 1.2v6l-6.2 1.2-1.7 4 3.6 5.2-4.3 4.3-5.2-3.6-4 1.7L35 52h-6l-1.2-6.2-4-1.7-5.2 3.6-4.3-4.3 3.6-5.2-1.7-4L12 35v-6l6.2-1.2 1.7-4-3.6-5.2 4.3-4.3 5.2 3.6 4-1.7z" fill="#deddda"/><circle cx="32" cy="32" r="7" fill="#77767b"/></svg>`,
+  showapps: () => `<svg viewBox="0 0 24 24" fill="#fff">${[5, 12, 19].map(y => [5, 12, 19].map(x => `<circle cx="${x}" cy="${y}" r="2.1"/>`).join("")).join("")}</svg>`,
+};
+const icon = id => `<span class="ico" aria-hidden="true">${APP_ICONS[id]("g" + ++uid)}</span>`;
+</script>
+<script>
+// ---------- Apps: placeholder content, replace with anything ----------
+const hbtn = (label, ic, text = "") => `<button class="hbtn" aria-label="${label}">${text}${ICONS[ic]}</button>`;
+const FOLDERS = ["Desktop", "Documents", "Downloads", "Music", "Pictures", "Public", "Templates", "Videos"];
+const APPS = [
+  { id: "files", name: "Files", dock: true, size: [860, 540],
+    head: `${hbtn("Back", "back")}${hbtn("Forward", "fwd")}<div class="pathbar">${ICONS.home}Home</div>`,
+    right: hbtn("Search", "search") + hbtn("View", "grid") + hbtn("Menu", "menu"),
+    body: () => `<nav class="side">${[["clock", "Recent"], ["star", "Starred"], ["home", "Home"], ["doc", "Documents"], ["dl", "Downloads"], ["pic", "Pictures"], ["trash", "Trash"]].map(([i, n]) => `<button${n === "Home" ? ' class="on"' : ""}>${ICONS[i]}${n}</button>`).join("")}</nav>
+      <div class="pane icons">${FOLDERS.map(f => `<button class="fitem">${icon("folder")}${f}</button>`).join("")}</div>` },
+  { id: "firefox", name: "Firefox", dock: true, size: [1040, 680],
+    head: `<div class="fx-tab">${icon("firefox")}<span>New Tab</span>${ICONS.close}</div>${hbtn("New tab", "plus")}`,
+    body: () => `<div class="fx"><div class="fx-bar">${hbtn("Back", "back")}${hbtn("Forward", "fwd")}${hbtn("Reload", "reload")}<input placeholder="Search or enter address" aria-label="Address">${hbtn("Menu", "menu")}</div>
+      <div class="fx-page">${icon("firefox")}<label class="fx-search"><input placeholder="Search the web" aria-label="Search the web"></label></div></div>` },
+  { id: "editor", name: "Text Editor", dock: true, size: [720, 500],
+    head: `${hbtn("Open", "down", "Open")}${hbtn("New", "plus")}<div class="title">notes.md<small>~/Documents</small></div>`,
+    right: hbtn("Menu", "menu"),
+    body: () => `<textarea class="ed" spellcheck="false" aria-label="notes.md"># Today\n\n- Review the onboarding flow\n- Reply to the design thread\n- Ship the dock tweaks\n</textarea>` },
+  { id: "terminal", name: "Terminal", dock: true, size: [720, 440],
+    head: `${hbtn("New tab", "plus")}<div class="title">naman@casuro: ~</div>`,
+    right: hbtn("Search", "search") + hbtn("Menu", "menu"),
+    body: () => `<div class="term" tabindex="0">Welcome to Ubuntu 24.04.1 LTS (GNU/Linux 6.8.0-45-generic x86_64)
+
+<b class="u">naman@casuro</b>:<b class="d">~</b>$ ls
+${FOLDERS.join("  ")}
+<b class="u">naman@casuro</b>:<b class="d">~</b>$ <span class="cur"></span></div>` },
+  { id: "settings", name: "Settings", dock: true, size: [880, 580],
+    head: `${hbtn("Search", "search")}<div class="title">Appearance</div>`,
+    body: () => `<nav class="side">${["Wi-Fi", "Network", "Bluetooth", "Displays", "Sound", "Power", "Appearance", "Notifications", "Apps", "Privacy & Security", "System"].map(n => `<button${n === "Appearance" ? ' class="on"' : ""}>${n}</button>`).join("")}</nav>
+      <div class="pane"><h4>Style</h4><div class="styles">${["Light", "Dark"].map(t => `<button class="${t.toLowerCase()}" data-style="${t}"><i></i>${t}</button>`).join("")}</div></div>`,
+    wire(el) {
+      const sync = () => {
+        $$("[data-style]", el).forEach(b => b.classList.toggle("on", (b.dataset.style === "Dark") === dark));
+      };
+      el.addEventListener("click", e => {
+        const st = e.target.closest("[data-style]");
+        if (st) setDark(st.dataset.style === "Dark");
+      });
+      el.sync = sync; sync();
+    } },
+];
+const appById = id => APPS.find(a => a.id === id);
+let dark = false;
+
+// ---------- Wallpaper ----------
+$("#wall").innerHTML = `<svg viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs>
+<linearGradient id="w0" x2="1" y2="1"><stop offset="0" stop-color="#1c0014"/><stop offset=".45" stop-color="#4a0f3d"/><stop offset=".78" stop-color="#9e2a3a"/><stop offset="1" stop-color="#e95420"/></linearGradient>
+<radialGradient id="w1" cx="1320" cy="880" r="760" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#ff8a3d" stop-opacity=".95"/><stop offset=".4" stop-color="#e95420" stop-opacity=".55"/><stop offset="1" stop-color="#e95420" stop-opacity="0"/></radialGradient>
+<linearGradient id="w2" y1="1" x2="1"><stop offset="0" stop-color="#ff9a52" stop-opacity="0"/><stop offset=".5" stop-color="#ff7a3d" stop-opacity=".55"/><stop offset="1" stop-color="#c7365f" stop-opacity=".15"/></linearGradient>
+<linearGradient id="w3" x2="1" y2="1"><stop offset="0" stop-color="#a0307a" stop-opacity=".05"/><stop offset=".6" stop-color="#d9445b" stop-opacity=".5"/><stop offset="1" stop-color="#ffb070" stop-opacity=".35"/></linearGradient></defs>
+<rect width="1600" height="1000" fill="url(#w0)"/><rect width="1600" height="1000" fill="url(#w1)"/>
+<path d="M-100 1000C220 760 520 700 800 760s600 40 900-260V1000z" fill="url(#w2)"/>
+<path d="M300 1000c180-300 480-420 780-400s440-160 620-420V1000z" fill="url(#w3)" opacity=".75"/>
+<path d="M-50 820C300 640 640 610 980 650s520-60 700-300" fill="none" stroke="#ffd2a8" stroke-opacity=".18" stroke-width="3"/>
+<g transform="translate(1180 330) rotate(18)" opacity=".2"><path d="M0-190 164.5-95v190L0 190-164.5 95v-190z" fill="none" stroke="#ffc49a" stroke-width="2"/><path d="M0-120 104-60v120L0 120-104 60v-120z" fill="#ff8a4a" fill-opacity=".35"/></g></svg>`;
+
+// ---------- Top bar ----------
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const tick = () => { const d = new Date(); $("#clock").textContent = `${MONTHS[d.getMonth()]} ${d.getDate()}  ${pad(d.getHours())}:${pad(d.getMinutes())}`; };
+tick(); setInterval(tick, 5000);
+$("#status").innerHTML = ICONS.wifi + ICONS.vol + ICONS.batt + ICONS.power;
+const qs = { wifi: true, bt: true };
+function renderQS() {
+  const t = (k, ic, name, on, off) => `<button class="tog${(k === "dark" ? dark : qs[k]) ? " on" : ""}" data-t="${k}">${ICONS[ic]}<span><b>${name}</b><small>${(k === "dark" ? dark : qs[k]) ? on : off}</small></span></button>`;
+  $("#qs").innerHTML = `<div class="qs-top"><span class="pct">${ICONS.batt}84 %</span><button class="rbtn" data-a="Settings" aria-label="Settings">${ICONS.settings}</button><button class="rbtn" data-a="Lock" aria-label="Lock">${ICONS.lock}</button><button class="rbtn" data-a="Power Off" aria-label="Power Off">${ICONS.power}</button></div>
+    <label class="slider">${ICONS.vol}<input type="range" value="62" aria-label="Volume"></label>
+    <div class="tgrid">${t("wifi", "wifi", "Wi-Fi", "Casuro HQ", "Off")}${t("bt", "bt", "Bluetooth", "On", "Off")}${t("dark", "moon", "Dark Style", "On", "Off")}</div>`;
+}
+$("#status").onclick = e => { e.stopPropagation(); const open = !$("#qs").classList.contains("open"); closeMenus(); if (open) { renderQS(); $("#qs").classList.add("open"); $("#status").classList.add("open"); } };
+$("#qs").onclick = e => {
+  const t = e.target.closest(".tog"), a = e.target.closest("[data-a]");
+  if (t) { const k = t.dataset.t; if (k === "dark") setDark(!dark); else qs[k] = !qs[k]; renderQS(); }
+  if (a) { closeMenus(); if (a.dataset.a === "Settings") openApp("settings"); else toast(a.dataset.a, "Not available in this mockup."); }
+};
+function closeMenus() { $("#qs").classList.remove("open"); $("#status").classList.remove("open"); }
+addEventListener("pointerdown", e => { if (!e.target.closest("#qs, #status")) closeMenus(); });
+function setDark(on) { dark = on; document.documentElement.dataset.theme = on ? "dark" : "light"; $$(".win").forEach(w => w.sync?.()); }
+let toastT;
+function toast(title, body) {
+  $("#toast").innerHTML = `<b>${esc(title)}</b><p>${esc(body)}</p>`;
+  $("#toast").classList.add("show");
+  clearTimeout(toastT); toastT = setTimeout(() => $("#toast").classList.remove("show"), 3000);
+}
+</script>
+<script>
+// ---------- Dock ----------
+const PANEL = 32;
+const work = () => { const x = $("#dock").offsetWidth; return { x, y: PANEL, w: innerWidth - x, h: innerHeight - PANEL }; };
+$("#dock").innerHTML = APPS.filter(a => a.dock).map(a => `<button class="dk" data-app="${a.id}" aria-label="${a.name}">${icon(a.id)}</button>`).join("")
+  + `<div class="grow"></div><button class="dk" id="showApps" aria-label="Show Apps">${icon("showapps")}</button>`;
+$("#dock").onclick = e => {
+  const b = e.target.closest(".dk"); if (!b) return;
+  $("#tip").style.display = "none";
+  if (b.id === "showApps") return toggleGrid();
+  showGrid(false);
+  const w = wins.get(b.dataset.app);
+  if (!w) openApp(b.dataset.app);
+  else if (w.min) restore(w);
+  else if (w === focused) minimize(w);
+  else focus(w);
+};
+$("#dock").onpointerover = e => {
+  const b = e.target.closest(".dk"), tip = $("#tip");
+  if (!b) return (tip.style.display = "none");
+  const r = b.getBoundingClientRect();
+  tip.textContent = b.getAttribute("aria-label");
+  Object.assign(tip.style, { display: "block", left: r.right + 10 + "px", top: r.top + r.height / 2 - 14 + "px" });
+};
+$("#dock").onpointerleave = () => ($("#tip").style.display = "none");
+function syncDock() {
+  $$(".dk[data-app]").forEach(b => {
+    const w = wins.get(b.dataset.app);
+    b.classList.toggle("run", !!w);
+    b.classList.toggle("on", !!w && w === focused && !document.body.classList.contains("ov"));
+  });
+  $("#showApps").classList.toggle("on", document.body.classList.contains("ov"));
+}
+
+// ---------- Windows ----------
+const wins = new Map();
+let focused = null, z = 10, cascade = 0;
+function openApp(id) {
+  if (wins.has(id)) return restore(wins.get(id));
+  const app = appById(id), W = work();
+  const [pw, ph] = app.size || [600, 420], step = cascade++ % 5;
+  const w = Math.min(pw, W.w - 64), h = Math.min(ph, W.h - 48);
+  const el = document.createElement("section");
+  el.className = "win opening";
+  el.setAttribute("aria-label", app.name);
+  el.innerHTML = `<header class="hb">${app.head ?? `<div class="title">${app.name}</div>`}<div class="sp"></div>${app.right ?? ""}<div class="ctl"><button class="m" aria-label="Minimize">${ICONS.min}</button><button class="mx" aria-label="Maximize">${ICONS.max}</button><button class="x" aria-label="Close">${ICONS.close}</button></div></header>
+    <div class="wbody">${app.body ? app.body() : `<div class="empty">${icon(id)}<b>${app.name}</b>Put any content in this window.</div>`}</div>
+    ${["s", "e", "se"].map(d => `<div class="rz ${d}" data-d="${d}"></div>`).join("")}`;
+  const win = { id, el, w, h, x: W.x + Math.max(16, (W.w - w) / 2 - 60 + step * 32), y: W.y + Math.max(12, (W.h - h) / 2 - 40 + step * 28), max: false, min: false };
+  wins.set(id, win);
+  $("#wins").append(el);
+  place(win); focus(win); app.wire?.(el);
+  requestAnimationFrame(() => requestAnimationFrame(() => el.classList.remove("opening")));
+  $(".m", el).onclick = () => minimize(win);
+  $(".mx", el).onclick = () => { win.max = !win.max; place(win); };
+  $(".x", el).onclick = () => closeWin(win);
+  el.addEventListener("pointerdown", () => focused !== win && focus(win), true);
+  const hb = $(".hb", el);
+  hb.ondblclick = e => { if (!e.target.closest("button, input")) $(".mx", el).click(); };
+  hb.onpointerdown = e => { if (e.button === 0 && !e.target.closest("button, input")) drag(win, e); };
+  $$(".rz", el).forEach(r => (r.onpointerdown = e => resize(win, e, r.dataset.d)));
+  return win;
+}
+function geom(win) {
+  if (win.max) return work();
+  return win;
+}
+function place(win) {
+  const g = geom(win);
+  Object.assign(win.el.style, { left: g.x + "px", top: g.y + "px", width: g.w + "px", height: g.h + "px" });
+  win.el.classList.toggle("max", win.max);
+  $(".mx", win.el).innerHTML = win.max ? ICONS.unmax : ICONS.max;
+}
+function focus(win) {
+  focused = win;
+  if (win) win.el.style.zIndex = ++z;
+  $$(".win").forEach(e => e.classList.toggle("focused", !!win && e === win.el));
+  syncDock();
+}
+const topmost = () => [...wins.values()].filter(w => !w.min).sort((a, b) => b.el.style.zIndex - a.el.style.zIndex)[0] || null;
+function minimize(win) { win.min = true; win.el.classList.add("min"); focus(topmost()); }
+function restore(win) { win.min = false; win.el.classList.remove("min"); focus(win); return win; }
+function closeWin(win) {
+  wins.delete(win.id);
+  win.el.classList.add("closing");
+  setTimeout(() => win.el.remove(), 180);
+  focus(focused === win ? topmost() : focused);
+}
+// Pointer moves over the whole page while dragging, so disable the window contents meanwhile
+function track(e, move, up) {
+  e.preventDefault();
+  document.body.classList.add("drag");
+  const end = () => { removeEventListener("pointermove", move); removeEventListener("pointerup", end); document.body.classList.remove("drag"); up?.(); };
+  addEventListener("pointermove", move); addEventListener("pointerup", end);
+}
+function drag(win, e) {
+  const g = { ...geom(win) }, sx = e.clientX, sy = e.clientY;
+  let gx = sx - g.x, moved = false;
+  track(e, ev => {
+    if (!moved && Math.hypot(ev.clientX - sx, ev.clientY - sy) < 4) return;
+    // Dragging a maximized window restores it under the pointer
+    if (!moved && win.max) { gx = Math.round(win.w * gx / g.w); win.max = false; }
+    moved = true;
+    win.x = ev.clientX - gx;
+    win.y = Math.max(PANEL, Math.min(ev.clientY - (sy - g.y), innerHeight - 46));
+    place(win);
+  });
+}
+function resize(win, e, d) {
+  const { x, y, w, h } = geom(win), sx = e.clientX, sy = e.clientY;
+  Object.assign(win, { x, y, w, h, max: false });
+  track(e, ev => {
+    const dx = ev.clientX - sx, dy = ev.clientY - sy;
+    if (d.includes("e")) win.w = Math.max(360, w + dx);
+    if (d.includes("s")) win.h = Math.max(220, h + dy);
+    place(win);
+  });
+}
+addEventListener("resize", () => wins.forEach(place));
+
+// ---------- App grid (Activities, Show Apps, Super) ----------
+const q = $("#q");
+function renderGrid() {
+  const t = q.value.trim().toLowerCase(), list = APPS.filter(a => a.name.toLowerCase().includes(t));
+  $("#grid").innerHTML = list.map(a => `<button class="gapp" data-app="${a.id}">${icon(a.id)}${a.name}</button>`).join("");
+  $("#none").hidden = list.length > 0;
+}
+function showGrid(on) {
+  if (on === document.body.classList.contains("ov")) return;
+  document.body.classList.toggle("ov", on);
+  closeMenus();
+  q.value = ""; renderGrid();
+  if (on && innerWidth >= 760) setTimeout(() => q.focus());
+  syncDock();
+}
+const toggleGrid = () => showGrid(!document.body.classList.contains("ov"));
+q.oninput = renderGrid;
+q.onkeydown = e => { if (e.key === "Enter") $(".gapp")?.click(); };
+$("#grid").onclick = e => { const b = e.target.closest(".gapp"); if (b) { showGrid(false); openApp(b.dataset.app); } };
+$("#ov").onclick = e => { if (e.target.id === "ov" || e.target.id === "grid") showGrid(false); };
+$("#ws").onclick = toggleGrid;
+
+// ---------- Keyboard ----------
+let superOnly = false;
+addEventListener("keydown", e => {
+  superOnly = e.key === "Meta" || e.key === "OS";
+  const k = e.key.toLowerCase();
+  if (e.key === "Escape") { closeMenus(); showGrid(false); }
+  else if (focused && ((e.ctrlKey && k === "w") || (e.metaKey && k === "q"))) { e.preventDefault(); closeWin(focused); }
+});
+addEventListener("keyup", e => { if (superOnly && (e.key === "Meta" || e.key === "OS")) toggleGrid(); superOnly = false; });
+
+// Phone width: the app grid is the home screen
+renderGrid();
+syncDock();
+</script>
+</body>
+</html>

@@ -1,0 +1,165 @@
+/*
+ * Ubuntu's GNOME shell (Yaru), from desktops/linux.html. Scoped to
+ * .kit-linux and stopping at each window's content, so it neither leaks into
+ * the page nor into what you put in a window, and sized by its own box
+ * (container queries). The --lx-* colors are inherited by window content, so
+ * placeholder content can follow Light and Dark Style.
+ */
+@scope (.kit-linux) to (.lx-content) {
+  /* The page's element styles (a CSS reset, Tailwind's preflight) stop at the
+     desktop's edge. SVG is left alone: its drawing attributes count as styles. */
+  :where(:scope, :scope *:not(svg, svg *)) { all: revert; }
+
+  :scope {
+    color-scheme: light;
+    --lx-accent: #e95420;
+    --lx-bg: #fafafa;
+    --lx-fg: #303030;
+    --lx-dim: #6b6b6b;
+    --lx-head: #ebebeb;
+    --lx-head-back: #f4f4f4;
+    --lx-side: #ebebeb;
+    --lx-line: rgba(0, 0, 0, .09);
+    --lx-btn: rgba(0, 0, 0, .08);
+    --lx-hover: rgba(0, 0, 0, .06);
+    --lx-sel: color-mix(in srgb, var(--lx-accent) 18%, transparent);
+    --shadow: 0 0 0 1px rgba(0, 0, 0, .12), 0 6px 22px rgba(0, 0, 0, .28);
+    --shadow-back: 0 0 0 1px rgba(0, 0, 0, .1), 0 3px 12px rgba(0, 0, 0, .2);
+    --shell: #2b2b2b;
+    --card: #3a3a3a;
+    --card-hover: #474747;
+    --panel: 32px;
+    --cell: clamp(40px, calc((100cqh - 120px) / 8), 56px);
+    --dock: calc(var(--cell) + 12px);
+
+    container: linux / size;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #2c001e;
+    color: #fff;
+    font: 14px/1.4 "Ubuntu", "Cantarell", system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    user-select: none;
+  }
+  :scope[data-theme="dark"] {
+    color-scheme: dark;
+    --lx-bg: #242424;
+    --lx-fg: #f2f2f2;
+    --lx-dim: #a8a8a8;
+    --lx-head: #303030;
+    --lx-head-back: #262626;
+    --lx-side: #2e2e2e;
+    --lx-line: rgba(0, 0, 0, .36);
+    --lx-btn: rgba(255, 255, 255, .1);
+    --lx-hover: rgba(255, 255, 255, .07);
+    --shadow: 0 0 0 1px rgba(0, 0, 0, .6), 0 6px 22px rgba(0, 0, 0, .5);
+    --shadow-back: 0 0 0 1px rgba(0, 0, 0, .55), 0 3px 12px rgba(0, 0, 0, .35);
+  }
+  * { box-sizing: border-box; }
+  button { font: inherit; color: inherit; border: 0; background: none; padding: 0; margin: 0; cursor: default; }
+  svg { display: block; flex: none; }
+  .lx-grow { flex: 1; }
+
+  /* Wallpaper */
+  .lx-wall { position: absolute; inset: 0; transition: filter .25s; }
+  .lx-wall svg { width: 100%; height: 100%; }
+  :scope.lx-grid-open .lx-wall { filter: blur(16px) brightness(.55); }
+
+  /* Top bar */
+  .lx-panel { position: absolute; inset: 0 0 auto; height: var(--panel); background: #000; display: flex; align-items: center; justify-content: space-between; padding: 0 6px; z-index: 30; font-weight: 500; }
+  .lx-pbtn { height: 26px; padding: 0 12px; border-radius: 13px; display: flex; align-items: center; gap: 8px; }
+  .lx-pbtn svg { width: 16px; height: 16px; }
+  .lx-pbtn:hover, .lx-pbtn.lx-open { background: rgba(255, 255, 255, .16); }
+  .lx-clock { position: absolute; left: 50%; transform: translateX(-50%); white-space: nowrap; }
+  .lx-ws { gap: 5px; }
+  .lx-ws i { display: block; width: 7px; height: 7px; border-radius: 4px; background: rgba(255, 255, 255, .5); }
+  .lx-ws i:first-child { width: 32px; background: #fff; }
+
+  /* Quick Settings */
+  .lx-qs { position: absolute; top: calc(var(--panel) + 6px); right: 8px; width: min(360px, calc(100% - 16px)); z-index: 40; background: var(--shell); border-radius: 22px; padding: 12px; box-shadow: 0 0 0 1px rgba(255, 255, 255, .08), 0 10px 32px rgba(0, 0, 0, .5); }
+  .lx-qs svg { width: 16px; height: 16px; }
+  .lx-qs-top { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .lx-pct { display: flex; align-items: center; gap: 6px; height: 36px; padding: 0 14px; border-radius: 18px; background: var(--card); margin-right: auto; }
+  .lx-round { width: 36px; height: 36px; border-radius: 50%; background: var(--card); display: grid; place-items: center; }
+  .lx-round:hover { background: var(--card-hover); }
+  .lx-slider { display: flex; align-items: center; gap: 12px; height: 40px; padding: 0 8px; }
+  .lx-slider input { flex: 1; accent-color: var(--lx-accent); }
+  .lx-toggles { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 6px; }
+  .lx-toggle { height: 48px; border-radius: 24px; background: var(--card); display: flex; align-items: center; gap: 10px; padding: 0 16px; text-align: left; }
+  .lx-toggle:hover { background: var(--card-hover); }
+  .lx-toggle.lx-on { background: var(--lx-accent); }
+  .lx-toggle b { display: block; font-weight: 600; line-height: 1.2; }
+  .lx-toggle small { display: block; font-size: 12px; opacity: .78; }
+
+  /* Ubuntu Dock */
+  .lx-dock { position: absolute; left: 0; top: var(--panel); bottom: 0; width: var(--dock); background: rgba(24, 24, 24, .72); backdrop-filter: blur(20px); display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 6px 0; z-index: 20; }
+  .lx-dk { position: relative; width: var(--cell); height: var(--cell); flex: none; border-radius: 10px; display: grid; place-items: center; }
+  .lx-dk:hover { background: rgba(255, 255, 255, .12); }
+  .lx-dk.lx-on { background: rgba(255, 255, 255, .2); }
+  .lx-dk .lx-ico { width: 78%; height: 78%; }
+  .lx-dk.lx-run::before { content: ""; position: absolute; left: -5px; top: 50%; width: 5px; height: 5px; margin-top: -2.5px; border-radius: 50%; background: var(--lx-accent); }
+  .lx-dk::after { content: attr(aria-label); position: absolute; left: calc(100% + 10px); top: 50%; transform: translateY(-50%); background: #222; padding: 5px 11px; border-radius: 99px; font-size: 13.5px; white-space: nowrap; pointer-events: none; display: none; }
+  .lx-dk:hover::after { display: block; }
+  .lx-ico { display: grid; }
+  .lx-ico > svg { width: 100%; height: 100%; filter: drop-shadow(0 1px 1.5px rgba(0, 0, 0, .3)); }
+
+  /* App grid */
+  .lx-grid { position: absolute; top: var(--panel); left: var(--dock); right: 0; bottom: 0; z-index: 15; display: none; flex-direction: column; align-items: center; padding: 22px 32px; overflow: auto; }
+  :scope.lx-grid-open .lx-grid { display: flex; }
+  :scope.lx-grid-open .lx-area { visibility: hidden; }
+  .lx-search { width: min(340px, 100%); height: 40px; flex: none; border-radius: 20px; background: rgba(255, 255, 255, .14); display: flex; align-items: center; gap: 10px; padding: 0 16px; }
+  .lx-search svg { width: 16px; height: 16px; }
+  .lx-search:focus-within { box-shadow: inset 0 0 0 2px var(--lx-accent); }
+  .lx-search input { flex: 1; min-width: 0; background: none; border: 0; outline: 0; color: #fff; font: inherit; font-size: 15px; }
+  .lx-search input::placeholder { color: rgba(255, 255, 255, .6); }
+  .lx-apps { width: 100%; max-width: 1000px; margin-top: 40px; display: grid; grid-template-columns: repeat(auto-fill, minmax(128px, 1fr)); gap: 12px 8px; }
+  .lx-app { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 16px 6px 12px; border-radius: 18px; text-align: center; }
+  .lx-app .lx-ico { width: 80px; height: 80px; }
+  .lx-app:hover, .lx-app:focus-visible { background: rgba(255, 255, 255, .12); outline: 0; }
+  .lx-none { margin-top: 60px; color: rgba(255, 255, 255, .62); font-size: 17px; }
+
+  /* Windows */
+  .lx-area { position: absolute; top: var(--panel); left: var(--dock); right: 0; bottom: 0; z-index: 10; pointer-events: none; }
+  .lx-win { position: absolute; display: flex; flex-direction: column; background: var(--lx-bg); color: var(--lx-fg); border-radius: 12px; box-shadow: var(--shadow-back); overflow: hidden; pointer-events: auto; animation: lx-open .18s ease-out; }
+  .lx-win[hidden] { display: none; }
+  .lx-win.lx-focused { box-shadow: var(--shadow); }
+  .lx-win.lx-max { border-radius: 0; }
+  @keyframes lx-open { from { opacity: 0; transform: scale(.94); } }
+  .lx-hb { height: 46px; flex: none; display: flex; align-items: center; gap: 6px; padding: 0 8px; background: var(--lx-head-back); border-bottom: 1px solid var(--lx-line); position: relative; touch-action: none; }
+  .lx-focused .lx-hb { background: var(--lx-head); }
+  .lx-win:not(.lx-focused) .lx-hb > * { opacity: .6; }
+  .lx-hb svg { width: 16px; height: 16px; }
+  .lx-title { position: absolute; left: 130px; right: 130px; text-align: center; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; pointer-events: none; }
+  .lx-ctl { display: flex; gap: 12px; margin: 0 4px 0 6px; }
+  .lx-ctl button { width: 24px; height: 24px; border-radius: 50%; background: var(--lx-btn); display: grid; place-items: center; }
+  .lx-ctl button:hover { background: color-mix(in srgb, var(--lx-fg) 16%, transparent); }
+  .lx-ctl .lx-x:hover { background: var(--lx-accent); color: #fff; }
+  .lx-ctl svg { width: 14px; height: 14px; stroke-width: 1.8; }
+  .lx-body { flex: 1; min-height: 0; display: flex; }
+  :scope.lx-dragging { cursor: grabbing; }
+  :scope.lx-dragging .lx-body { pointer-events: none; }
+  .lx-rz { position: absolute; z-index: 5; touch-action: none; }
+  .lx-rz-s { left: 10px; right: 10px; bottom: 0; height: 7px; cursor: ns-resize; }
+  .lx-rz-e { top: 10px; bottom: 10px; right: 0; width: 7px; cursor: ew-resize; }
+  .lx-rz-se { right: 0; bottom: 0; width: 14px; height: 14px; cursor: nwse-resize; }
+  .lx-max .lx-rz { display: none; }
+
+  /* Notification banner */
+  .lx-toast { position: absolute; top: calc(var(--panel) + 8px); left: 50%; transform: translateX(-50%); z-index: 50; width: min(380px, calc(100% - 16px)); background: var(--shell); border-radius: 16px; padding: 12px 16px; box-shadow: 0 8px 24px rgba(0, 0, 0, .45); }
+  .lx-toast p { margin: 2px 0 0; font-size: 13px; color: rgba(255, 255, 255, .62); }
+
+  /* Narrow: the app grid is home and apps open full screen */
+  @container linux (max-width: 759px) {
+    .lx-dock, .lx-ws, .lx-search, .lx-ctl button:not(.lx-x), .lx-rz { display: none; }
+    .lx-panel { justify-content: flex-end; }
+    .lx-grid { display: flex; left: 0; padding: 16px; }
+    .lx-apps { margin-top: 12px; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px 6px; }
+    .lx-app { padding: 8px 2px; font-size: 12.5px; }
+    .lx-app .lx-ico { width: 56px; height: 56px; }
+    .lx-area { left: 0; z-index: 25; }
+    :scope.lx-grid-open .lx-area { visibility: visible; }
+    .lx-win { inset: 0 !important; width: auto !important; height: auto !important; border-radius: 0; }
+  }
+}
