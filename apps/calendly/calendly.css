@@ -1,0 +1,168 @@
+/*
+ * Calendly's booking page look, from apps/calendly.html. Scoped to
+ * .kit-calendly so it neither leaks into the page around it nor picks up the
+ * page's styles, and sized by its own box (container queries) so it works as
+ * the whole screen or one pane of it. Plain CSS with Calendly's own colors
+ * and the system font stack: edit it like any stylesheet.
+ */
+
+@scope (.kit-calendly) {
+  /* The page's element styles (a CSS reset, Tailwind's preflight) stop at the
+     app's edge. SVG is left alone: its drawing attributes count as styles. */
+  :where(:scope, :scope *:not(svg, svg *)) { all: revert; }
+
+  :scope {
+    color-scheme: light;
+    --bg: #f7f8fa;
+    --surface: #ffffff;
+    --text: #1a1a1a;
+    --text-2: rgba(26,26,26,.61);
+    --line: rgba(26,26,26,.1);
+    --blue: #006bff;
+    --blue-hover: #0055d4;
+    --blue-text: #0060e6;
+    --blue-soft: rgba(0,105,255,.065);
+    --blue-soft-2: rgba(0,105,255,.15);
+    --blue-line: rgba(0,105,255,.5);
+    --slot-sel: #666a73;
+    --danger: #c84545;
+    --shadow: 0 1px 8px 0 rgba(0,0,0,.08);
+  }
+  /* Light is the default; dark only applies with data-theme="dark" */
+  :scope[data-theme="dark"] {
+    color-scheme: dark;
+    --bg: #121417; --surface: #1c1f24; --text: #eef0f3; --text-2: rgba(238,240,243,.62); --line: rgba(238,240,243,.12);
+    --blue: #3d8bff; --blue-hover: #6aa6ff; --blue-text: #6aa6ff; --blue-soft: rgba(61,139,255,.12); --blue-soft-2: rgba(61,139,255,.24); --blue-line: rgba(61,139,255,.55);
+    --slot-sel: #5a5f69; --danger: #ef7a7a; --shadow: 0 1px 8px 0 rgba(0,0,0,.5);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :scope {
+    display: block; position: relative; height: 100%; overflow: hidden;
+    container: calendly / inline-size;
+    font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; font-size: 14px;
+    color: var(--text); background: var(--bg); -webkit-font-smoothing: antialiased;
+  }
+  button, input, textarea { font: inherit; color: inherit; }
+  button { background: none; border: 0; cursor: pointer; }
+  svg { display: block; }
+  .scroller { height: 100%; overflow-y: auto; }
+  .page { min-height: 100%; display: flex; align-items: flex-start; justify-content: center; padding: 66px 16px; }
+
+  /* ---------- The card and the host panel ---------- */
+  .card { position: relative; background: var(--surface); border-radius: 8px; box-shadow: var(--shadow); display: flex; width: 100%; max-width: 900px; min-height: 700px; overflow: hidden; }
+  .card.wide { max-width: 1060px; }
+  .card.fin { min-height: 0; }
+  .left { flex: 0 0 340px; border-right: 1px solid var(--line); padding: 25px 24px; }
+  .avatar { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; display: block; margin-bottom: 16px; }
+  .avatar.initials { display: grid; place-items: center; background: var(--blue); color: #fff; font-size: 24px; font-weight: 700; }
+  .host { color: var(--text-2); font-size: 16px; font-weight: 600; margin-bottom: 6px; }
+  .ev { font-size: 28px; font-weight: 700; line-height: 1.25; margin-bottom: 24px; }
+  .meta { display: flex; gap: 10px; align-items: flex-start; color: var(--text-2); font-size: 16px; font-weight: 600; margin-bottom: 20px; line-height: 1.3; }
+  .meta svg { flex: 0 0 20px; width: 20px; height: 20px; margin-top: 1px; }
+  .meta.when { color: var(--text-2); }
+  .desc { font-size: 16px; line-height: 1.5; margin-top: 4px; }
+  .back { width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line); display: grid; place-items: center; color: var(--blue-text); margin-bottom: 20px; }
+  .back:hover { background: var(--blue-soft); }
+  .back svg { width: 20px; height: 20px; }
+  .right { flex: 1; min-width: 0; padding: 28px 32px 32px; }
+  h2 { font-size: 20px; font-weight: 700; margin-bottom: 26px; }
+
+  /* ---------- Month, time zone and times ---------- */
+  .picker { display: flex; gap: 24px; }
+  .cal { flex: 1; min-width: 0; max-width: 440px; }
+  .card.wide .cal { max-width: 440px; }
+  .month { display: flex; align-items: center; justify-content: center; gap: 24px; margin-bottom: 22px; }
+  .month .t { font-size: 16px; min-width: 150px; text-align: center; }
+  .nav { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; color: var(--blue-text); background: var(--blue-soft); }
+  .nav:hover { background: var(--blue-soft-2); }
+  .nav:disabled { background: none; color: var(--text-2); opacity: .5; cursor: default; }
+  .nav svg { width: 16px; height: 16px; }
+  .grid { display: grid; grid-template-columns: repeat(7, 1fr); row-gap: 6px; text-align: center; }
+  .dow { font-size: 12px; text-transform: uppercase; padding-bottom: 12px; color: var(--text); }
+  .day { position: relative; justify-self: center; width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; font-size: 16px; color: var(--text); cursor: default; }
+  .day.av { background: var(--blue-soft); color: var(--blue-text); font-weight: 700; cursor: pointer; }
+  .day.av:hover { background: var(--blue-soft-2); }
+  .day.sel, .day.sel:hover { background: var(--blue); color: #fff; }
+  .day.today::after { content: ""; position: absolute; bottom: 6px; left: 50%; width: 4px; height: 4px; margin-left: -2px; border-radius: 50%; background: currentColor; }
+  .day:not(.av) { color: var(--text-2); }
+  .tz { position: relative; margin-top: 34px; }
+  .tz .lbl { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+  .tz-btn { display: inline-flex; align-items: center; gap: 8px; padding: 8px 10px 8px 4px; border-radius: 6px; font-size: 14px; }
+  .tz-btn:hover { background: var(--blue-soft); }
+  .tz-btn svg { width: 16px; height: 16px; }
+  .tz-menu { position: absolute; left: 0; bottom: calc(100% - 22px); z-index: 5; width: 340px; max-width: calc(100cqw - 48px); background: var(--surface); border-radius: 8px; box-shadow: 0 4px 24px rgba(0,0,0,.16); padding: 8px 0; }
+  .tz-menu .h { font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--text-2); padding: 8px 16px; }
+  .tz-opt { display: flex; justify-content: space-between; width: 100%; padding: 10px 16px; text-align: left; font-size: 14px; }
+  .tz-opt:hover { background: var(--blue-soft); }
+  .tz-opt.on { background: var(--blue); color: #fff; }
+  .tz-opt span:last-child { opacity: .75; }
+  .slots { flex: 0 0 236px; display: flex; flex-direction: column; min-width: 0; }
+  .slots .dt { font-size: 16px; margin: 8px 0 22px; height: 24px; line-height: 24px; }
+  .slot-list { display: flex; flex-direction: column; gap: 10px; max-height: 520px; overflow-y: auto; padding-right: 8px; }
+  .slot { height: 52px; border: 1px solid var(--blue-line); border-radius: 4px; color: var(--blue-text); font-size: 16px; font-weight: 700; flex-shrink: 0; transition: border-color .1s; }
+  .slot:hover { border: 2px solid var(--blue); }
+  .slot-pair { display: flex; gap: 8px; height: 52px; flex-shrink: 0; }
+  .slot-pair > * { flex: 1; border-radius: 4px; font-size: 16px; font-weight: 700; color: #fff; display: grid; place-items: center; }
+  .slot-pair .time { background: var(--slot-sel); }
+  .slot-pair .go { background: var(--blue); }
+  .slot-pair .go:hover { background: var(--blue-hover); }
+
+  /* ---------- Enter Details ---------- */
+  .form { max-width: 480px; }
+  .field { margin-bottom: 22px; }
+  .field label { display: block; font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+  .field input, .field textarea { width: 100%; border: 1px solid #b2b2b2; border-radius: 8px; padding: 12px 14px; font-size: 16px; background: var(--surface); outline: none; }
+  .field textarea { min-height: 96px; resize: vertical; line-height: 1.4; }
+  .field input:focus, .field textarea:focus { border-color: var(--blue); box-shadow: 0 0 0 1px var(--blue); }
+  .field.err input, .field.err textarea { border-color: var(--danger); box-shadow: 0 0 0 1px var(--danger); }
+  .field .msg { color: var(--danger); font-size: 13px; margin-top: 6px; }
+  .guests-btn { border: 1px solid var(--blue); color: var(--blue-text); border-radius: 40px; padding: 8px 16px; font-size: 14px; font-weight: 600; margin-bottom: 22px; }
+  .guests-btn:hover { background: var(--blue-soft); }
+  .hint { font-size: 12px; color: var(--text-2); margin-top: 6px; }
+  .legal { font-size: 12px; color: var(--text-2); line-height: 1.5; margin: 4px 0 20px; }
+  .legal a { color: var(--blue-text); }
+  .primary { background: var(--blue); color: #fff; border-radius: 40px; padding: 12px 18px; font-size: 16px; font-weight: 700; }
+  .primary:hover { background: var(--blue-hover); }
+
+  /* ---------- You are scheduled ---------- */
+  .done { flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 48px 24px 80px; }
+  .done .avatar { margin: 0 auto 20px; }
+  .done h1 { display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 700; margin-bottom: 12px; }
+  .done h1 svg { width: 24px; height: 24px; }
+  .done .sub { font-size: 16px; color: var(--text-2); margin-bottom: 28px; }
+  .summary { width: 100%; max-width: 520px; text-align: left; border: 1px solid var(--line); border-radius: 8px; padding: 24px 24px 4px; }
+  .summary .ev { font-size: 20px; margin-bottom: 20px; }
+  .again { margin-top: 28px; color: var(--blue-text); font-size: 16px; font-weight: 600; }
+  .again:hover { text-decoration: underline; }
+
+  /* ---------- Cookie settings, the ribbon, the toast ---------- */
+  .cookie { position: absolute; left: 24px; bottom: 24px; font-size: 14px; color: var(--blue-text); }
+  .cookie:hover { text-decoration: underline; }
+  .ribbon { position: absolute; top: 0; right: 0; width: 104px; height: 104px; overflow: hidden; pointer-events: none; }
+  .ribbon a { pointer-events: auto; position: absolute; top: 20px; right: -34px; width: 150px; transform: rotate(45deg); background: #505960; color: #fff; text-align: center; padding: 6px 0 5px; text-decoration: none; line-height: 1.1; box-shadow: 0 0 0 1px rgba(0,0,0,.05); }
+  .ribbon .s { display: block; font-size: 8px; font-weight: 700; letter-spacing: .3px; text-transform: uppercase; opacity: .85; }
+  .ribbon .b { display: block; font-size: 13px; font-weight: 700; }
+  .toast { position: absolute; bottom: 24px; left: 50%; transform: translate(-50%, 20px); max-width: calc(100% - 32px); background: #1a1a1a; color: #fff; padding: 10px 16px; border-radius: 8px; font-size: 14px; box-shadow: 0 4px 24px rgba(0,0,0,.16); opacity: 0; transition: opacity .2s, transform .2s; pointer-events: none; z-index: 20; }
+  .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+  /* ---------- Phone ---------- */
+  @container calendly (max-width: 759px) {
+    .page { padding: 0; align-items: stretch; }
+    .card, .card.wide, .card.fin { flex-direction: column; max-width: none; min-height: 0; border-radius: 0; box-shadow: none; padding-bottom: 56px; }
+    .left { flex: none; border-right: 0; border-bottom: 1px solid var(--line); padding: 24px 16px 4px; }
+    .ev { font-size: 24px; margin-bottom: 18px; }
+    .right { padding: 24px 16px; }
+    h2 { margin-bottom: 18px; }
+    .picker { flex-direction: column; gap: 28px; }
+    .card.wide .cal { max-width: none; }
+    .grid { row-gap: 4px; }
+    .day { width: 40px; height: 40px; }
+    .slots { flex: none; }
+    .slot-list { max-height: none; overflow: visible; padding-right: 0; }
+    .form { max-width: none; }
+    .done { padding: 40px 16px; }
+    .cookie { left: 16px; bottom: 20px; }
+    .toast { bottom: 72px; }
+  }
+}
