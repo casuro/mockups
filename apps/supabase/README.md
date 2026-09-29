@@ -129,6 +129,8 @@ import {
   type SupabaseProps, type SupabaseApp, type SupabaseOptions, type OpenTarget,
   type SupabaseSeed, type SupabaseState, type SupabaseEvent, type SupabaseRow, type SupabaseResult,
 } from "./apps/supabase";
+// The brand mark is not re-exported by index.ts (for a desktop launcher, say):
+import { SupabaseLogo } from "./apps/supabase/icons";
 ```
 
 `index.ts` also re-exports every other type in `types.ts` (`SupabaseColumn`, `SupabaseColumnType`, `SupabaseValue`, `SupabaseJson`, `SupabaseIndex`, `SupabaseTableSeed`, `SupabaseSchemaSeed`, `SupabaseSnippet`, `SupabaseFilter`, `SupabaseSort`, `SupabaseTableState`, `TableRef`, `TableAt`).
@@ -205,7 +207,19 @@ type SupabaseResult =
 type OpenTarget = { view: "table" | "sql" } | { table: TableRef } | { snippet: string };
 ```
 
-A table name that matches no table throws. Read-only fields: `supabase.state` (below), `supabase.seed`, `supabase.notices`, `supabase.pageSize`, `supabase.table` (the `SupabaseTableState` on screen, or null) and `supabase.snippet` (the snippet on screen, or null). `supabase.ui` holds what `<Supabase>` calls for the signed-in person; a world does not need it.
+A table name that matches no table, or a snippet id that matches no snippet, throws. Read-only fields: `supabase.state` (below), `supabase.seed`, `supabase.notices`, `supabase.pageSize`, `supabase.table` (the `SupabaseTableState` on screen, or null) and `supabase.snippet` (the snippet on screen, or null). `supabase.ui` holds what `<Supabase>` calls for the signed-in person; a world does not need it.
+
+```ts
+interface SupabaseTableState {     // supabase.table, and each of supabase.state.tables
+  schema: string;                  // "public"
+  name: string;                    // "orders"
+  columns: SupabaseColumn[];       // with any added in the Table Editor
+  rows: SupabaseRow[];             // every row (an insert goes on top); not filtered, sorted or paged
+  rls: boolean;
+  policies: number;
+  indexes: { name: string; column: string }[];
+}
+```
 
 ### Events
 
@@ -232,7 +246,7 @@ The world's calls fire no events.
 
 ### State
 
-`supabase.state` is a `SupabaseState`: plain JSON (`version: 1`, `view`, `schema`, `tables` keyed `"schema.name"` with their columns and rows, `table` and `tabs`, `snippets`, `snippet` and `sqlTabs`, `results`, `running`, and per table `filters`, `sorts`, `page`, `mode`, plus `theme` and `seq`). It is a new object after every change. Save it, and pass it back as `useSupabase(seed, { restore })`; `restore` is read only when the hook first mounts, so load the saved state before rendering the component that calls `useSupabase`.
+`supabase.state` is a `SupabaseState`: plain JSON (`version: 1`, `view`, `schema`, `tables` keyed `"schema.name"` with their columns and rows, `table` and `tabs`, `snippets`, `snippet` and `sqlTabs`, `results`, `running`, and per table `filters`, `sorts`, `page`, `mode`, plus `theme`). It is a new object after every change. Save it, and pass it back as `useSupabase(seed, { restore })`; `restore` is read only when the hook first mounts, so load the saved state before rendering the component that calls `useSupabase`.
 
 ### The component
 

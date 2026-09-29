@@ -38,10 +38,10 @@ export const Moon = icon(<path d="M20 14.5A8 8 0 019.5 4 8 8 0 1020 14.5z" />);
 export const LogOut = icon(<path d="M14 5h5v14h-5M10 8l-4 4 4 4M6 12h10" />);
 export const Cog = icon(<><circle cx="12" cy="12" r="3" /><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1" /></>);
 
-/** PagerDuty's mark, in the current color (white on the nav). */
+/** PagerDuty's mark, in PagerDuty green; it fills the box it is put in. Pass `fill` for another color (the nav's is white). */
 export function PagerDutyLogo(props: IconProps) {
   return (
-    <svg className="pd-logo" fill="currentColor" role="img" aria-label="PagerDuty" viewBox="0 0 24 24" {...props}>
+    <svg fill="#06AC38" role="img" aria-label="PagerDuty" viewBox="0 0 24 24" {...props}>
       <path d="M16.965 1.18C15.085.164 13.769 0 10.683 0H3.73v14.55h6.926c2.743 0 4.8-.164 6.61-1.37 1.975-1.303 3.004-3.484 3.004-6.007 0-2.716-1.262-4.896-3.305-5.994zm-5.5 10.326h-4.21V3.113l3.977-.027c3.62-.028 5.43 1.234 5.43 4.128 0 3.113-2.248 4.292-5.197 4.292zM3.73 17.61h3.525V24H3.73Z" />
     </svg>
   );

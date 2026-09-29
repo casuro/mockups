@@ -141,7 +141,12 @@ import {
   type PagerDutyProps, type PagerDutyAccount, type PagerDutyOptions, type IncidentPatch, type Person,
   type PagerDutySeed, type PagerDutyState, type PagerDutyEvent, type PagerDutyIncident, type PagerDutyIncidentInput,
 } from "./apps/pagerduty";
+// The brand mark is not re-exported by index.ts (for a desktop launcher, say):
+import { PagerDutyLogo } from "./apps/pagerduty/icons";
 ```
+
+`PagerDutyLogo` is PagerDuty green (`#06AC38`) and fills the box it is put
+in; pass `fill` for another color.
 
 `index.ts` also re-exports every other type in `types.ts` (`PagerDutyPerson`, `PagerDutyPolicy`, `PagerDutyService`, `PagerDutyBridge`, `PagerDutyAlert`, `PagerDutyAlertInput`, `PagerDutyTimelineEntry`, `PagerDutyTimelineInput`, `TimelineType`, `IncidentStatus`, `Urgency`, `Priority`, `IncidentTab`, `UrgencyFilter`). `TABS` is the Incidents page's tabs, in order, as `{ id, name, test(incident, me) }`.
 
@@ -232,6 +237,59 @@ interface PagerDutyTimelineInput {
   via?: string;                                       // "datadog": its mark in the dot and a tag
   channel?: "push" | "sms" | "phone" | "email";      // a notify line's icon
   custom?: { type: string; data?: unknown };          // drawn by <PagerDuty renderCustom>
+}
+```
+
+### What the hook makes of it
+
+`pagerduty.people`, `pagerduty.current` and `pagerduty.state.incidents`
+hold these, with every default filled in:
+
+```ts
+interface Person {
+  id: string;
+  name: string;
+  initials: string;                                   // the seed's, or the name's
+  color: string;                                      // the seed's, or one picked from the id
+  email?: string;
+  role?: string;
+  photo?: string;
+}
+
+interface PagerDutyIncident {
+  id: number;
+  title: string;
+  service: string;
+  status: IncidentStatus;
+  urgency: Urgency;
+  priority: Priority | null;
+  assignee: string;                                   // a person id
+  level: number;                                      // escalation level, 1-based
+  createdAt: number;                                  // ms
+  resolvedAt: number | null;
+  responders: string[];
+  alerts: PagerDutyAlert[];
+  timeline: PagerDutyTimelineEntry[];                 // in the order added; the drawer shows newest first
+  bridge: PagerDutyBridge | null;                     // { zoom?: string; slack?: string }
+}
+
+interface PagerDutyAlert {
+  title: string;
+  status: "triggered" | "resolved";
+  detail?: string;
+  source?: string;
+  at: number;                                         // ms
+}
+
+interface PagerDutyTimelineEntry {                    // a PagerDutyTimelineInput with these filled in:
+  id: string;
+  at: number;                                         // ms
+  text: string;
+  type: TimelineType;
+  by?: string;
+  via?: string;
+  channel?: "push" | "sms" | "phone" | "email";
+  custom?: { type: string; data?: unknown };
 }
 ```
 

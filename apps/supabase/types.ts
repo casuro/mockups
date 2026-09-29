@@ -169,7 +169,6 @@ export interface SupabaseState {
   page: Record<string, number>;
   mode: Record<string, "data" | "definition">;
   theme: "light" | "dark";
-  seq: number;
 }
 
 /** Where a table's events happen: its schema and plain name. */

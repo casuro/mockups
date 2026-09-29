@@ -12,7 +12,7 @@ export function TableList() {
   const { app, listOpen, setListOpen, openPop, closePop } = useUI();
   const [q, setQ] = useState("");
   const { state } = app;
-  const tables = Object.entries(state.tables).filter(([, t]) => t.schema === state.schema && t.name.includes(q.trim().toLowerCase()));
+  const tables = Object.entries(state.tables).filter(([, t]) => t.schema === state.schema && t.name.toLowerCase().includes(q.trim().toLowerCase()));
   const schemas = app.seed.schemas.map((s) => s.name);
   return (
     <aside className={`menu-side${listOpen ? " open" : ""}`} aria-label="Tables">
@@ -94,6 +94,8 @@ export function TableView() {
   const key = app.state.table ?? "";
   const [loading, setLoading] = useState(false);
   const gridRef = useRef<HTMLDivElement>(null);
+  const refreshTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
+  useEffect(() => () => clearTimeout(refreshTimer.current), []);
 
   // A row highlights once after it was added or saved.
   useEffect(() => {
@@ -146,7 +148,8 @@ export function TableView() {
   const refresh = () => {
     setLoading(true);
     app.ui.refresh(key);
-    setTimeout(() => setLoading(false), 450);
+    clearTimeout(refreshTimer.current);
+    refreshTimer.current = setTimeout(() => setLoading(false), 450);
   };
 
   const listBtn = (
