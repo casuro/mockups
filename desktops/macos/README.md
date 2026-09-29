@@ -189,9 +189,27 @@ interface MacOSProps {
 interface DockItem {
   id: string;
   name: string;                // the Dock tooltip and the phone home screen label
-  icon: ReactNode;             // any node: <AppIcon name="notes" />, or an app kit's logo
+  icon: ReactNode;             // any node: <AppIcon name="notes" />, or an app kit's logo in a tile (below)
   onOpen?: () => void;         // called on click when no window has `dockId === id`
 }
+```
+
+An app kit's logo in the Dock goes on a tile, like a real Mac app icon: a
+white (`#fff`, a soft off-white in dark mode is fine) rounded square
+(radius about 22%) filling the Dock slot, with the logo inside, slightly
+smaller, about 18% padding on every side, and a faint shadow. A bare logo
+fills the whole slot, reads as too big and sits on the glass with nothing
+behind it. `AppIcon` draws only its own names, so wrap the logo yourself:
+
+```tsx
+function DockTile({ children }: { children: ReactNode }) {
+  return (
+    <span style={{ display: "grid", placeItems: "center", width: "100%", height: "100%", boxSizing: "border-box", padding: "18%", borderRadius: "22%", background: "#fff", boxShadow: "0 1px 2px rgba(0,0,0,.18), inset 0 0 0 .5px rgba(0,0,0,.08)" }}>
+      {children}
+    </span>
+  );
+}
+// dock={[{ id: "slack", name: "Slack", icon: <DockTile><SlackLogo /></DockTile>, onOpen }]}
 ```
 
 It fills its parent, so the parent needs a definite height. A window's body
@@ -227,6 +245,15 @@ const WINDOWS: Record<string, MacWindowInput> = {
 // An app kit fills its parent: give it the whole window body.
 const fill = (node: ReactNode) => <div style={{ position: "absolute", inset: 0 }}>{node}</div>;
 const scenes: Record<string, ReactNode> = { slack: fill(<SlackScene />), gmail: fill(<GmailScene />) };
+
+// A logo in the Dock sits on a white rounded tile, slightly smaller than the slot.
+function DockTile({ children }: { children: ReactNode }) {
+  return (
+    <span style={{ display: "grid", placeItems: "center", width: "100%", height: "100%", boxSizing: "border-box", padding: "18%", borderRadius: "22%", background: "#fff", boxShadow: "0 1px 2px rgba(0,0,0,.18), inset 0 0 0 .5px rgba(0,0,0,.08)" }}>
+      {children}
+    </span>
+  );
+}
 
 export function Desktop() {
   const [saved, setSaved] = useState<SavedWindow[] | null | undefined>(undefined);
@@ -280,8 +307,8 @@ function Mac({ saved }: { saved: SavedWindow[] | null }) {
       <MacOS
         mac={mac}
         dock={[
-          { id: "slack", name: "Slack", icon: <SlackLogo />, onOpen: () => mac.open(WINDOWS.slack) },
-          { id: "gmail", name: "Gmail", icon: <GmailLogo />, onOpen: () => mac.open(WINDOWS.gmail) },
+          { id: "slack", name: "Slack", icon: <DockTile><SlackLogo /></DockTile>, onOpen: () => mac.open(WINDOWS.slack) },
+          { id: "gmail", name: "Gmail", icon: <DockTile><GmailLogo /></DockTile>, onOpen: () => mac.open(WINDOWS.gmail) },
         ]}
         renderWindow={(w: MacWindow) => scenes[w.id]}
       />
