@@ -407,8 +407,8 @@ function Dialog() {
         ) : null}
         {d.after}
         <div className="acts">
-          {ok ? <button className="btn primary" disabled={!valid} style={d.danger ? { background: "var(--danger)" } : undefined} onClick={confirm}>{ok}</button> : null}
-          {cancel ? <button className="btn" onClick={close}>{cancel}</button> : null}
+          {ok ? <button className="btn primary" aria-label={ok} disabled={!valid} style={d.danger ? { background: "var(--danger)" } : undefined} onClick={confirm}>{ok}</button> : null}
+          {cancel ? <button className="btn" aria-label={cancel} onClick={close}>{cancel}</button> : null}
         </div>
       </div>
     </div>

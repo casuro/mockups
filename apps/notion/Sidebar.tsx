@@ -144,7 +144,7 @@ export function WorkspaceMenu({ anchor }: { anchor: Box }) {
     fn();
   };
   const item = (label: string, icon: ReactNode, onClick: () => void, chk = false) => (
-    <button className="mi" onClick={pick(onClick)}>
+    <button className="mi" aria-label={label} onClick={pick(onClick)}>
       <span className="ic">{icon}</span>
       <span className="lbl">{label}</span>
       {chk ? <span className="chk"><I.Check /></span> : null}

@@ -212,6 +212,7 @@ export type ZoomEvent =
   | { type: "captions"; on: boolean }
   | { type: "security"; setting: keyof ZoomSecurity | "suspend"; on: boolean }
   | { type: "app"; name: string }
+  | { type: "annotate"; surface: "whiteboard" | "screen"; tool: string }
   | { type: "end" }
   | { type: "leave" }
   | { type: "rejoin" };

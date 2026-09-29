@@ -136,7 +136,7 @@ function Properties({ issue }: { issue: LinearIssue }) {
       {project ? (
         <>
           <div className="props-h">Project</div>
-          <button className="prop">
+          <button className="prop" aria-label={`Project: ${project.name}`}>
             <I.Projects stroke={project.color ?? "currentColor"} />
             <span>{project.name}</span>
           </button>
@@ -145,7 +145,7 @@ function Properties({ issue }: { issue: LinearIssue }) {
       {issue.due != null ? (
         <>
           <div className="props-h">Due date</div>
-          <button className="prop"><I.Cal /><span>{shortDate(issue.due, true)}</span></button>
+          <button className="prop" aria-label={`Due date: ${shortDate(issue.due, true)}`}><I.Cal /><span>{shortDate(issue.due, true)}</span></button>
         </>
       ) : null}
     </aside>

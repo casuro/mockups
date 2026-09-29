@@ -260,7 +260,7 @@ export function LabelDialog({ dialog, onClose }: { dialog: DialogKind; onClose: 
             <label className="check">
               <input type="checkbox" checked={nest} onChange={(e) => setNest(e.target.checked)} /> Nest label under:
             </label>
-            <select className="parent" value={parent} disabled={!nest} onChange={(e) => setParent(e.target.value)}>
+            <select className="parent" aria-label="Parent label" value={parent} disabled={!nest} onChange={(e) => setParent(e.target.value)}>
               {parents.map((l) => <option key={l}>{l}</option>)}
             </select>
           </>

@@ -260,6 +260,7 @@ function Whiteboard() {
         <div className="dots-bg" />
         <canvas
           ref={canvas}
+          aria-label="Whiteboard drawing area"
           onPointerDown={(e) => {
             e.currentTarget.setPointerCapture(e.pointerId);
             current.current = { color: tool === "eraser" ? "#ffffff" : color, width: tool === "eraser" ? 24 : 3, points: [pt(e)] };
@@ -272,7 +273,11 @@ function Whiteboard() {
             current.current.points.push(pt(e));
             draw();
           }}
-          onPointerUp={() => (current.current = null)}
+          onPointerUp={() => {
+            // A finished stroke is reported: what is drawn cannot be read off the canvas.
+            if (current.current) meet.ui.emit({ type: "draw", tool, strokes: strokes.current.length });
+            current.current = null;
+          }}
           onPointerCancel={() => (current.current = null)}
         />
         {hint ? <div className="board-hint">Draw anywhere</div> : null}

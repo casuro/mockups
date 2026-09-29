@@ -141,7 +141,7 @@ export function MenuItem({
 export function CheckItem({ checked, label, icon, onClick }: { checked: boolean; label: ReactNode; icon?: ReactNode; onClick: () => void }) {
   return (
     <button className="mi" role="menuitemcheckbox" aria-checked={checked} onClick={onClick}>
-      <span className="mi-ic"><input type="checkbox" tabIndex={-1} checked={checked} readOnly style={{ pointerEvents: "none", accentColor: "var(--brand)" }} /></span>
+      <span className="mi-ic"><input type="checkbox" aria-hidden="true" aria-label={typeof label === "string" ? label : "Selected"} tabIndex={-1} checked={checked} readOnly style={{ pointerEvents: "none", accentColor: "var(--brand)" }} /></span>
       {icon ? <span className="mi-ic">{icon}</span> : null}
       <span className="t">{label}</span>
     </button>

@@ -161,7 +161,7 @@ export function Zoom({ zoom, renderScreen, className, style }: ZoomProps) {
         {s.phase === "meeting" ? (
           <div className={`call${selfShare ? " selfshare" : ""}`}>
             <TopBar />
-            <div className="c-body">
+            <div className="c-body" role="main">
               <Stage />
               <Side />
               <WaitingNotice />

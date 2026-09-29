@@ -300,6 +300,7 @@ function AttachButton({ className, ribbon }: { className: string; ribbon?: boole
       <input
         ref={pick}
         type="file"
+        aria-label="Attach files"
         multiple
         hidden
         onChange={(e) => {

@@ -30,7 +30,7 @@ export function Toolbar() {
   const bump = (d: number) => setSize((v) => String(Math.max(1, (parseInt(v, 10) || sel.size) + d)));
   const link = () => {
     if (window.getSelection()?.isCollapsed ?? true) return docs.toast("Select text to add a link");
-    cmd("createLink", "https://example.com");
+    cmd("createLink", "https://casuro.com/onboarding");
     docs.toast("Link added");
   };
 

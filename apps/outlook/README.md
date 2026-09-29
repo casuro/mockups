@@ -81,7 +81,9 @@ of a larger screen.
   its day view).
 - A message has `from`, `to`, `cc`, `at` (ms or a date string), and its body
   as plain `text` (a blank line starts a paragraph) or trusted `html` (tables,
-  lists, a newsletter), plus a grey `signature` and `attachments`.
+  lists, a newsletter), plus a grey `signature` and `attachments`. `html` is
+  shown as written, so anything a model writes (a persona's reply) goes in
+  `text`, which is escaped.
 - `folders` (custom ones), `favorites`, `groups`, `categories` and their
   colors, `suggested` people for the To field, and the starting `theme`,
   `density`, reading `pane` position and `focusedInbox`.
