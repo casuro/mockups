@@ -1,0 +1,10 @@
+/*
+ * The preview's sample windows (Finder, Notes, ...) are page content, which
+ * the desktop's styles stop short of, as an episode's are. They carry the
+ * small reset an episode gets from its own page styles instead.
+ */
+@scope (.mac-sample) {
+  :scope { position: absolute; inset: 0; overflow: auto; }
+  * { box-sizing: border-box; }
+  button { font: inherit; color: inherit; background: none; border: 0; padding: 0; margin: 0; cursor: default; text-align: inherit; }
+}
