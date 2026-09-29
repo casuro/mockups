@@ -122,6 +122,243 @@ The signed-in agent's actions arrive through `onEvent`:
 unsent drafts): save it, and pass it back as `useZendesk(seed, { restore })`
 to pick up where they left off.
 
+## API reference
+
+Everything below comes from `index.ts`, `types.ts`, `use-zendesk.ts` and
+`Zendesk.tsx`. You should not need to open them.
+
+### Imports
+
+```ts
+import {
+  Zendesk, useZendesk, DEFAULT_VIEWS,
+  type ZendeskProps, type ZendeskWorkspace, type ZendeskOptions, type MessageOptions, type TicketPatch, type Person,
+  type ZendeskSeed, type ZendeskState, type ZendeskEvent, type ZendeskTicket, type ZendeskTicketInput,
+  type ZendeskMessage, type ZendeskMessageInput, type TicketStatus,
+} from "./apps/zendesk";
+```
+
+`DEFAULT_VIEWS` is the six views used when `seed.views` is left out (ids
+`mine`, `unassigned`, `all`, `recent`, `pending`, `solved`). `index.ts` also
+re-exports every other type in `types.ts` (`ZendeskAgent`,
+`ZendeskRequester`, `ZendeskOrganization`, `ZendeskView`, `ZendeskMacro`,
+`TicketPriority`, `TicketType`, `TicketChannel`, `TicketField`...).
+
+### The hook
+
+```ts
+function useZendesk(seed: ZendeskSeed, options?: ZendeskOptions): ZendeskWorkspace;
+
+interface ZendeskOptions {
+  restore?: ZendeskState | null;           // a saved `zendesk.state`; read once, on the first render
+  onEvent?: (event: ZendeskEvent) => void; // everything the signed-in agent does
+}
+```
+
+Keep `seed` stable (a module constant or `useMemo`). `seed.me` must be a
+key of `seed.agents`, or the hook throws. Ticket ids are numbers.
+
+### The seed
+
+```ts
+type TicketStatus = "new" | "open" | "pending" | "solved";
+type TicketPriority = "low" | "normal" | "high" | "urgent";
+type TicketType = "question" | "incident" | "problem" | "task";
+type TicketChannel = "email" | "web" | "chat";
+
+interface ZendeskSeed {
+  account: { name: string };               // required - "to Northwind Support"
+  me: string;                              // required - signed-in agent's id
+  agents: Record<string, { name: string; email?: string; photo?: string; color?: string; group?: string }>; // required; group "Support" by default
+  organizations?: Record<string, { name: string; plan?: string; timezone?: string; city?: string; tags?: string[] }>;
+  requesters: Record<string, {             // required; ids distinct from agent ids
+    name: string; email: string;           // required
+    org?: string; title?: string; photo?: string; color?: string;
+    language?: string;                     // "English" by default
+    history?: { text: string; when: string }[];
+  }>;
+  tickets: ZendeskTicketInput[];           // required (may be [])
+  macros?: { name: string; text: string }[];
+  views?: { id: string; name: string; filter: { assignee?: "me" | "none" | string; status?: TicketStatus[]; updatedWithin?: number } }[];
+  view?: string;                           // view listed at the start; the first by default
+  tabs?: number[];                         // tickets open in tabs at the start
+  open?: number;                           // the tab on screen at the start
+  theme?: "light" | "dark";
+}
+
+interface ZendeskTicketInput {
+  subject: string;                         // required
+  requester: string;                       // required - a requester id
+  id?: number;                             // next free number when left out
+  status?: TicketStatus;                   // "new"
+  priority?: TicketPriority;               // "normal"
+  type?: TicketType;                       // "question"
+  assignee?: string | null;                // agent id
+  tags?: string[];
+  followers?: string[];                    // agent ids
+  channel?: TicketChannel;                 // "email"
+  requestedAt?: number | string;           // first message's time, or now
+  updatedAt?: number | string;             // last message's time
+  messages?: ZendeskMessageInput[];        // oldest first
+}
+
+interface ZendeskMessageInput {
+  from: string;                            // required - agent or requester id
+  id?: string;
+  at?: number | string;                    // now by default
+  channel?: TicketChannel;                 // the ticket's by default
+  note?: boolean;                          // internal note
+  text?: string;                           // plain text, line breaks kept
+  attachment?: string;                     // a file name
+  custom?: { type: string; data?: unknown }; // drawn by `renderCustom`
+}
+```
+
+### What the world can do
+
+All functions are stable across renders. A missing ticket id throws.
+
+- `createTicket(ticket: ZendeskTicketInput, opts?: { open?: boolean }): number` - a ticket arrives at the top of the lists; returns its number. `open: true` shows it in a tab. Throws if the id exists.
+- `customerReply(ticket: number, text: string, opts?: { delay?: number; notify?: boolean; attachment?: string; channel?: TicketChannel }): Promise<string>` - the requester writes, after `delay` ms. Resolves with the message id once it lands. Reopens a pending or solved ticket; toasts when the agent is on another ticket.
+- `addMessage(ticket: number, message: ZendeskMessageInput, opts?: { delay?: number; notify?: boolean }): Promise<string>` - any message: another agent's reply, an internal note (`note: true`), or a customer's. A non-agent `from` reopens a pending or solved ticket. `notify` is true by default for customers only.
+- `updateTicket(id: number, patch: TicketPatch): void` - `TicketPatch` is a partial of `subject, status, priority, type, assignee, tags, followers`.
+- `open(id: number | null): void` - shows a ticket in a tab, or the view's list with `null`. Does not fire an event.
+- `showView(id: string): void` - lists a view.
+- `toast(text: string): void` - a notice at the bottom.
+- `setTheme(theme: "light" | "dark"): void`.
+- `active: ZendeskTicket | null` - the ticket on screen.
+- `state: ZendeskState` - see State.
+- Read-only: `seed`, `me`, `people: Record<string, Person>` (agents and requesters: `id, name, initials, color, photo?, email?, agent`), `views`, `macros`, `notice`.
+- `ui` is what `<Zendesk>` wires to the agent's clicks. Do not call it from the world.
+
+Delayed messages are dropped if the hook unmounts before they land.
+
+### Events
+
+```ts
+type ZendeskEvent =
+  | { type: "open"; ticket: number }
+  | { type: "close"; ticket: number }
+  | { type: "view"; view: string }
+  | { type: "submit"; ticket: number; status: TicketStatus; note: boolean; text: string; id?: string } // text "" when only the status changed
+  | { type: "macro"; ticket: number; macro: string }            // the macro's name; it only fills the composer
+  | { type: "change"; ticket: number; field: "assignee" | "type" | "priority" | "status"; value: string | null }
+  | { type: "tag"; ticket: number; tag: string; added: boolean }
+  | { type: "follow"; ticket: number; following: boolean }
+  | { type: "action"; label: string };                          // "Play", "Options", "Reporting", "Bold"...
+```
+
+A public reply is `submit` with `note: false` and a non-empty `text`.
+Submitting a reply on an unassigned ticket assigns it to the signed-in
+agent.
+
+### State
+
+`zendesk.state` is a `ZendeskState`: plain JSON (`version: 1`, `tickets`,
+`tabs`, `active`, `view`, `drafts` - unsent composer text by ticket id -,
+`theme`, `seq`). Save it whenever it changes and pass it back as
+`useZendesk(seed, { restore })`. `restore` is read only on the first render,
+and only when `restore.version === 1`, so load the saved state before you
+mount the component that calls `useZendesk`.
+
+### The component
+
+```ts
+interface ZendeskProps {
+  zendesk: ZendeskWorkspace;                            // required - what useZendesk returned
+  renderCustom?: (message: ZendeskMessage) => ReactNode; // draws a message's `custom`, under its text
+  className?: string;
+  style?: CSSProperties;
+}
+```
+
+It fills its parent, so the parent needs a height. It drops the customer
+panel under 1180px wide and switches to the phone layout under 760px.
+
+### Wiring it in an episode
+
+```tsx
+import { useEffect, useState } from "react";
+import { casuro } from "@/lib/casuro";
+import { Zendesk, useZendesk, type ZendeskSeed, type ZendeskState } from "./apps/zendesk";
+
+const seed: ZendeskSeed = {
+  account: { name: "Northwind Support" },
+  me: "sam",
+  agents: { sam: { name: "Sam Rivera" }, priya: { name: "Priya Shah", group: "Tier 2" } },
+  organizations: { acme: { name: "Acme Corp", plan: "Enterprise", timezone: "Europe/London", city: "London" } },
+  requesters: {
+    jo: { name: "Jo Park", email: "jo@acme.com", org: "acme", title: "Office Manager" },
+    max: { name: "Max Bauer", email: "max@acme.com", org: "acme" },
+  },
+  tickets: [
+    { id: 1042, subject: "Can't log in after password reset", requester: "jo", status: "open", priority: "high",
+      type: "incident", assignee: "sam", messages: [{ from: "jo", text: "The reset link says it expired." }] },
+  ],
+  macros: [{ name: "Ask for a screenshot", text: "Could you send a screenshot of the error?" }],
+  tabs: [1042],
+  open: 1042,
+};
+
+// `restore` is read once, so load the saved state before mounting the help desk.
+export function Episode() {
+  const [saved, setSaved] = useState<ZendeskState | null | undefined>(undefined);
+  useEffect(() => void casuro.store.get<ZendeskState>().then(setSaved), []);
+  if (saved === undefined) return null;
+  return <HelpDesk saved={saved} />;
+}
+
+function HelpDesk({ saved }: { saved: ZendeskState | null }) {
+  const zendesk = useZendesk(seed, {
+    restore: saved,
+    onEvent(event) {
+      if (event.type === "submit" && event.text && !event.note) {
+        const ticket = zendesk.state.tickets.find((t) => t.id === event.ticket);
+        const customer = ticket ? zendesk.people[ticket.requester].name : "customer";
+        void casuro.track.message({ from: "candidate", to: customer, channel: `#${event.ticket}`, text: event.text });
+        if (ticket) void answer(ticket.id, customer, event.text);
+      }
+      if (event.type === "change") void casuro.track.decision({ summary: `Set ${event.field} of #${event.ticket} to ${event.value}` });
+    },
+  });
+
+  // The requester answers every public reply.
+  async function answer(ticket: number, customer: string, text: string) {
+    const reply = await casuro.llm(
+      [
+        { role: "system", content: `You are ${customer}, an Acme Corp employee writing to Northwind Support. Answer the agent's email in two sentences.` },
+        { role: "user", content: text },
+      ],
+      { persona: customer },
+    );
+    await zendesk.customerReply(ticket, reply, { delay: 2000 });
+    void casuro.track.message({ from: customer, to: "candidate", channel: `#${ticket}`, text: reply });
+  }
+
+  // Two minutes in, an urgent ticket arrives (once: a restored state already has it).
+  useEffect(() => {
+    if (zendesk.state.tickets.some((t) => t.id === 1050)) return;
+    const t = setTimeout(() => {
+      zendesk.createTicket({
+        id: 1050, subject: "Whole office locked out", requester: "max", priority: "urgent", type: "incident",
+        messages: [{ from: "max", text: "Nobody at Acme can sign in since 9am. We have a board meeting at noon." }],
+      });
+      zendesk.toast("New ticket #1050 from Max Bauer");
+    }, 120_000);
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => void casuro.store.set(zendesk.state), [zendesk.state]);
+
+  return (
+    <div style={{ height: "100vh" }}>
+      <Zendesk zendesk={zendesk} />
+    </div>
+  );
+}
+```
+
 ## Changing it
 
 The files are small and do one thing each:

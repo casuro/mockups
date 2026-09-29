@@ -114,6 +114,272 @@ The signed-in person's actions arrive through `onEvent`:
 pass it back as `useGoogleCalendar(seed, { restore })` to pick up where
 they left off.
 
+## API reference
+
+Everything below is taken from `index.ts`, `types.ts`, `use-google-calendar.ts`
+and `GoogleCalendar.tsx`; you should not need to open them.
+
+### Imports
+
+```ts
+import {
+  GoogleCalendar, useGoogleCalendar,
+  type GoogleCalendarProps, type GoogleCalendarApp, type CalendarOptions, type Person,
+  type CalendarSeed, type CalendarState, type CalendarEvent, type CalendarEntry, type CalendarEntryInput,
+  type CalendarPerson, type CalendarCalendar, type CalendarGuest, type CalendarView, type Rsvp,
+} from "./apps/calendar";
+```
+
+### The hook
+
+```ts
+function useGoogleCalendar(seed: CalendarSeed, options?: CalendarOptions): GoogleCalendarApp;
+
+interface CalendarOptions {
+  restore?: CalendarState | null;             // a saved `calendar.state`; read on the first render only
+  onEvent?: (event: CalendarEvent) => void;   // what the signed-in person does
+}
+```
+
+`restore` is used only when its `version` is `1`; otherwise the seed is used.
+Both options are read once (`restore`) or through a ref (`onEvent`), so an
+inline `onEvent` is fine. It throws if `seed.me` is not a key of
+`seed.people`. Keep the seed at module level (or in `useMemo`): `people` is
+recomputed whenever the seed object changes.
+
+### The seed
+
+```ts
+interface CalendarSeed {
+  me: string;                                  // required: a key of `people`
+  people: Record<string, CalendarPerson>;      // required
+  calendars: CalendarCalendar[];               // required, in side panel order
+  entries: CalendarEntryInput[];               // required
+  start?: string;                              // "2026-09-28"; today by default
+  view?: CalendarView;                         // "day" | "week" | "month"; default "week"
+  theme?: "light" | "dark";                    // default "light"
+}
+
+interface CalendarPerson {
+  name: string;                                // required
+  email?: string;
+  photo?: string;                              // picture URL; else initials on `color`
+  initials?: string;                           // default: first letter of `name`
+  color?: string;
+}
+
+interface CalendarCalendar {
+  id: string;                                  // required
+  name: string;                                // required
+  color: string;                               // required, "#039be5"
+  group?: "mine" | "other";                    // default "mine"
+  visible?: boolean;                           // default true
+  primary?: boolean;                           // the signed-in person's own; first with it, else the first calendar
+}
+
+interface CalendarEntryInput {
+  id?: string;                                 // "e1", "e2"... when left out
+  title: string;                               // required
+  date: string;                                // required, "2026-09-28"
+  calendar?: string;                           // a calendar id; the primary one by default
+  allDay?: boolean;
+  start?: string;                              // "09:30", 24-hour; ignored when allDay
+  end?: string;                                // "10:15", "24:00" = midnight; start + 1h by default
+  color?: string;                              // overrides the calendar's color
+  guests?: CalendarGuest[];
+  location?: string;
+  meet?: string;                               // a Meet code; shows "Join with Google Meet"
+  description?: string;
+  recurrence?: string;                         // text only ("Weekly on weekdays"); list each occurrence yourself
+  focus?: boolean;                             // focus time
+  task?: boolean;                              // outlined chip in the all-day row
+  custom?: { type: string; data?: unknown };   // drawn by the `renderDetails` prop
+}
+
+interface CalendarGuest {
+  person?: string;                             // a key of `people`...
+  email?: string;                              // ...or an outside address
+  rsvp?: Rsvp;                                 // "yes" | "no" | "maybe" | "awaiting"; default "awaiting"
+  organizer?: boolean;
+}
+```
+
+A stored `CalendarEntry` is a `CalendarEntryInput` with `id: string`,
+`calendar: string` and `guests: (CalendarGuest & { rsvp: Rsvp })[]` always
+filled in.
+
+### What the world can do
+
+All on the object `useGoogleCalendar` returns; every function is stable
+across renders and safe to call from timers and after `await`.
+
+```ts
+calendar.addEntry(entry: CalendarEntryInput): string            // adds an entry, returns its id
+calendar.updateEntry(id: string, patch: Partial<CalendarEntryInput>): void   // merges the patch; unknown id is ignored
+calendar.removeEntry(id: string): void                          // removes it (closes its popover if open)
+calendar.rsvp(id: string, who: string, answer: Rsvp): void      // `who` is a person id or a guest email; adds them as a guest if missing
+calendar.open(id: string | null): void                          // opens an entry's popover, or closes it
+calendar.goTo(date: string, view?: CalendarView): void          // shows a day, in a view (current view by default)
+calendar.toast(text: string): void                              // a notice at the bottom left
+calendar.setTheme(theme: "light" | "dark"): void
+```
+
+Read-only fields: `seed`, `people: Record<string, Person>` (with `id`,
+`name`, `email?`, `initials`, `color`, `photo?`), `me`, `primary` (the id of
+the calendar new entries go on), `state`, `now` (a `Date`, ticks every 30s),
+`notice`. `calendar.ui` holds what `<GoogleCalendar>` calls for the signed-in
+person (`navigate`, `step`, `setView`, `toggleCalendar`, `select`, `create`,
+`remove`, `answer`, `join`, `emit`); each one fires an `onEvent`, so the world
+should not call them.
+
+The world's calls never fire `onEvent`: only the signed-in person's actions
+do.
+
+### Events
+
+```ts
+type CalendarEvent =
+  | { type: "create"; entry: CalendarEntry }           // saved from quick-create
+  | { type: "delete"; entry: CalendarEntry }           // deleted one of their own (primary calendar) entries
+  | { type: "rsvp"; id: string; answer: "yes" | "no" | "maybe" }
+  | { type: "open"; id: string }                       // opened an entry's popover
+  | { type: "join"; id: string; meet: string }         // pressed "Join with Google Meet"
+  | { type: "navigate"; date: string; view: CalendarView }
+  | { type: "view"; view: CalendarView }
+  | { type: "toggle"; calendar: string; visible: boolean };
+```
+
+### State
+
+`calendar.state` is a `CalendarState`, plain JSON (no functions, no
+`Date`s): `{ version: 1, view, anchor, visible, entries: CalendarEntry[],
+selected, theme, seq }`. Save it whenever it changes and pass it back as
+`useGoogleCalendar(seed, { restore })`. Read `calendar.state.entries` to see
+what is on the calendar now, including what the person created.
+
+### The component
+
+```ts
+interface GoogleCalendarProps {
+  calendar: GoogleCalendarApp;                         // required: what useGoogleCalendar returned
+  renderDetails?: (entry: CalendarEntry) => ReactNode; // draws an entry's `custom` part in its popover
+  className?: string;
+  style?: CSSProperties;
+}
+```
+
+It fills its parent, so the parent needs a height (`height: 100vh`, or a
+flex or grid cell with one). Under 760px of its own width it uses the phone
+layout.
+
+Worth knowing before you build on it:
+
+- Quick-create saves a title only, as a one-hour event on the primary
+  calendar; "Add guests", "More options", "Edit event" and the Task tab are
+  drawn but do nothing. To have the person invite someone, react to the
+  `create` event (for example with `updateEntry(id, { guests })`).
+- "Going?" (and so the `rsvp` event) shows only on entries where `me` is a
+  guest by `person` id.
+- Delete (and so the `delete` event) shows only on entries on the primary
+  calendar.
+- An entry with `custom` shows it only when `renderDetails` is passed.
+
+### Wiring it in an episode
+
+```tsx
+import { useEffect, useState } from "react";
+import { casuro } from "@/lib/casuro";
+import { GoogleCalendar, useGoogleCalendar, type CalendarSeed, type CalendarState } from "./apps/calendar";
+
+// Module level, so its identity never changes between renders.
+const seed: CalendarSeed = {
+  me: "sam",
+  people: {
+    sam: { name: "Sam Rivera", email: "sam@northwind.example" },
+    priya: { name: "Priya Shah", email: "priya@northwind.example" },
+    omar: { name: "Omar Haddad", email: "omar@northwind.example" },
+  },
+  calendars: [
+    { id: "sam", name: "Sam Rivera", color: "#039be5", primary: true },
+    { id: "team", name: "Platform team", color: "#33b679" },
+  ],
+  entries: [
+    {
+      id: "standup", title: "Standup", date: "2026-03-10", start: "09:30", end: "09:45", calendar: "team",
+      meet: "abc-defg-hij", recurrence: "Weekly on weekdays",
+      guests: [{ person: "omar", rsvp: "yes", organizer: true }, { person: "sam", rsvp: "yes" }, { person: "priya" }],
+    },
+    { id: "review", title: "Design review", date: "2026-03-11", start: "14:00", end: "15:00", location: "Room 4" },
+  ],
+  start: "2026-03-10",
+  view: "week",
+};
+
+// The hook reads `restore` only on its first render, so load the saved state first.
+export function CalendarScreen() {
+  const [saved, setSaved] = useState<CalendarState | null | undefined>(undefined);
+  useEffect(() => {
+    void casuro.store.get<CalendarState>().then(setSaved);
+  }, []);
+  if (saved === undefined) return null;
+  return <Planner restore={saved} />;
+}
+
+function Planner({ restore }: { restore: CalendarState | null }) {
+  const calendar = useGoogleCalendar(seed, {
+    restore,
+    onEvent(event) {
+      if (event.type === "create")
+        void casuro.track.document({ action: "create", title: event.entry.title, text: `${event.entry.date} ${event.entry.start}-${event.entry.end}` });
+      if (event.type === "delete") void casuro.track.decision({ summary: `Deleted "${event.entry.title}"` });
+      if (event.type === "rsvp") {
+        void casuro.track.decision({ summary: `Answered ${event.answer} to ${event.id}` });
+        if (event.id === "offsite" && event.answer === "no") void priyaMoves(event.id);
+      }
+    },
+  });
+
+  // The organizer reacts to a decline by moving the meeting.
+  async function priyaMoves(id: string) {
+    const reply = await casuro.llm(
+      [
+        { role: "system", content: "You are Priya Shah. Sam declined your offsite planning meeting. Answer with only a new start time on 2026-03-12, as HH:MM, between 10:00 and 16:00." },
+        { role: "user", content: "Pick a new time." },
+      ],
+      { persona: "Priya Shah" }
+    );
+    const start = /\d{2}:\d{2}/.exec(reply)?.[0] ?? "15:00";
+    calendar.updateEntry(id, { date: "2026-03-12", start, end: `${String(Number(start.slice(0, 2)) + 1).padStart(2, "0")}${start.slice(2)}` });
+    calendar.rsvp(id, "sam", "awaiting");
+    calendar.toast(`Priya Shah moved "Offsite planning" to ${start}`);
+  }
+
+  // A timed event: an invite lands 30 seconds in (once; a restored state already has it).
+  useEffect(() => {
+    if (calendar.state.entries.some((e) => e.id === "offsite")) return;
+    const t = setTimeout(() => {
+      calendar.addEntry({
+        id: "offsite", title: "Offsite planning", date: "2026-03-11", start: "11:00", end: "12:00", meet: "xqp-hzrn-kfa",
+        guests: [{ person: "priya", rsvp: "yes", organizer: true }, { person: "sam" }],
+      });
+      calendar.toast("Priya Shah invited you to Offsite planning");
+    }, 30_000);
+    return () => clearTimeout(t);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Save whenever anything changes.
+  useEffect(() => {
+    void casuro.store.set(calendar.state);
+  }, [calendar.state]);
+
+  return (
+    <div style={{ height: "100vh" }}>
+      <GoogleCalendar calendar={calendar} />
+    </div>
+  );
+}
+```
+
 ## Changing it
 
 The files are small and do one thing each:
