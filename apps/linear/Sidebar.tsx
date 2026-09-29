@@ -24,7 +24,7 @@ export function Sidebar() {
   return (
     <aside className="sb" aria-label={`${seed.workspace.name} sidebar`}>
       <div className="sb-top">
-        <button className="ws">
+        <button className="ws" aria-label={`${seed.workspace.name} workspace`}>
           <span className="ws-av">{seed.workspace.initial ?? seed.workspace.name.charAt(0).toUpperCase()}</span>
           <span>{seed.workspace.name}</span>
           <I.Chev />

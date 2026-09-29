@@ -178,6 +178,7 @@ export type MeetEvent =
   | { type: "question"; action: "ask" | "upvote"; id: string; text: string }
   | { type: "person"; action: "invite" | "mute" | "remove" | "lower-hand"; person: string }
   | { type: "lower-all" }
+  | { type: "draw"; tool: "pen" | "eraser"; strokes: number }
   | { type: "leave" }
   | { type: "rejoin" }
   | { type: "rate"; stars: number }

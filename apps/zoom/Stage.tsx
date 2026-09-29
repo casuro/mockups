@@ -178,7 +178,7 @@ function ScreenContent({ share }: { share: ZoomShare }) {
 
 /** Pen, stamps and eraser over a shared screen or a whiteboard, in screen pixels. */
 function AnnoCanvas({ surface, drawing }: { surface: string; drawing: boolean }) {
-  const { anno, strokes, inked, bumpInk } = useUI();
+  const { anno, strokes, inked, bumpInk, zoom } = useUI();
   const canvas = useRef<HTMLCanvasElement>(null);
   const current = useRef<Extract<Stroke, { points: unknown }> | null>(null);
 
@@ -215,6 +215,7 @@ function AnnoCanvas({ surface, drawing }: { surface: string; drawing: boolean })
     <canvas
       ref={canvas}
       className={`anno${drawing ? " drawing" : ""}`}
+      aria-label={surface === "wb" ? "Whiteboard drawing area" : "Annotation layer"}
       width={1280}
       height={800}
       onPointerDown={(e) => {
@@ -230,6 +231,8 @@ function AnnoCanvas({ surface, drawing }: { surface: string; drawing: boolean })
           e.preventDefault();
         }
         bumpInk();
+        // Reported: what is drawn cannot be read off the canvas.
+        zoom.ui.emit({ type: "annotate", surface: surface === "wb" ? "whiteboard" : "screen", tool: anno.tool });
       }}
       onPointerMove={(e) => {
         if (!current.current) return;

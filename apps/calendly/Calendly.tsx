@@ -38,7 +38,7 @@ export function Calendly({ calendly, className, style }: CalendlyProps) {
     <CalendlyContext.Provider value={ui}>
       <div className={`kit-calendly${className ? ` ${className}` : ""}`} style={style} data-theme={state.theme}>
         <div className="scroller" ref={scroller}>
-          <div className="page">
+          <div className="page" role="main">
             <div className={card}>
               {state.step === "done" ? (
                 <Confirmation />

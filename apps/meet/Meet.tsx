@@ -131,7 +131,7 @@ export function Meet({ meet, renderScreen, className, style }: MeetProps) {
       >
         {state.view === "call" ? (
           <div className="call">
-            <div className="c-main">
+            <div className="c-main" role="main">
               <Stage />
               <Panel />
             </div>

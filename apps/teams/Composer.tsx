@@ -143,8 +143,8 @@ export function Tabs({ names }: { names: [string, string] }) {
   const { teams } = useUI();
   return (
     <div className="tabs">
-      <button className="tab active">{names[0]}</button>
-      <button className="tab" onClick={() => teams.toast(names[0] === "Chat" ? "Shared files and links" : "Files")}>{names[1]}</button>
+      <button className="tab active" aria-label={names[0]}>{names[0]}</button>
+      <button className="tab" aria-label={names[1]} onClick={() => teams.toast(names[0] === "Chat" ? "Shared files and links" : "Files")}>{names[1]}</button>
       <button className="tab" aria-label="Add a tab" onClick={() => teams.toast("Add a tab")}><I.Plus style={{ width: 16, height: 16 }} /></button>
     </div>
   );

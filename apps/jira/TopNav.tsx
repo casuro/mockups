@@ -197,7 +197,7 @@ function AppSwitcher() {
         <span><b>Jira</b><small>{jira.seed.site}.atlassian.net</small></span>
       </button>
       {other.map(([name, desc, logo]) => (
-        <button key={name} className="sw-item" onClick={app(name)}>
+        <button key={name} className="sw-item" aria-label={name} onClick={app(name)}>
           {logo}
           <span><b>{name}</b><small>{desc}</small></span>
         </button>

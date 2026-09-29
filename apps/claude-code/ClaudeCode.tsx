@@ -265,7 +265,7 @@ function Toasts() {
           <div key={t.id} className={`toast${t.out ? " out" : ""}`}>
             <Icon />
             <span>{t.text}</span>
-            {t.action ? <button onClick={t.action.run}>{t.action.label}</button> : null}
+            {t.action ? <button aria-label={t.action.label} onClick={t.action.run}>{t.action.label}</button> : null}
           </div>
         );
       })}

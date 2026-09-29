@@ -113,6 +113,7 @@ The signed-in person's actions arrive through `onEvent`:
 | `{ type: "participant", action, person }` | As host: mute, ask to unmute, ask to start video, stop video, lower a hand, pin, spotlight, put in the waiting room, remove. Asking only asks: answer with `zoom.mute` or `zoom.camera`. |
 | `{ type: "mute-all", allowUnmute }` / `{ type: "invite", people }` | Mute All; the Invite dialog (bring them in with `zoom.join`). |
 | `{ type: "view", view }` / `{ type: "captions", on }` / `{ type: "security", setting, on }` / `{ type: "app", name }` | The View menu, captions, the Security menu, an app in the Apps panel. |
+| `{ type: "annotate", surface, tool }` | They draw, stamp or erase on the whiteboard or a shared screen. The marks are on a canvas, which nothing can read, so record this if they matter. |
 | `{ type: "end" }` / `{ type: "leave" }` / `{ type: "rejoin" }` | They end the meeting for all, leave it, or rejoin from the "You left" screen. |
 
 `zoom.state` is everything that changed, as plain JSON: save it, and pass it

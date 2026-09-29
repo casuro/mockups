@@ -216,6 +216,7 @@ export function FilesDialog() {
           <input
             ref={input}
             type="file"
+            aria-label="Upload files"
             multiple
             hidden
             onChange={(e) => add([...(e.target.files ?? [])].map((f) => ({ name: f.name, type: (f.name.split(".").pop() ?? "").toLowerCase() })))}

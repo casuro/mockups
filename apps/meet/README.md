@@ -104,6 +104,7 @@ The signed-in person's actions arrive through `onEvent`:
 | `{ type: "record" \| "transcript", on }` | They start or stop recording or a transcript. |
 | `{ type: "poll", action, question, options, choice? }` / `{ type: "question", action, id, text }` | Polls and Q&A. |
 | `{ type: "person", action, person }` / `{ type: "lower-all" }` | They invite, mute or remove someone, or lower hands. |
+| `{ type: "draw", tool, strokes }` | They finish a stroke on the whiteboard (`strokes` is how many are on it). The drawing itself is on a canvas, which nothing can read, so record this if the drawing matters. |
 | `{ type: "leave" }` / `{ type: "rejoin" }` / `{ type: "rate", stars }` | They leave, rejoin, or rate the call. |
 | `{ type: "action", kind, label }` | Anything else: copy link, open the doc, breakout rooms, help, report, a device, a setting. |
 

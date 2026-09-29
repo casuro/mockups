@@ -18,6 +18,7 @@ export function StatusMenu({ issueKey }: { issueKey: string }) {
           key={s.id}
           className={`mi${is.status === s.id ? " on" : ""}`}
           role="menuitemradio"
+          aria-label={s.name}
           aria-checked={is.status === s.id}
           onClick={() => (closePop(), jira.ui.setStatus(issueKey, s.id))}
         >
