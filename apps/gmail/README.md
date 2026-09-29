@@ -112,6 +112,222 @@ The signed-in person's actions arrive through `onEvent`:
 `gmail.state` is everything that changed, as plain JSON: save it, and pass
 it back as `useGmail(seed, { restore })` to pick up where they left off.
 
+## API reference
+
+Everything below is what the kit's source defines; nothing else exists.
+
+### Imports
+
+```ts
+import {
+  Gmail, useGmail,
+  type GmailProps, type GmailMailbox, type GmailOptions, type Notice, type NoticeAction, type Person,
+  type GmailSeed, type GmailState, type GmailEvent, type GmailMail, type GmailMailInput,
+  type GmailMessage, type GmailMessageInput, type GmailFolder, type GmailTab,
+} from "./apps/gmail";
+```
+
+`index.ts` also re-exports every other type in `types.ts` (`GmailPerson`, `GmailInvite`, `GmailRsvp`, `GmailView`, `GmailAction`, `GmailAgendaItem`, `GmailNote`, `GmailCompose`, `GmailDensity`, `GmailPane`).
+
+### The hook
+
+```ts
+function useGmail(seed: GmailSeed, options?: GmailOptions): GmailMailbox;
+
+interface GmailOptions {
+  restore?: GmailState | null;             // a saved `gmail.state`; read on the first render only
+  onEvent?: (event: GmailEvent) => void;   // everything the signed-in person does
+}
+```
+
+It throws if `seed.me` is not a key of `seed.people`. A `restore` whose `version` is not `1` is ignored.
+
+### The seed
+
+```ts
+type GmailFolder = "inbox" | "sent" | "drafts" | "snoozed" | "scheduled" | "spam" | "trash" | "archive";
+type GmailTab = "primary" | "promotions" | "social" | "updates";
+type GmailRsvp = "yes" | "no" | "maybe";
+
+interface GmailSeed {
+  me: string;                                  // required: the signed-in person's id
+  people: Record<string, GmailPerson>;         // required
+  mails: GmailMailInput[];                     // required, any order
+  labels?: Record<string, string>;             // name -> color; "Parent/Child" nests
+  agenda?: { time: string; title: string; now?: boolean }[];   // Calendar side panel
+  notes?: { title: string; text: string; yellow?: boolean }[]; // Keep side panel
+  tasks?: { text: string; done?: boolean }[];                  // Tasks side panel
+  domain?: string;                             // "Managed by ..." in the account card
+  open?: string;                               // a mail id on screen at the start; the inbox by default
+  theme?: "light" | "dark";
+  density?: "default" | "comfortable" | "compact";
+  pane?: "none" | "right";
+}
+
+interface GmailPerson {
+  name: string; email: string;                 // required
+  photo?: string; color?: string;
+  signature?: string;                          // "Name\nCompany", added under "--"
+}
+
+interface GmailMailInput {                     // a conversation
+  subject: string;                             // required
+  messages: GmailMessageInput[];               // required, oldest first
+  id?: string;
+  folder?: GmailFolder;                        // default "inbox"
+  tab?: GmailTab;                              // default "primary"
+  labels?: string[];
+  unread?: boolean; starred?: boolean; important?: boolean;
+  invite?: { title: string; start: number | string; end: number | string;
+             organizer?: string; guests?: number; meet?: boolean; rsvp?: GmailRsvp | null };
+}
+
+interface GmailMessageInput {
+  from: string;                                // required: a person id
+  to: string[];                                // required: person ids or plain addresses
+  id?: string;
+  at?: number | string;                        // ms or a date string; now by default
+  body?: string;                               // blank line = paragraph, "- " list, `code`, *bold*, URLs
+  attachments?: string[];                      // file names; the extension picks the icon
+  signed?: boolean;                            // add the sender's signature, default true
+  custom?: { type: string; data?: unknown };   // drawn by <Gmail renderCustom>
+}
+```
+
+### What the world can do
+
+All of these are stable across renders.
+
+```ts
+gmail.receive(mail: GmailMailInput, o?: { notify?: boolean }): string
+  // A new conversation (unread, in the inbox, unless `mail` says otherwise). Returns its id
+  // synchronously. The "New message from ..." notice shows by default when it lands in the inbox.
+gmail.reply(mailId: string, message: Omit<GmailMessageInput, "to"> & { to?: string[] },
+            o?: { delay?: number; notify?: boolean }): Promise<string>
+  // A message lands in an existing conversation after `delay` ms; `to` defaults to [me].
+  // Moves it to inbox/primary, unread unless on screen, with a notice (notify: false hides it).
+  // Resolves with the message id, or "" if the conversation no longer exists.
+gmail.modify(id: string, patch: Partial<Pick<GmailMail, "folder" | "tab" | "labels" | "unread" | "starred" | "important">>): void
+gmail.open(id: string): void                  // show a conversation, mark it read, fire "open"; a draft opens in compose
+gmail.toast(text: string, actions?: NoticeAction[]): void   // NoticeAction = { label: string; run: () => void }
+```
+
+Read-only fields: `gmail.state`, `gmail.seed`, `gmail.me`, `gmail.people` (`Record<string, Person>`), `gmail.person(idOrAddress: string): Person` (resolves an id or an address from an event's `to`; unknown addresses come back as `{ name: address, email: address }`), `gmail.notice`. `gmail.ui` is what `<Gmail>` calls for the signed-in person; a world does not need it.
+
+### Events
+
+```ts
+type GmailAction = "archive" | "delete" | "spam" | "snooze" | "read" | "unread" | "task";
+type GmailView = Exclude<GmailFolder, "archive"> | "starred" | "important" | "all";
+
+type GmailEvent =
+  | { type: "send"; id: string; to: string[]; subject: string; body: string }   // id = the new conversation (in "sent")
+  | { type: "reply"; mail: string; id: string; to: string[]; body: string }     // inline reply; id = the message
+  | { type: "draft"; id: string; to: string[]; subject: string; body: string }
+  | { type: "open"; id: string }
+  | { type: "action"; action: GmailAction; ids: string[] }
+  | { type: "undo"; action: GmailAction | "send" | "reply" | "removeLabel"; ids: string[] }
+  | { type: "star"; id: string; starred: boolean }
+  | { type: "important"; id: string; important: boolean }
+  | { type: "label"; id: string; label: string; added: boolean }
+  | { type: "manageLabel"; action: "create" | "rename" | "color" | "remove"; label: string; to?: string; color?: string }
+  | { type: "rsvp"; id: string; answer: GmailRsvp }
+  | { type: "search"; query: string }
+  | { type: "view"; folder: GmailView; label: string | null; tab: GmailTab }
+  | { type: "attachment"; mail: string; name: string }
+  | { type: "task"; text: string; done: boolean };
+```
+
+`to` holds person ids or whatever address was typed; pass each through `gmail.person(...)` to get a name. `send` and `reply` fire at once, and the person can still press Undo afterwards (`undo` with action `"send"` or `"reply"`, `ids` holding the conversation or message id). An undone `send` removes the conversation, so a later `gmail.reply` to it resolves `""` and nothing lands; an undone `reply` does not stop an answer the world already scheduled. To answer a new mail the person composed, reply into `event.id`: the conversation moves from Sent to the inbox with the answer.
+
+### State
+
+`gmail.state` is a `GmailState`: plain JSON (`version: 1`, `view`, `open`, `selected`, `expanded`, `reply`, `compose`, `labels`, `mails`, `tasks`, `side`, `navCollapsed`, `more`, `density`, `pane`, `theme`, `seq`), a new object after every change. Save it, and pass it back as `useGmail(seed, { restore })`; `restore` is read only when the hook first mounts, so load the saved state before rendering the component that calls `useGmail`.
+
+### The component
+
+```ts
+interface GmailProps {
+  gmail: GmailMailbox;                                    // required: from useGmail
+  renderCustom?: (message: GmailMessage) => ReactNode;    // a message's `custom` part, under the body
+  className?: string;
+  style?: CSSProperties;
+}
+```
+
+`<Gmail>` fills its parent, so the parent needs a height. It uses the tablet layout under 1100px and the mobile one under 760px of that parent's width.
+
+### Wiring it in an episode
+
+```tsx
+import { useEffect, useState } from "react";
+import { casuro } from "@/lib/casuro";
+import { Gmail, useGmail, type GmailSeed, type GmailState } from "./apps/gmail";
+
+const seed: GmailSeed = {
+  me: "sam",
+  people: {
+    sam: { name: "Sam Rivera", email: "sam@northwind.example" },
+    priya: { name: "Priya Shah", email: "priya@northwind.example", signature: "Priya Shah\nEngineering lead" },
+    billing: { name: "Acme Billing", email: "billing@acme.example" },
+  },
+  labels: { Clients: "#1a73e8" },
+  mails: [
+    { id: "contract", subject: "Contract draft for review", unread: true, labels: ["Clients"], messages: [
+      { from: "priya", to: ["sam"], at: Date.now() - 3_600_000, body: "Hi Sam,\n\nThe draft is attached. Can you check the payment terms?", attachments: ["Contract v2.pdf"] },
+    ] },
+  ],
+};
+
+export default function Episode() {
+  // `restore` is read once, on mount: load the saved state before rendering the mailbox.
+  const [saved, setSaved] = useState<GmailState | null | undefined>(undefined);
+  useEffect(() => void casuro.store.get<GmailState>().then(setSaved), []);
+  if (saved === undefined) return null;
+  return <Mailbox saved={saved} />;
+}
+
+function Mailbox({ saved }: { saved: GmailState | null }) {
+  const gmail = useGmail(seed, {
+    restore: saved,
+    async onEvent(event) {
+      if (event.type !== "send" && event.type !== "reply") return;
+      const to = event.to.map((t) => gmail.person(t));
+      void casuro.track.message({ from: "candidate", to: to.map((p) => p.name).join(", "), channel: "email", text: event.body });
+      if (!to.some((p) => p.id === "priya")) return;
+      const mailId = event.type === "send" ? event.id : event.mail;
+      const reply = await casuro.llm(
+        [
+          { role: "system", content: "You are Priya Shah, engineering lead. Answer this email briefly, plain text, no subject line." },
+          { role: "user", content: event.body },
+        ],
+        { persona: "Priya Shah" },
+      );
+      await gmail.reply(mailId, { from: "priya", body: reply }, { delay: 4000 });
+      void casuro.track.message({ from: "Priya Shah", to: "candidate", channel: "email", text: reply });
+    },
+  });
+
+  // One timed beat: an invoice arrives 40 seconds in (only on a fresh start).
+  useEffect(() => {
+    if (saved) return;
+    const t = setTimeout(() => {
+      gmail.receive({ subject: "Invoice overdue", important: true, messages: [{ from: "billing", to: ["sam"], body: "Invoice #4410 is 30 days overdue. Total due: $12,400.00" }] });
+    }, 40_000);
+    return () => clearTimeout(t);
+  }, [saved, gmail.receive]);
+
+  // Save every change.
+  useEffect(() => void casuro.store.set(gmail.state), [gmail.state]);
+
+  return (
+    <div style={{ height: "100vh" }}>
+      <Gmail gmail={gmail} />
+    </div>
+  );
+}
+```
+
 ## Changing it
 
 The files are small and do one thing each:

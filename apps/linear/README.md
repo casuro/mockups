@@ -117,6 +117,239 @@ open issue), Enter opens, Esc closes the menu or the issue.
 `linear.state` is everything that changed, as plain JSON: save it, and pass
 it back as `useLinear(seed, { restore })` to pick up where they left off.
 
+## API reference
+
+Everything below comes from `index.ts`, `types.ts`, `use-linear.ts` and
+`Linear.tsx`. You should not need to open them.
+
+### Imports
+
+```ts
+import {
+  Linear, useLinear, PRIORITIES,
+  type LinearProps, type LinearWorkspace, type LinearOptions, type UpdateOptions, type Person, type Team, type Status,
+  type LinearSeed, type LinearState, type LinearEvent, type LinearIssue, type LinearIssueInput, type LinearActivity,
+  type LinearActivityInput, type Priority,
+} from "./apps/linear";
+```
+
+`PRIORITIES` is `["No priority", "Urgent", "High", "Medium", "Low"]`,
+indexed by `Priority`. `index.ts` also re-exports every other type in
+`types.ts` (`LinearPerson`, `LinearTeam`, `LinearStatus`, `LinearProject`,
+`LinearCycle`, `LinearTab`).
+
+### The hook
+
+```ts
+function useLinear(seed: LinearSeed, options?: LinearOptions): LinearWorkspace;
+
+interface LinearOptions {
+  restore?: LinearState | null;           // a saved `linear.state`; read once, on the first render
+  onEvent?: (event: LinearEvent) => void; // everything the signed-in person does
+}
+```
+
+Keep `seed` stable (a module constant or `useMemo`). The hook throws when
+`seed.me` is not in `seed.people`, or `teams` or `statuses` is empty.
+
+### The seed
+
+```ts
+type Priority = 0 | 1 | 2 | 3 | 4;       // 0 No priority, 1 Urgent, 2 High, 3 Medium, 4 Low
+
+interface LinearSeed {
+  workspace: { name: string; initial?: string }; // required
+  me: string;                             // required - signed-in person's id
+  people: Record<string, { name: string; photo?: string; initials?: string; color?: string }>; // required; name required
+  teams: {                                // required, non-empty, sidebar order
+    id: string; name: string;             // required
+    color?: string; letter?: string;
+    key?: string;                         // new issue id prefix; first 3 letters of the name by default
+  }[];
+  statuses: {                             // required, non-empty, list group order
+    id: string; name: string;             // required
+    type: "backlog" | "unstarted" | "started" | "completed"; // required - icon and tab
+    color?: string;
+  }[];
+  labels?: Record<string, string>;        // label name -> dot color
+  projects?: Record<string, { name: string; color?: string }>;
+  cycles?: Record<string, { name: string; dates?: string }>;
+  issues: LinearIssueInput[];             // required (may be [])
+  inbox?: number;                         // the count on Inbox
+  team?: string;                          // team shown first; the first team by default
+  open?: string;                          // an issue id open at the start
+  expanded?: string[];                    // teams expanded in the sidebar; the first by default
+  theme?: "light" | "dark";
+}
+
+interface LinearIssueInput {
+  title: string;                          // required
+  id?: string;                            // "PLA-912"; team key + next number when left out
+  team?: string;                          // team id; the first team by default
+  status?: string;                        // status id; the first "unstarted" status by default
+  priority?: Priority;                    // 0 by default
+  assignee?: string | null;               // person id
+  labels?: string[];                      // label names
+  project?: string | null;                // project id
+  cycle?: string | null;                  // cycle id
+  due?: number | string | null;           // ms or "2026-10-02"
+  created?: number | string;              // now by default
+  creator?: string;                       // who "created the issue"; assignee, else me
+  description?: string;                   // paragraphs split by a blank line, "- " lists, `code`
+  subIssues?: string[];                   // other issues' ids
+  activity?: LinearActivityInput[];       // oldest first; a "created the issue" line by default
+}
+
+interface LinearActivityInput {
+  kind: "event" | "comment";              // required
+  from: string;                           // required - person id
+  text: string;                           // required - event words after the name, or the comment
+  id?: string;
+  at?: number | string;                   // now by default
+  custom?: { type: string; data?: unknown }; // drawn by `renderCustom`
+}
+```
+
+### What the world can do
+
+All functions are stable across renders. A missing issue id throws.
+
+- `createIssue(issue: LinearIssueInput): string` - adds an issue to its team's list and returns its id. Throws if the id exists.
+- `updateIssue(id: string, patch: Partial<Omit<LinearIssueInput, "id">>, opts?: { by?: string }): void` - changes `title, team, status, priority, assignee, labels, project, cycle, due, created, description, subIssues` (`activity` and `creator` in a patch are ignored). With `by`, status, priority and assignee changes add an activity line.
+- `comment(id: string, from: string, text: string): string` - a comment from `from`; returns its id.
+- `log(id: string, entry: LinearActivityInput): string` - any activity line (event, comment, or `custom`); returns its id.
+- `notify(text: string): void` - Inbox count +1 and a toast with the text.
+- `toast(text: string): void` - a notice at the bottom.
+- `open(id: string | null): void` - shows an issue, or the list with `null`. Note: it also fires an `{ type: "open" }` event.
+- `issue(id: string): LinearIssue | undefined` - an issue as it is now.
+- `visible(): LinearIssue[]` - the list as shown (current team and tab).
+- `state: LinearState` - see State.
+- Read-only: `seed`, `me`, `people: Record<string, Person>` (`id, name, initials, color, photo?`), `teams: Team[]`, `statuses: Status[]`, `notice`.
+- `ui` is what `<Linear>` wires to the signed-in person's clicks. Do not call it from the world.
+
+### Events
+
+```ts
+type LinearEvent =
+  | { type: "open"; id: string }
+  | { type: "status"; id: string; from: string; to: string }      // status ids
+  | { type: "priority"; id: string; from: Priority; to: Priority }
+  | { type: "assignee"; id: string; from: string | null; to: string | null }
+  | { type: "comment"; id: string; text: string; commentId: string }
+  | { type: "create"; team: string; status?: string }             // New issue pressed; nothing is created
+  | { type: "navigate"; to: string };                             // "inbox", "mine", "web:cycles", "tab:active"...
+```
+
+The kit has no New issue form: on `create`, the world must call
+`createIssue` itself (and usually `open` it), or nothing happens.
+
+### State
+
+`linear.state` is a `LinearState`: plain JSON (`version: 1`, `issues`,
+`nav`, `team`, `tab`, `selected`, `open`, `collapsed`, `expanded`, `inbox`,
+`theme`, `seq`). Save it whenever it changes and pass it back as
+`useLinear(seed, { restore })`. `restore` is read only on the first render,
+and only when `restore.version === 1`, so load the saved state before you
+mount the component that calls `useLinear`.
+
+### The component
+
+```ts
+interface LinearProps {
+  linear: LinearWorkspace;                             // required - what useLinear returned
+  renderCustom?: (entry: LinearActivity) => ReactNode; // draws an activity line's `custom`
+  className?: string;
+  style?: CSSProperties;
+}
+```
+
+It fills its parent, so the parent needs a height. Under 760px wide it
+switches to the mobile layout.
+
+### Wiring it in an episode
+
+```tsx
+import { useEffect, useState } from "react";
+import { casuro } from "@/lib/casuro";
+import { Linear, useLinear, PRIORITIES, type LinearSeed, type LinearState } from "./apps/linear";
+
+const seed: LinearSeed = {
+  workspace: { name: "Northwind" },
+  me: "sam",
+  people: { sam: { name: "Sam Rivera" }, priya: { name: "Priya Shah" }, leo: { name: "Leo Park" } },
+  teams: [{ id: "web", name: "Web", key: "WEB" }],
+  statuses: [
+    { id: "todo", name: "Todo", type: "unstarted" },
+    { id: "doing", name: "In Progress", type: "started" },
+    { id: "backlog", name: "Backlog", type: "backlog" },
+    { id: "done", name: "Done", type: "completed" },
+  ],
+  labels: { Bug: "#eb5757" },
+  issues: [
+    { id: "WEB-12", title: "Checkout button overlaps footer on iPad", status: "todo", priority: 2, assignee: "priya", labels: ["Bug"] },
+    { id: "WEB-13", title: "Saved cards list", status: "doing", priority: 3, assignee: "leo" },
+  ],
+};
+
+// `restore` is read once, so load the saved state before mounting the tracker.
+export function Episode() {
+  const [saved, setSaved] = useState<LinearState | null | undefined>(undefined);
+  useEffect(() => void casuro.store.get<LinearState>().then(setSaved), []);
+  if (saved === undefined) return null;
+  return <Tracker saved={saved} />;
+}
+
+function Tracker({ saved }: { saved: LinearState | null }) {
+  const linear = useLinear(seed, {
+    restore: saved,
+    onEvent(event) {
+      if (event.type === "status") void casuro.track.decision({ summary: `Moved ${event.id} from ${event.from} to ${event.to}` });
+      if (event.type === "priority") void casuro.track.decision({ summary: `Set ${event.id} to ${PRIORITIES[event.to]}` });
+      if (event.type === "comment") {
+        void casuro.track.message({ from: "candidate", to: "Priya Shah", channel: event.id, text: event.text });
+        void answer(event.id, event.text);
+      }
+      if (event.type === "create") {
+        const id = linear.createIssue({ title: "New issue", team: event.team, status: event.status, creator: "sam" });
+        linear.open(id);
+      }
+    },
+  });
+
+  // Priya answers every comment the candidate posts.
+  async function answer(id: string, text: string) {
+    const reply = await casuro.llm(
+      [
+        { role: "system", content: `You are Priya Shah, a frontend engineer. Reply to a Linear comment on "${linear.issue(id)?.title}" in one or two sentences.` },
+        { role: "user", content: text },
+      ],
+      { persona: "Priya Shah" },
+    );
+    linear.comment(id, "priya", reply);
+    void casuro.track.message({ from: "Priya Shah", to: "candidate", channel: id, text: reply });
+  }
+
+  // Two minutes in, Priya files an urgent bug (once: a restored state already has it).
+  useEffect(() => {
+    if (linear.issue("WEB-20")) return;
+    const t = setTimeout(() => {
+      linear.createIssue({ id: "WEB-20", title: "Checkout returns 502 in EU", team: "web", priority: 1, assignee: "sam", labels: ["Bug"], creator: "priya" });
+      linear.notify("Priya Shah assigned you WEB-20");
+    }, 120_000);
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => void casuro.store.set(linear.state), [linear.state]);
+
+  return (
+    <div style={{ height: "100vh" }}>
+      <Linear linear={linear} />
+    </div>
+  );
+}
+```
+
 ## Changing it
 
 The files are small and do one thing each:

@@ -107,6 +107,193 @@ day and time picked, the time zone, the form, the bookings): save it, and
 pass it back as `useCalendly(seed, { restore })` to pick up where they left
 off. Availability is part of the seed, not the state.
 
+## API reference
+
+Everything below is what the kit's source defines; nothing else exists.
+
+### Imports
+
+```ts
+import {
+  Calendly, useCalendly, dayOf, localToday,
+  type CalendlyProps, type CalendlyPage, type CalendlyOptions,
+  type CalendlySeed, type CalendlyState, type CalendlyEvent, type CalendlyBooking,
+  type CalendlyAvailability, type Day, type SlotTime,
+} from "./apps/calendly";
+```
+
+`index.ts` also re-exports every other type in `types.ts` (`CalendlyHost`, `CalendlyEventType`, `CalendlyQuestion`, `CalendlyTimeZone`, `CalendlyForm`). Two helpers: `localToday(): Day` is today on the browser's clock as `"YYYY-MM-DD"`, and `dayOf(year: number, month: number, date: number): Day` builds a day with a zero-based `month` (like `Date`: `dayOf(2026, 9, 2)` is `"2026-10-02"`), rolling over out-of-range dates.
+
+### The hook
+
+```ts
+function useCalendly(seed: CalendlySeed, options?: CalendlyOptions): CalendlyPage;
+
+interface CalendlyOptions {
+  restore?: CalendlyState | null;              // a saved `calendly.state`; read on the first render only
+  onEvent?: (event: CalendlyEvent) => void;    // everything the invitee does
+}
+```
+
+It throws if `seed.timeZones` is empty. A `restore` whose `version` is not `1` is ignored.
+
+### The seed
+
+```ts
+type Day = string;         // "YYYY-MM-DD"
+type SlotTime = string;    // "HH:MM", 24-hour, on the host's clock
+type CalendlyAvailability = ((day: Day) => SlotTime[]) | Record<Day, SlotTime[]>;
+
+interface CalendlySeed {
+  host: { name: string; photo?: string };      // required
+  event: CalendlyEventType;                    // required
+  availability: CalendlyAvailability;          // required: host's free start times per day
+  timeZones: { id: string; label: string; offset?: number }[];   // required, at least one; id is IANA
+  hostTimeZone?: string;                       // zone `availability` is in; the first of timeZones by default
+  timeZone?: string;                           // invitee's starting zone; hostTimeZone by default
+  month?: string;                              // "YYYY-MM" shown first; today's month by default
+  today?: Day;                                 // the real date by default; nothing before it is bookable
+  theme?: "light" | "dark";
+}
+
+interface CalendlyEventType {
+  name: string;                                // required: "30 Minute Meeting"
+  duration: number;                            // required: minutes
+  location?: string;                           // "Google Meet" by default
+  locationIcon?: "meet" | "pin";
+  locationNote?: string;                       // on the confirmation
+  description?: string;
+  questions?: { id: string; label: string; required?: boolean; multiline?: boolean }[];
+                                               // after name, email, guests; one "notes" question by default
+}
+```
+
+### What the world can do
+
+All of these are stable across renders. There is no way to message the invitee from the page besides a toast: a persona's answer to a booking belongs in another app (mail, chat).
+
+```ts
+calendly.setAvailability(next: CalendlyAvailability): void
+  // The host's free times from now on; a picked day or time that is no longer open is let go.
+calendly.reset(): void          // back to the seed: its availability, month and zone, an empty form, no bookings
+calendly.toast(text: string): void
+calendly.setTheme(theme: "light" | "dark"): void
+```
+
+Read-only fields: `calendly.state`, `calendly.seed`, `calendly.notice`, `calendly.today` (`Day`), `calendly.questions` (the form's questions, defaults applied), `calendly.zone` (the invitee's `CalendlyTimeZone`), `calendly.booking` (the latest `CalendlyBooking`, or `null`), `calendly.slotsFor(day: Day): SlotTime[]` (times still open that day: none before today, none already booked), `calendly.localMinutes(day: Day, time: SlotTime, zoneId?: string): number` (a host time in minutes after midnight on the invitee's clock, or `zoneId`'s). `calendly.ui` is what `<Calendly>` calls for the invitee; a world does not need it.
+
+### Events
+
+```ts
+interface CalendlyBooking {
+  day: Day; time: SlotTime;         // the start, on the host's clock
+  timeZone: string;                 // the zone the invitee picked it in
+  name: string; email: string;
+  guests: string[];                 // split from what was typed
+  answers: Record<string, string>;  // by question id
+}
+
+type CalendlyEvent =
+  | { type: "month"; month: string }
+  | { type: "date"; day: Day }
+  | { type: "slot"; day: Day; time: SlotTime }
+  | { type: "next"; day: Day; time: SlotTime }            // on to Enter Details
+  | { type: "back" }
+  | { type: "timezone"; timeZone: string }
+  | { type: "book"; booking: CalendlyBooking }
+  | { type: "invalid"; errors: Record<string, string> }   // by field: "name", "email", "guests" or a question id
+  | { type: "again" }                                     // Schedule another event
+  | { type: "link"; link: "cookies" | "terms" | "privacy" | "powered-by" };
+```
+
+### State
+
+`calendly.state` is a `CalendlyState`: plain JSON (`version: 1`, `step` of `"calendar" | "details" | "done"`, `month`, `day`, `slot`, `timeZone`, `form`, `showGuests`, `errors`, `bookings`, `theme`), a new object after every change. Save it, and pass it back as `useCalendly(seed, { restore })`; `restore` is read only when the hook first mounts, so load the saved state before rendering the component that calls `useCalendly`. Availability is not in the state: after a restore the page uses `seed.availability` again, so call `setAvailability` again (or save it yourself) if the world changed it.
+
+### The component
+
+```ts
+interface CalendlyProps {
+  calendly: CalendlyPage;    // required: from useCalendly
+  className?: string;
+  style?: CSSProperties;
+}
+```
+
+`<Calendly>` fills its parent and scrolls inside it, so the parent needs a height. Under 760px of width it uses the phone layout. There is no `renderCustom`.
+
+### Wiring it in an episode
+
+```tsx
+import { useEffect, useState } from "react";
+import { casuro } from "@/lib/casuro";
+import { Calendly, useCalendly, type CalendlySeed, type CalendlyState, type Day } from "./apps/calendly";
+
+const weekdays = (day: Day) => {
+  const weekday = new Date(`${day}T12:00:00Z`).getUTCDay();
+  return weekday % 6 === 0 ? [] : ["10:00", "11:00", "13:00", "14:00", "15:00"];
+};
+
+const seed: CalendlySeed = {
+  host: { name: "Priya Shah" },
+  event: { name: "Intro Call", duration: 30, description: "A first chat about the role.",
+           questions: [{ id: "topic", label: "What would you like to cover?", required: true, multiline: true }] },
+  availability: weekdays,
+  timeZones: [
+    { id: "America/New_York", label: "Eastern Time - US & Canada" },
+    { id: "Europe/London", label: "UK, Ireland, Lisbon Time" },
+  ],
+};
+
+export default function Episode() {
+  // `restore` is read once, on mount: load the saved state before rendering the page.
+  const [saved, setSaved] = useState<CalendlyState | null | undefined>(undefined);
+  useEffect(() => void casuro.store.get<CalendlyState>().then(setSaved), []);
+  if (saved === undefined) return null;
+  return <Booking saved={saved} />;
+}
+
+function Booking({ saved }: { saved: CalendlyState | null }) {
+  const calendly = useCalendly(seed, {
+    restore: saved,
+    async onEvent(event) {
+      if (event.type !== "book") return;
+      const { day, time, timeZone, answers } = event.booking;
+      const text = `Booked ${day} ${time} (${timeZone}): ${answers.topic ?? ""}`;
+      void casuro.track.message({ from: "candidate", to: "Priya Shah", channel: "calendly", text });
+      const reply = await casuro.llm(
+        [
+          { role: "system", content: "You are Priya Shah. In one short sentence, acknowledge this meeting booking." },
+          { role: "user", content: text },
+        ],
+        { persona: "Priya Shah" },
+      );
+      // The page has no message thread: the toast is its only way to show it.
+      calendly.toast(reply);
+      void casuro.track.message({ from: "Priya Shah", to: "candidate", channel: "calendly", text: reply });
+    },
+  });
+
+  // One timed beat: 30 seconds in, the host's afternoons fill up.
+  useEffect(() => {
+    const t = setTimeout(() => {
+      calendly.setAvailability((day) => weekdays(day).filter((time) => time < "12:00"));
+      calendly.toast("Priya's calendar just changed");
+    }, 30_000);
+    return () => clearTimeout(t);
+  }, [calendly.setAvailability, calendly.toast]);
+
+  // Save every change.
+  useEffect(() => void casuro.store.set(calendly.state), [calendly.state]);
+
+  return (
+    <div style={{ height: "100vh" }}>
+      <Calendly calendly={calendly} />
+    </div>
+  );
+}
+```
+
 ## Changing it
 
 The files are small and do one thing each:

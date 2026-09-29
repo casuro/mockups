@@ -122,6 +122,232 @@ The signed-in person's actions arrive through `onEvent`:
 pass it back as `useConfluence(seed, { restore })` to pick up where they
 left off.
 
+## API reference
+
+Everything below comes from `index.ts`, `types.ts`, `use-confluence.ts` and
+`Confluence.tsx`. You should not need to open them.
+
+### Imports
+
+```ts
+import {
+  Confluence, useConfluence,
+  type ConfluenceProps, type ConfluenceSpace, type ConfluenceOptions, type PagePatch, type Person,
+  type ConfluenceSeed, type ConfluenceState, type ConfluenceEvent, type ConfluencePage, type ConfluencePageSeed,
+  type ConfluenceBlock, type ConfluenceComment,
+} from "./apps/confluence";
+```
+
+`index.ts` also re-exports every other type in `types.ts`
+(`ConfluencePerson`, `ConfluenceIssue`, `ConfluenceTask`,
+`ConfluenceReaction`, `ConfluenceCommentInput`, `LozengeColor`).
+
+### The hook
+
+```ts
+function useConfluence(seed: ConfluenceSeed, options?: ConfluenceOptions): ConfluenceSpace;
+
+interface ConfluenceOptions {
+  restore?: ConfluenceState | null;           // a saved `confluence.state`; read once, on the first render
+  onEvent?: (event: ConfluenceEvent) => void; // everything the signed-in person does
+}
+```
+
+Keep `seed` stable (a module constant or `useMemo`). The hook throws when
+`seed.me` is not in `seed.people`, or two pages share an id.
+
+### The seed
+
+```ts
+interface ConfluenceSeed {
+  space: { name: string; site?: string; initial?: string }; // required; name required
+  me: string;                                 // required - signed-in person's id
+  people: Record<string, { name: string; photo?: string; initials?: string; color?: string }>; // required; name required
+  pages: ConfluencePageSeed[];                // required - the tree, top level first, sidebar order
+  issues?: Record<string, { summary: string; status: string; color?: LozengeColor }>; // for {jira:KEY}
+  open?: string;                              // page on screen at the start; the first page by default
+  expanded?: string[];                        // pages whose children show; the open page's parents by default
+  notifications?: number;                     // the red count on the bell
+  theme?: "light" | "dark";
+}
+
+interface ConfluencePageSeed {
+  id: string;                                 // required - unique in the space
+  title: string;                              // required
+  author?: string;                            // person id; me by default
+  updated?: number | string;                  // "Last updated"; now by default
+  readTime?: string;                          // "6 min read"; worked out from the words by default
+  blocks?: ConfluenceBlock[];
+  likes?: string[];                           // person ids
+  reactions?: { emoji: string; count: number; mine?: boolean }[];
+  comments?: { id?: string; from: string; at?: number | string; text: string }[];
+  starred?: boolean;
+  children?: ConfluencePageSeed[];
+}
+
+type LozengeColor = "grey" | "blue" | "green" | "yellow";
+
+type ConfluenceBlock =                        // every text, cell and item is rich text (see "The data")
+  | { type: "heading"; text: string; level?: 2 | 3; id?: string } // level 2 (default) lists under "On this page"
+  | { type: "paragraph"; text: string }
+  | { type: "list"; items: string[]; ordered?: boolean }
+  | { type: "panel"; tone: "info" | "note" | "warning" | "success"; text: string }
+  | { type: "table"; head: string[]; rows: string[][] }
+  | { type: "code"; code: string; language?: string }              // "sql" colors keywords
+  | { type: "tasks"; items: { text: string; done?: boolean }[] }   // the signed-in person can tick them
+  | { type: "custom"; kind: string; data?: unknown };             // drawn by `renderBlock`
+```
+
+### What the world can do
+
+All functions are stable across renders. A missing page id throws.
+
+- `addComment(pageId: string, from: string, text: string, opts?: { notify?: boolean }): string` - a comment under the page; returns its id. A toast says so when `from` is not the signed-in person (`notify` overrides that).
+- `updatePage(pageId: string, patch: PagePatch): void` - `PagePatch` is a partial of `title, author, readTime, blocks, likes, reactions, starred`, plus `updated?: number | string`. "Last updated" moves to now when `title` or `blocks` change, unless `updated` is given. New `blocks` reset the read time unless `readTime` is set.
+- `addPage(page: ConfluencePageSeed, parent?: string): void` - a new page (with its `children`), last under `parent`, or at the top level. Returns nothing: you choose `page.id`.
+- `like(pageId: string, personId: string, liked?: boolean): void` - someone likes the page (`liked` defaults to true), or stops.
+- `react(pageId: string, emoji: string): void` - adds 1 to that emoji's pill, making it if needed.
+- `notify(count: number): void` - sets the count on the bell (it does not add).
+- `open(pageId: string): void` - shows a page and expands its parents. This one does not fire an `open` event.
+- `toast(text: string): void` - a notice at the bottom.
+- `page: ConfluencePage` - the page on screen now (`id, title, parent, children, author, updated, readTime?, blocks, likes, reactions, comments, starred`).
+- `state: ConfluenceState` - see State.
+- Read-only: `seed`, `me`, `people: Record<string, Person>` (`id, name, initials, color, photo?`), `notice`.
+- `ui` is what `<Confluence>` wires to the signed-in person's clicks. Do not call it from the world.
+
+### Events
+
+```ts
+type ConfluenceEvent =
+  | { type: "open"; pageId: string }
+  | { type: "like"; pageId: string; liked: boolean }
+  | { type: "react"; pageId: string; emoji: string; added: boolean }
+  | { type: "comment"; pageId: string; text: string; id: string }
+  | { type: "check"; pageId: string; block: number; item: number; text: string; done: boolean } // block/item are indexes
+  | { type: "star"; pageId: string; starred: boolean }
+  | { type: "search"; query: string }
+  | {
+      type: "action";
+      kind: "edit" | "share" | "more" | "create" | "add-page" | "home" | "recent" | "spaces" | "overview" | "blogs" | "notifications" | "jira" | "reply" | "like-comment";
+      pageId?: string;
+      id?: string;                            // issue key for "jira"; comment id for "reply" and "like-comment"
+    };
+```
+
+The kit has no page editor: Edit, Create and "+" only fire an `action`
+event. If the candidate must write, draw a form yourself (a `custom` block,
+or a pane next to the kit) and put the result in with `updatePage` or
+`addPage`.
+
+### State
+
+`confluence.state` is a `ConfluenceState`: plain JSON (`version: 1`,
+`current`, `roots`, `pages` by id, `expanded`, `notifications`, `theme`,
+`seq`). Save it whenever it changes and pass it back as
+`useConfluence(seed, { restore })`. `restore` is read only on the first
+render, and only when `restore.version === 1`, so load the saved state
+before you mount the component that calls `useConfluence`.
+
+### The component
+
+```ts
+interface ConfluenceProps {
+  confluence: ConfluenceSpace;                // required - what useConfluence returned
+  renderBlock?: (block: Extract<ConfluenceBlock, { type: "custom" }>, page: ConfluencePage) => ReactNode;
+  className?: string;
+  style?: CSSProperties;
+}
+```
+
+It fills its parent, so the parent needs a height. It hides "On this page"
+under 1100px wide and switches to the mobile layout under 760px.
+
+### Wiring it in an episode
+
+```tsx
+import { useEffect, useState } from "react";
+import { casuro } from "@/lib/casuro";
+import { Confluence, useConfluence, type ConfluenceSeed, type ConfluenceState } from "./apps/confluence";
+
+const seed: ConfluenceSeed = {
+  space: { name: "Platform", site: "Northwind" },
+  me: "sam",
+  people: { sam: { name: "Sam Rivera" }, priya: { name: "Priya Shah" }, leo: { name: "Leo Park" } },
+  pages: [
+    { id: "runbooks", title: "Runbooks", author: "leo", children: [
+      { id: "keys", title: "Key rotation", author: "priya", updated: "2026-09-20", blocks: [
+        { type: "panel", tone: "info", text: "Owner: @priya. Status: {status:Draft|blue}" },
+        { type: "heading", text: "Steps" },
+        { type: "tasks", items: [{ text: "Generate the new key", done: true }, { text: "Roll it out" }] },
+      ] },
+    ] },
+  ],
+  open: "keys",
+};
+
+// `restore` is read once, so load the saved state before mounting the wiki.
+export function Episode() {
+  const [saved, setSaved] = useState<ConfluenceState | null | undefined>(undefined);
+  useEffect(() => void casuro.store.get<ConfluenceState>().then(setSaved), []);
+  if (saved === undefined) return null;
+  return <Wiki saved={saved} />;
+}
+
+function Wiki({ saved }: { saved: ConfluenceState | null }) {
+  const confluence = useConfluence(seed, {
+    restore: saved,
+    onEvent(event) {
+      if (event.type === "check")
+        void casuro.track.decision({ summary: `${event.done ? "Ticked" : "Unticked"} "${event.text}" on ${event.pageId}` });
+      if (event.type === "comment") {
+        void casuro.track.message({ from: "candidate", to: "Priya Shah", channel: event.pageId, text: event.text });
+        void answer(event.pageId, event.text);
+      }
+      if (event.type === "action" && event.kind === "edit") confluence.toast("Editing is off for this page");
+    },
+  });
+
+  // Priya, the author, answers every comment.
+  async function answer(pageId: string, text: string) {
+    const page = confluence.state.pages[pageId];
+    const reply = await casuro.llm(
+      [
+        { role: "system", content: `You are Priya Shah, who wrote the Confluence page "${page?.title}". Reply to a comment in one or two sentences.` },
+        { role: "user", content: text },
+      ],
+      { persona: "Priya Shah" },
+    );
+    confluence.addComment(pageId, "priya", reply);
+    void casuro.track.message({ from: "Priya Shah", to: "candidate", channel: pageId, text: reply });
+  }
+
+  // Two minutes in, Leo publishes an incident page (once: a restored state already has it).
+  useEffect(() => {
+    if (confluence.state.pages["keys-incident"]) return;
+    const t = setTimeout(() => {
+      confluence.addPage(
+        { id: "keys-incident", title: "Incident: old key still in use", author: "leo", blocks: [
+          { type: "panel", tone: "warning", text: "The old key expires *tonight*. @sam please confirm the rollout in [[keys]]." },
+        ] },
+        "runbooks",
+      );
+      confluence.addComment("keys", "leo", "Opened [[keys-incident]] - we are out of time on this one.");
+      confluence.notify(1);
+    }, 120_000);
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => void casuro.store.set(confluence.state), [confluence.state]);
+
+  return (
+    <div style={{ height: "100vh" }}>
+      <Confluence confluence={confluence} />
+    </div>
+  );
+}
+```
+
 ## Changing it
 
 The files are small and do one thing each:

@@ -107,6 +107,205 @@ The signed-in person's actions arrive through `onEvent`:
 `whatsapp.state` is everything that changed, as plain JSON: save it, and
 pass it back as `useWhatsApp(seed, { restore })` to pick up where they left off.
 
+## API reference
+
+Everything below is what the kit's source defines; nothing else exists.
+
+### Imports
+
+```ts
+import {
+  WhatsApp, useWhatsApp,
+  type WhatsAppProps, type WhatsAppApp, type WhatsAppOptions, type DeliverOptions, type Person, type ChatInfo,
+  type WhatsAppSeed, type WhatsAppState, type WhatsAppEvent, type WhatsAppMessage, type WhatsAppMessageInput, type Ticks,
+} from "./apps/whatsapp";
+```
+
+`index.ts` also re-exports every other type in `types.ts` (`WhatsAppPerson`, `WhatsAppChatSeed`, `WhatsAppChatState`, `WhatsAppQuote`, `WhatsAppReaction`, `WhatsAppImage`, `WhatsAppDocument`).
+
+### The hook
+
+```ts
+function useWhatsApp(seed: WhatsAppSeed, options?: WhatsAppOptions): WhatsAppApp;
+
+interface WhatsAppOptions {
+  restore?: WhatsAppState | null;             // a saved `whatsapp.state`; read on the first render only
+  onEvent?: (event: WhatsAppEvent) => void;   // everything the signed-in person does
+}
+```
+
+It throws if `seed.me` is not a key of `seed.people`. A `restore` whose `version` is not `1` is ignored.
+
+### The seed
+
+```ts
+type Ticks = "sent" | "delivered" | "read";
+
+interface WhatsAppSeed {
+  me: string;                                  // required: the signed-in person's id
+  people: Record<string, WhatsAppPerson>;      // required: everyone, `me` included
+  chats: WhatsAppChatSeed[];                   // required, list order (pinned go first)
+  open?: string;                               // chat id on screen; the first chat by default
+  theme?: "light" | "dark";
+}
+
+interface WhatsAppPerson {
+  name: string;                                // required
+  photo?: string; color?: string; initials?: string;
+  online?: boolean;                            // default false
+  lastSeen?: string;                           // "last seen today at 09:34"
+}
+
+interface WhatsAppChatSeed {
+  id: string;                                  // required: what deliver, open and events use
+  with?: string;                               // one-to-one: the other person's id
+  name?: string; members?: string[];           // group: name, members without `me`
+  photo?: string;                              // group picture
+  pinned?: boolean; muted?: boolean;
+  unread?: number;
+  typing?: string;                             // a person typing when the app opens
+  messages?: WhatsAppMessageInput[];
+}
+
+interface WhatsAppMessageInput {
+  from: string;                                // required: a person id
+  id?: string;
+  at?: number | string;                        // ms or a date string; now by default
+  text?: string;                               // or an image caption; line breaks kept
+  ticks?: Ticks;                               // `me`'s messages; "read" in a seed, "sent" when sent live
+  quote?: { from: string; text: string };
+  image?: { src?: string; alt?: string; title?: string; bars?: number[]; line?: number[] };   // no src = drawn chart
+  voice?: { seconds: number };
+  document?: { name: string; meta?: string; ext?: string };
+  reactions?: { emoji: string; count: number; mine?: boolean }[];
+  custom?: { type: string; data?: unknown };   // drawn by <WhatsApp renderCustom>
+}
+```
+
+### What the world can do
+
+All of these are stable across renders. A `chatId` is a seed chat's `id`, or a person's id, which starts a one-to-one chat with them on first use (any other id throws).
+
+```ts
+whatsapp.deliver(chatId: string, message: WhatsAppMessageInput, options?: DeliverOptions): Promise<string>
+  // Lands a message, moves the chat to the top, bumps unread when it is not on screen.
+  // Resolves with the message id.
+interface DeliverOptions {
+  typing?: number;    // show the sender typing for this many ms first
+  notify?: boolean;   // also toast when the chat is not on screen; default false
+}
+whatsapp.setTicks(messageId: string, ticks: Ticks): void       // only on `me`'s messages
+whatsapp.typingIn(chatId: string, from: string | null): void
+whatsapp.setOnline(personId: string, online: boolean): void    // going offline records "last seen"
+whatsapp.react(messageId: string, emoji: string): void         // someone else reacts
+whatsapp.open(chatId: string): void                            // show a chat (also fires "open")
+whatsapp.toast(text: string): void
+```
+
+Read-only fields: `whatsapp.state`, `whatsapp.seed`, `whatsapp.me`, `whatsapp.people` (`Record<string, Person>`), `whatsapp.notice`, `whatsapp.chat(id: string): ChatInfo` (a chat's name, `group`, `with`, `members`, `photo`). `whatsapp.ui` (`send`, `toggleReaction`, `setTheme`, `emit`) is what `<WhatsApp>` calls; a world does not need it.
+
+### Events
+
+```ts
+type WhatsAppEvent =
+  | { type: "send"; chat: string; text: string; id: string }
+  | { type: "open"; chat: string }
+  | { type: "react"; id: string; emoji: string; added: boolean }
+  | { type: "play"; id: string }                     // a voice note
+  | { type: "download"; id: string; name: string }   // a document
+  | { type: "call"; chat: string; video: boolean }
+  | { type: "action"; label: string; chat?: string }; // any other button, by its label
+```
+
+The candidate's messages stay at one grey tick until the world calls `whatsapp.setTicks(event.id, "delivered")` and then `"read"`: do it before a persona answers, or every message looks unread.
+
+### State
+
+`whatsapp.state` is a `WhatsAppState`: plain JSON (`version: 1`, `open`, `order`, `chats` by id, `online`, `lastSeen`, `theme`, `seq`), a new object after every change. Save it, and pass it back as `useWhatsApp(seed, { restore })`; `restore` is read only when the hook first mounts, so load the saved state before rendering the component that calls `useWhatsApp`.
+
+### The component
+
+```ts
+interface WhatsAppProps {
+  whatsapp: WhatsAppApp;                                   // required: from useWhatsApp
+  renderCustom?: (message: WhatsAppMessage) => ReactNode;  // a message's `custom` part
+  className?: string;
+  style?: CSSProperties;
+}
+```
+
+`<WhatsApp>` fills its parent, so the parent needs a height. Under 760px of width it uses the phone layout.
+
+### Wiring it in an episode
+
+```tsx
+import { useEffect, useState } from "react";
+import { casuro } from "@/lib/casuro";
+import { WhatsApp, useWhatsApp, type WhatsAppSeed, type WhatsAppState } from "./apps/whatsapp";
+
+const seed: WhatsAppSeed = {
+  me: "you",
+  people: {
+    you: { name: "Sam Rivera" },
+    priya: { name: "Priya Shah", online: true },
+    tom: { name: "Tom Berg", lastSeen: "last seen today at 08:12" },
+  },
+  chats: [
+    // Keep a one-to-one chat's id equal to the person's id, so deliver("priya", ...) finds it.
+    { id: "priya", with: "priya", messages: [{ from: "priya", at: Date.now() - 3_600_000, text: "Are we still on for 3?" }] },
+    { id: "team", name: "Launch crew", members: ["priya", "tom"], messages: [{ from: "tom", text: "Deck is final 🎉" }] },
+  ],
+};
+
+export default function Episode() {
+  // `restore` is read once, on mount: load the saved state before rendering the phone.
+  const [saved, setSaved] = useState<WhatsAppState | null | undefined>(undefined);
+  useEffect(() => void casuro.store.get<WhatsAppState>().then(setSaved), []);
+  if (saved === undefined) return null;
+  return <Phone saved={saved} />;
+}
+
+function Phone({ saved }: { saved: WhatsAppState | null }) {
+  const whatsapp = useWhatsApp(seed, {
+    restore: saved,
+    async onEvent(event) {
+      if (event.type !== "send") return;
+      void casuro.track.message({ from: "candidate", to: whatsapp.chat(event.chat).name, channel: "whatsapp", text: event.text });
+      if (event.chat !== "priya") return;
+      whatsapp.setTicks(event.id, "read");
+      whatsapp.typingIn("priya", "priya");
+      const reply = await casuro.llm(
+        [
+          { role: "system", content: "You are Priya Shah. Reply as a short WhatsApp message." },
+          { role: "user", content: event.text },
+        ],
+        { persona: "Priya Shah" },
+      );
+      await whatsapp.deliver("priya", { from: "priya", text: reply });   // clears Priya's typing
+      void casuro.track.message({ from: "Priya Shah", to: "candidate", channel: "whatsapp", text: reply });
+    },
+  });
+
+  // One timed beat: Tom writes in the group 25 seconds in (only on a fresh start).
+  useEffect(() => {
+    if (saved) return;
+    const t = setTimeout(() => {
+      void whatsapp.deliver("team", { from: "tom", text: "Client moved the call to 2pm, can someone confirm?" }, { typing: 1500, notify: true });
+    }, 25_000);
+    return () => clearTimeout(t);
+  }, [saved, whatsapp.deliver]);
+
+  // Save every change.
+  useEffect(() => void casuro.store.set(whatsapp.state), [whatsapp.state]);
+
+  return (
+    <div style={{ height: "100vh" }}>
+      <WhatsApp whatsapp={whatsapp} />
+    </div>
+  );
+}
+```
+
 ## Changing it
 
 The files are small and do one thing each:
