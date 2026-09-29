@@ -14,6 +14,12 @@ npm install
 npm run dev   # then open /preview/?app=slack and /apps/slack.html
 ```
 
+`desktops/` has lightweight desktop shells in the same shape: `macos.html`,
+`windows.html` and `linux.html` (Ubuntu), each with a React version next to
+it whose windows take any React content, so an app kit can run inside a
+desktop window. Preview them with `?app=macos`, `?app=windows` and
+`?app=linux`.
+
 Any app's name works in `?app=`: calendar, calendly, chatgpt, claude-code,
 confluence, datadog, docs, gmail, greenhouse, intercom, jira, linear, meet,
 notion, outlook, slack, teams, whatsapp, zendesk, zoom.
