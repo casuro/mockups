@@ -1,0 +1,119 @@
+/*
+ * macOS's look, from desktops/macos.html. Scoped to .kit-macos so it neither
+ * leaks into the page around it nor picks up the page's styles, and sized by
+ * its own box, so it works as the whole screen or one pane of it.
+ */
+@scope (.kit-macos) {
+  /* The page's element styles (a CSS reset, Tailwind's preflight) stop at the
+     desktop's edge. SVG is left alone: its drawing attributes count as styles. */
+  :where(:scope, :scope *:not(svg, svg *)) { all: revert; }
+
+  :scope {
+    color-scheme: light;
+    --text: #1d1d1f; --text-3: rgba(60,60,67,.6); --accent: #0a84ff;
+    --bar: rgba(246,246,250,.42); --bar-text: #111; --menu: rgba(242,242,246,.82); --edge: rgba(0,0,0,.12); --line: rgba(255,255,255,.55);
+    --sep: rgba(0,0,0,.1); --win: #fff; --title: #ececec; --light-off: #d0d0d2;
+    --dock: rgba(255,255,255,.28); --dock-edge: rgba(255,255,255,.5); --dot: rgba(0,0,0,.7);
+    --shadow: 0 22px 70px rgba(0,0,0,.3), 0 4px 14px rgba(0,0,0,.12);
+  }
+  /* Light is the default; dark only applies when switched on */
+  :scope[data-theme="dark"] {
+    color-scheme: dark;
+    --text: #f5f5f7; --text-3: rgba(235,235,245,.55);
+    --bar: rgba(20,20,26,.38); --bar-text: #fff; --menu: rgba(38,38,44,.8); --edge: rgba(0,0,0,.5); --line: rgba(255,255,255,.12);
+    --sep: rgba(255,255,255,.12); --win: #1e1e20; --title: #2c2c2e; --light-off: #4a4a4e;
+    --dock: rgba(30,30,36,.32); --dock-edge: rgba(255,255,255,.16); --dot: rgba(255,255,255,.8);
+    --shadow: 0 22px 70px rgba(0,0,0,.55), 0 4px 14px rgba(0,0,0,.3);
+  }
+
+  * { box-sizing: border-box; }
+  :scope {
+    display: block; position: relative; height: 100%; overflow: hidden; outline: none;
+    container: macos / inline-size;
+    font: 13px/1.35 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: var(--text); background: #1b4fb8;
+    -webkit-font-smoothing: antialiased; user-select: none; -webkit-user-select: none;
+  }
+  button { font: inherit; color: inherit; background: none; border: 0; padding: 0; margin: 0; cursor: default; text-align: inherit; }
+  svg { display: block; }
+
+  .wall { position: absolute; inset: 0; overflow: hidden; background: radial-gradient(90% 70% at 10% 0%, #bfe3ff, transparent 55%), linear-gradient(160deg, #8fd0ff, #4a9cf5 35%, #1d5fd6 65%, #123fa8); }
+  .wall i { position: absolute; border-radius: 50%; filter: blur(40px); }
+  .wall i:nth-child(1) { width: 140%; height: 60%; left: -30%; top: 28%; transform: rotate(-14deg); background: linear-gradient(90deg, transparent, rgba(214,240,255,.85) 45%, transparent); }
+  .wall i:nth-child(2) { width: 120%; height: 42%; left: -10%; top: 52%; transform: rotate(-9deg); background: linear-gradient(90deg, transparent, #2d6bff 40%, #6a4cff 75%, transparent); opacity: .75; }
+  .wall i:nth-child(3) { width: 90%; height: 34%; right: -25%; top: 8%; transform: rotate(-22deg); background: linear-gradient(90deg, transparent, #7fe0ff 50%, #fff); opacity: .55; }
+  :scope[data-theme="dark"] .wall { background: radial-gradient(90% 70% at 10% 0%, #173a7a, transparent 55%), linear-gradient(160deg, #1a3a78, #0f2a66 35%, #0b1d4d 65%, #060d2a); }
+  :scope[data-theme="dark"] .wall i { opacity: .45; }
+
+  .menubar { position: absolute; inset: 0 0 auto; height: 28px; z-index: 9000; display: flex; align-items: center; justify-content: space-between; padding: 0 8px; color: var(--bar-text); background: var(--bar); backdrop-filter: blur(40px) saturate(1.8); -webkit-backdrop-filter: blur(40px) saturate(1.8); }
+  .menubar > div { display: flex; align-items: center; min-width: 0; overflow: hidden; }
+  .mb { height: 22px; padding: 0 9px; border-radius: 5px; display: flex; align-items: center; gap: 5px; white-space: nowrap; font-weight: 500; }
+  .mb svg { width: 17px; height: 17px; }
+  .mb svg.batt { width: 25px; height: 12px; }
+  .mb.apple svg { width: 14px; height: 17px; margin-top: -2px; }
+  .mb.app { font-weight: 700; }
+  .mb.open { background: rgba(127,127,127,.28); }
+  .clock { font-variant-numeric: tabular-nums; }
+  .menu { position: absolute; top: 30px; z-index: 9500; min-width: 210px; padding: 5px; border-radius: 10px; background: var(--menu); backdrop-filter: blur(50px) saturate(1.8); -webkit-backdrop-filter: blur(50px) saturate(1.8); box-shadow: 0 0 0 .5px var(--edge), inset 0 0 0 .5px var(--line), 0 12px 40px rgba(0,0,0,.22); }
+  .menu .it { display: flex; width: 100%; height: 22px; align-items: center; padding: 0 10px 0 22px; border-radius: 5px; position: relative; white-space: nowrap; }
+  .menu .k { margin-left: auto; padding-left: 24px; color: var(--text-3); }
+  .menu .chk::before { content: "\2713"; position: absolute; left: 7px; font-size: 12px; }
+  .menu .it:not(.dis):hover { background: var(--accent); color: #fff; }
+  .menu .it:not(.dis):hover .k { color: rgba(255,255,255,.85); }
+  .menu .dis { color: var(--text-3); }
+  .menu hr { border: 0; height: 1px; background: var(--sep); margin: 5px 10px; }
+
+  .icon { position: relative; width: 100%; height: 100%; border-radius: 22.5%; display: grid; overflow: hidden; background: #fff; box-shadow: inset 0 0 0 .5px rgba(0,0,0,.12), 0 1px 2px rgba(0,0,0,.18); }
+  .icon svg { width: 100%; height: 100%; }
+  .icon.bare { background: none; box-shadow: none; overflow: visible; }
+  .icon.bare svg { filter: drop-shadow(0 1px 1.5px rgba(0,0,0,.25)); }
+
+  .dock-wrap { position: absolute; inset: auto 0 6px; z-index: 8000; display: flex; justify-content: center; pointer-events: none; }
+  .dock { pointer-events: auto; position: relative; display: flex; align-items: flex-end; padding: 5px; height: 62px; border-radius: 20px; background: var(--dock); backdrop-filter: blur(30px) saturate(1.7); -webkit-backdrop-filter: blur(30px) saturate(1.7); box-shadow: inset 0 0 0 1px var(--dock-edge), 0 0 0 .5px rgba(0,0,0,.18), 0 10px 30px rgba(0,0,0,.18); }
+  .ditem { position: relative; display: block; width: 54px; height: 50px; padding: 0 2px; transition: transform .15s; }
+  .ditem:hover { transform: translateY(-4px); }
+  .ditem:active .icon { filter: brightness(.82); }
+  .ditem .dot { position: absolute; left: 50%; bottom: -4px; width: 4px; height: 4px; margin-left: -2px; border-radius: 50%; background: var(--dot); opacity: 0; }
+  .ditem.running .dot { opacity: 1; }
+  .ditem .tip { position: absolute; bottom: calc(100% + 12px); left: 50%; transform: translateX(-50%); padding: 3px 10px; border-radius: 7px; background: var(--menu); box-shadow: 0 0 0 .5px var(--edge), 0 4px 14px rgba(0,0,0,.18); white-space: nowrap; opacity: 0; pointer-events: none; }
+  .ditem:hover .tip { opacity: 1; }
+  .dsep { width: 1px; align-self: stretch; margin: 6px 7px; background: var(--sep); }
+
+  .windows { position: absolute; inset: 28px 0 0; z-index: 10; pointer-events: none; }
+  .win { position: absolute; pointer-events: auto; display: flex; flex-direction: column; border-radius: 14px; background: var(--win); box-shadow: 0 0 0 .5px var(--edge), 0 12px 36px rgba(0,0,0,.16); overflow: hidden; animation: winIn .2s cubic-bezier(.2,.8,.3,1); transition: transform .3s cubic-bezier(.2,.8,.3,1), opacity .3s; }
+  @keyframes winIn { from { transform: scale(.94); opacity: 0; } }
+  .win.focused { box-shadow: 0 0 0 .5px var(--edge), var(--shadow); }
+  .win.min { transform: translateY(40vh) scale(.08); opacity: 0; visibility: hidden; transition: transform .35s cubic-bezier(.5,0,.3,1), opacity .35s, visibility 0s .35s; }
+  .win.max { left: 0 !important; top: 0 !important; width: 100% !important; height: calc(100% - 82px) !important; border-radius: 0; }
+  .tbar { position: relative; height: 30px; flex: none; display: flex; align-items: center; background: var(--title); border-bottom: .5px solid var(--sep); }
+  .tt { position: absolute; left: 90px; right: 90px; text-align: center; font-weight: 600; opacity: .8; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; pointer-events: none; }
+  .win:not(.focused) .tt { opacity: .45; }
+  .lights { display: flex; gap: 8px; padding: 0 13px; height: 100%; align-items: center; z-index: 1; }
+  .lights button { width: 12px; height: 12px; border-radius: 50%; box-shadow: inset 0 0 0 .5px rgba(0,0,0,.18); display: grid; place-items: center; }
+  .lights .cl { background: #ff5f57; } .lights .mn { background: #febc2e; } .lights .zm { background: #28c840; }
+  .win:not(.focused) .lights:not(:hover) button { background: var(--light-off); }
+  .lights svg { width: 8px; height: 8px; opacity: 0; stroke: rgba(0,0,0,.55); fill: none; stroke-width: 1.3; stroke-linecap: round; }
+  .lights svg .fill { fill: rgba(0,0,0,.55); stroke: none; }
+  .lights:hover svg { opacity: 1; }
+  .wbody { flex: 1; min-height: 0; position: relative; overflow: auto; }
+  :scope.busy .wbody { pointer-events: none; }
+  .rz { position: absolute; z-index: 5; }
+  .rz.s { left: 8px; right: 8px; bottom: 0; height: 6px; cursor: ns-resize; }
+  .rz.e { top: 8px; bottom: 8px; right: 0; width: 6px; cursor: ew-resize; }
+  .rz.se { bottom: 0; right: 0; width: 14px; height: 14px; cursor: nwse-resize; }
+  .win.max .rz { display: none; }
+
+  .toasts { position: absolute; top: 36px; right: 10px; z-index: 9400; display: flex; flex-direction: column; gap: 8px; width: min(340px, calc(100% - 20px)); }
+  .toast { display: flex; gap: 10px; align-items: flex-start; padding: 11px 14px 11px 11px; border-radius: 18px; background: var(--menu); backdrop-filter: blur(40px) saturate(1.8); -webkit-backdrop-filter: blur(40px) saturate(1.8); box-shadow: 0 0 0 .5px var(--edge), 0 8px 28px rgba(0,0,0,.18); animation: toastIn .35s cubic-bezier(.2,.9,.3,1.1); }
+  @keyframes toastIn { from { transform: translateX(110%); } }
+  .toast .ti { width: 34px; height: 34px; flex: none; border-radius: 8px; display: grid; place-items: center; background: linear-gradient(160deg, #5e5e64, #1c1c1e); color: #fff; }
+  .toast .ti svg { width: 16px; height: 19px; }
+  .toast b { display: block; }
+  .toast .now { margin-left: auto; font-size: 12px; color: var(--text-3); }
+
+  /* A narrow box: windows fill it, like apps on a phone */
+  @container macos (max-width: 759px) {
+    .win { left: 0 !important; top: 0 !important; width: 100% !important; height: calc(100% - 82px) !important; border-radius: 0; }
+    .rz, .menubar .mb.clock { display: none; }
+  }
+}
