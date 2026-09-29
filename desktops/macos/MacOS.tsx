@@ -83,6 +83,17 @@ export function MacOS({ mac, dock = [], renderWindow, idleApp = "Finder", onTras
   return (
     <div className={["kit-macos", busy && "busy", className].filter(Boolean).join(" ")} style={style} data-theme={state.theme} tabIndex={-1} onKeyDown={onKey}>
       <div className="wall" aria-hidden="true"><i /><i /><i /></div>
+      {/* In a narrow box, the Dock's apps as a phone's home screen. */}
+      <nav className="phone" aria-label="Home screen">
+        <div className="pg">
+          {dock.map((d) => (
+            <button key={d.id} className="pa" onClick={() => openDock(d)}>
+              <span className="picon">{d.icon}</span>
+              {d.name}
+            </button>
+          ))}
+        </div>
+      </nav>
 
       <header className="menubar">
         <div>
@@ -200,6 +211,8 @@ function Window({ win, focused, mac, setBusy, onClose, onMinimize, onMaximize, c
       </div>
       <div className="wbody">{children}</div>
       {["e", "s", "se"].map((d) => <div key={d} className={`rz ${d}`} onPointerDown={resize(d)} />)}
+      {/* The phone's home bar: back to the home screen. */}
+      <button className="home" aria-label="Home" onClick={onMinimize} />
     </section>
   );
 }

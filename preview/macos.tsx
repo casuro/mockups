@@ -1,5 +1,6 @@
 import { useState, type CSSProperties } from "react";
 import { AppIcon, MacOS, useMacOS, type DockItem, type MacWindowInput } from "../desktops/macos";
+import "./macos.css";
 
 // desktops/macos.html's desktop, driving the React version: the same Dock
 // and placeholder windows (Finder, Safari, Notes, Terminal, System Settings).
@@ -115,8 +116,12 @@ export function MacOSPreview() {
   return (
     <div style={{ height: "100vh" }}>
       <MacOS mac={mac} dock={dock} onTrash={() => mac.open({ id: "trash", title: "Trash", app: "Finder", dockId: "finder", width: 600, height: 380 })}
-        renderWindow={(w) => w.id === "finder" ? <Finder /> : w.id === "trash" ? <Finder trash /> : w.id === "safari" ? <Safari /> : w.id === "notes" ? <Notes />
-          : w.id === "terminal" ? <Terminal /> : <Settings dark={dark} toggle={() => mac.setTheme(dark ? "light" : "dark")} />} />
+        renderWindow={(w) => (
+          <div className="mac-sample">
+            {w.id === "finder" ? <Finder /> : w.id === "trash" ? <Finder trash /> : w.id === "safari" ? <Safari /> : w.id === "notes" ? <Notes />
+              : w.id === "terminal" ? <Terminal /> : <Settings dark={dark} toggle={() => mac.setTheme(dark ? "light" : "dark")} />}
+          </div>
+        )} />
     </div>
   );
 }
