@@ -35,7 +35,7 @@ export function TopNav() {
       <button className="menu-btn" aria-label="Menu" aria-expanded={navOpen} onClick={() => { setMenu(null); setNavOpen(!navOpen); }}>
         <I.Menu />
       </button>
-      <div className="brand"><I.PagerDutyLogo /><span>pagerduty</span></div>
+      <div className="brand"><I.PagerDutyLogo className="pd-logo" fill="currentColor" /><span>pagerduty</span></div>
       <nav className="nav" aria-label="Main">{links}</nav>
       <div className="grow" />
       <div className="top-right">

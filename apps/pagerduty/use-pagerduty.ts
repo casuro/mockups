@@ -148,6 +148,12 @@ export function usePagerDuty(seed: PagerDutySeed, options: PagerDutyOptions = {}
   const ref = useRef(state);
   const opts = useRef(options);
   opts.current = options;
+  // The seed and its people are read through refs, so the functions below
+  // stay the same even when `seed` is a new object every render.
+  const seedRef = useRef(seed);
+  seedRef.current = seed;
+  const peopleRef = useRef(people);
+  peopleRef.current = people;
   const [notice, setNotice] = useState<{ text: string; n: number } | null>(null);
 
   const update = useCallback((fn: (draft: PagerDutyState) => void) => {
@@ -160,7 +166,7 @@ export function usePagerDuty(seed: PagerDutySeed, options: PagerDutyOptions = {}
 
   const emit = useCallback((event: PagerDutyEvent) => opts.current.onEvent?.(event), []);
   const toast = useCallback((text: string) => setNotice((n) => ({ text, n: (n?.n ?? 0) + 1 })), []);
-  const nameOf = useCallback((id: string) => people[id]?.name ?? id, [people]);
+  const nameOf = useCallback((id: string) => peopleRef.current[id]?.name ?? id, []);
 
   /** The incident, in a draft of the state; throws when there is none. */
   const need = (s: PagerDutyState, id: number) => {
@@ -208,7 +214,7 @@ export function usePagerDuty(seed: PagerDutySeed, options: PagerDutyOptions = {}
         return `Requested ${nameOf(arg)} to respond`;
       }
       if (what === "escalate" && i.status !== "resolved") {
-        const levels = s.policies[seed.services[i.service]?.policy ?? ""]?.levels ?? [];
+        const levels = s.policies[seedRef.current.services[i.service]?.policy ?? ""]?.levels ?? [];
         if (i.level >= levels.length) return null;
         i.level += 1;
         i.assignee = levels[i.level - 1];
@@ -219,7 +225,7 @@ export function usePagerDuty(seed: PagerDutySeed, options: PagerDutyOptions = {}
       }
       return null;
     },
-    [nameOf, seed.services]
+    [nameOf]
   );
 
   // ---------- What the world does ----------
@@ -231,7 +237,7 @@ export function usePagerDuty(seed: PagerDutySeed, options: PagerDutyOptions = {}
       update((s) => {
         const id = input.id ?? nextNumber(s.incidents);
         if (s.incidents.some((i) => i.id === id)) throw new Error(`PagerDuty: incident #${id} already exists`);
-        made = makeIncident(input, id, s.policies, seed, people, () => `t${++s.seq}`);
+        made = makeIncident(input, id, s.policies, seedRef.current, peopleRef.current, () => `t${++s.seq}`);
         s.incidents.push(made);
         if (o.open) s.open = id;
       });
@@ -240,7 +246,7 @@ export function usePagerDuty(seed: PagerDutySeed, options: PagerDutyOptions = {}
       if (o.notify ?? i.assignee === me) toast(`Incident #${i.id} triggered: ${i.title}`);
       return i.id;
     },
-    [update, seed, people, me, toast]
+    [update, me, toast]
   );
 
   /** Someone (`by`, the signed-in person by default) acknowledges an incident. */
@@ -427,6 +433,11 @@ export function usePagerDuty(seed: PagerDutySeed, options: PagerDutyOptions = {}
 
   const action = useCallback((label: string) => emit({ type: "action", label }), [emit]);
 
+  const ui = useMemo(
+    () => ({ openIncident, act, setDraft, note, select, selectAll, bulk, filter, action, emit }),
+    [openIncident, act, setDraft, note, select, selectAll, bulk, filter, action, emit]
+  );
+
   return {
     seed,
     people,
@@ -453,7 +464,7 @@ export function usePagerDuty(seed: PagerDutySeed, options: PagerDutyOptions = {}
     toast,
     setTheme,
     // The signed-in person (wired by <PagerDuty>)
-    ui: { openIncident, act, setDraft, note, select, selectAll, bulk, filter, action, emit },
+    ui,
   };
 }
 

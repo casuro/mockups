@@ -117,7 +117,11 @@ export function Supabase({ supabase: app, className, style }: SupabaseProps) {
 
   const keys = useRef<(e: KeyboardEvent) => void>(() => {});
   keys.current = (e: KeyboardEvent) => {
-    const mod = e.metaKey || e.ctrlKey;
+    // ⌘K and ⌘↵ while focus is in the kit, or nowhere yet (the page just
+    // loaded): on a desktop, another app with focus keeps its own.
+    const active = document.activeElement;
+    const ours = !active || active === document.body || !!root.current?.contains(active);
+    const mod = (e.metaKey || e.ctrlKey) && ours;
     if (mod && e.key.toLowerCase() === "k") {
       e.preventDefault();
       setOverlay(overlay?.kind === "palette" ? null : { kind: "palette" });

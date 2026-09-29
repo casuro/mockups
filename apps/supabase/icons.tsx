@@ -66,7 +66,7 @@ export const ArrowUp = icon(<path d="M12 19V5M5 12l7-7 7 7" />);
 export const ArrowDown = icon(<path d="M12 5v14M19 12l-7 7-7-7" />);
 
 /** The Supabase mark, with its own gradient ids so it can appear more than once. */
-export function Logo(props: SVGProps<SVGSVGElement>) {
+export function SupabaseLogo(props: SVGProps<SVGSVGElement>) {
   const id = useId().replace(/:/g, "");
   return (
     <svg aria-hidden="true" viewBox="0 0 109 113" fill="none" {...props}>

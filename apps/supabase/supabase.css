@@ -209,7 +209,7 @@
       position: absolute; inset: 0 auto 0 0; width: 48px; background: var(--bg-alt); border-right: 1px solid var(--border);
       display: flex; flex-direction: column; padding: 8px 0; overflow: hidden; transition: width .18s ease, box-shadow .18s ease;
     }
-    .rail:hover .rail-nav, .rail:focus-within .rail-nav { width: 208px; box-shadow: var(--shadow-2); transition-delay: .12s; }
+    .rail:hover .rail-nav, .rail:has(:focus-visible) .rail-nav { width: 208px; box-shadow: var(--shadow-2); transition-delay: .12s; }
     .rail-group { display: flex; flex-direction: column; gap: 2px; padding: 0 8px; }
     .rail-sep { height: 1px; background: var(--border); margin: 8px 12px; flex: none; }
     .rail-item {
@@ -220,7 +220,7 @@
     .rail-item:hover { color: var(--text); background: var(--surface-3); }
     .rail-item.on { color: var(--text); background: var(--surface-3); }
     .rail-item .lbl { opacity: 0; transition: opacity .12s; }
-    .rail:hover .rail-item .lbl, .rail:focus-within .rail-item .lbl { opacity: 1; transition-delay: .15s; }
+    .rail:hover .rail-item .lbl, .rail:has(:focus-visible) .rail-item .lbl { opacity: 1; transition-delay: .15s; }
     .rail-bottom { margin-top: auto; }
 
     /* ---------- Product menu (table list, snippet list) ---------- */
@@ -437,7 +437,7 @@
     .fp-foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 8px 12px; border-top: 1px solid var(--border); }
     .asc { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-2); white-space: nowrap; }
 
-    .palette { position: absolute; inset: 0; z-index: 90; background: var(--scrim); display: flex; justify-content: center; align-items: flex-start; padding: 12vh 16px 16px; animation: supabase-fade .12s ease-out; }
+    .palette { position: absolute; inset: 0; z-index: 90; background: var(--scrim); display: flex; justify-content: center; align-items: flex-start; padding: 96px 16px 16px; animation: supabase-fade .12s ease-out; }
     .pal { width: min(560px, 100%); background: var(--surface); border: 1px solid var(--border); border-radius: 10px; box-shadow: var(--shadow-3); overflow: hidden; }
     .pal-in { display: flex; align-items: center; gap: 10px; padding: 0 14px; border-bottom: 1px solid var(--border); }
     .pal-in .i { color: var(--text-3); }

@@ -93,7 +93,7 @@ export function TopBar() {
   return (
     <header className="top">
       <button className="icon-btn mb-only" aria-label="Open navigation" onClick={() => setRailOpen(true)}><I.Menu /></button>
-      <button className="top-logo" aria-label="Project overview" data-tip="Project overview" onClick={() => go("home", "Project overview")}><I.Logo /></button>
+      <button className="top-logo" aria-label="Project overview" data-tip="Project overview" onClick={() => go("home", "Project overview")}><I.SupabaseLogo /></button>
       <button className="crumb dt-only" aria-label={`Organization: ${org.name}`} onClick={(e) => openPop(e.currentTarget, crumbMenu("org"))}>
         <span className="org-av">{org.name.charAt(0)}</span>
         {org.name}
@@ -148,7 +148,7 @@ export function Rail() {
       <div className="drawer-scrim" onClick={() => setRailOpen(false)} />
       <div className="rail-nav">
         <div className="rail-drawer-head">
-          <I.Logo />
+          <I.SupabaseLogo />
           <div>
             <b style={{ fontWeight: 500 }}>{project.name}</b>
             <span>{org.name} · {project.branch ?? "main"}</span>

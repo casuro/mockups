@@ -67,7 +67,6 @@ function initialState(seed: SupabaseSeed): SupabaseState {
     page: {},
     mode: {},
     theme: seed.theme ?? "light",
-    seq: 0,
   };
 }
 
@@ -203,6 +202,7 @@ export function useSupabase(seed: SupabaseSeed, options: SupabaseOptions = {}) {
   const open = useCallback(
     (target: OpenTarget) => {
       const key = "table" in target ? resolve(target.table) : null;
+      if ("snippet" in target && !ref.current.snippets.some((x) => x.id === target.snippet)) throw new Error(`Supabase: no snippet "${target.snippet}"`);
       update((s) => {
         if ("view" in target) s.view = target.view;
         if (key) {
@@ -211,7 +211,7 @@ export function useSupabase(seed: SupabaseSeed, options: SupabaseOptions = {}) {
           s.schema = s.tables[key].schema;
           s.view = "table";
         }
-        if ("snippet" in target && s.snippets.some((x) => x.id === target.snippet)) {
+        if ("snippet" in target) {
           if (!s.sqlTabs.includes(target.snippet)) s.sqlTabs.push(target.snippet);
           s.snippet = target.snippet;
           s.view = "sql";

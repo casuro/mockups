@@ -159,7 +159,7 @@ function Incident({ incident: i }: { incident: PagerDutyIncident }) {
               <div className="alert-row" key={n}>
                 <span className="src">{a.source ? <SourceMark source={a.source} /> : <I.Alert />}</span>
                 <div className="s">
-                  <b>{a.title}</b>
+                  <b>{a.title}{a.source && a.source !== "datadog" ? <span className="via">{sourceName(a.source)}</span> : null}</b>
                   <span>{[a.detail, ago(a.at)].filter(Boolean).join(" · ")}</span>
                 </div>
                 <span className={`alert-st ${done ? "resolved" : a.status}`}>{done ? "Resolved" : statusLabel(a.status)}</span>

@@ -24,6 +24,7 @@ export function PagerDuty({ pagerduty, renderCustom, className, style }: PagerDu
   const [menu, setMenu] = useState<Menu>(null);
   const [navOpen, setNavOpen] = useState(false);
   const [, tick] = useState(0);
+  const root = useRef<HTMLDivElement>(null);
   const { state } = pagerduty;
 
   // "12 min ago" and "Open for" keep moving.
@@ -52,12 +53,25 @@ export function PagerDuty({ pagerduty, renderCustom, className, style }: PagerDu
     return () => document.removeEventListener("keydown", onKey);
   }, []);
 
+  // A press outside the kit (another app on a desktop) closes the menus too.
+  useEffect(() => {
+    if (!menu && !navOpen) return;
+    const down = (e: PointerEvent) => {
+      if (root.current?.contains(e.target as Node)) return;
+      setMenu(null);
+      setNavOpen(false);
+    };
+    document.addEventListener("pointerdown", down);
+    return () => document.removeEventListener("pointerdown", down);
+  }, [menu, navOpen]);
+
   const ui: PagerDutyUI = { pagerduty, renderCustom, menu, setMenu, navOpen, setNavOpen };
   const appClass = ["app", pagerduty.current ? "detail-open" : ""].filter(Boolean).join(" ");
 
   return (
     <PagerDutyContext.Provider value={ui}>
       <div
+        ref={root}
         className={`kit-pagerduty${className ? ` ${className}` : ""}`}
         style={style}
         data-theme={state.theme}
