@@ -107,3 +107,13 @@ export function MeetLogo(props: IconProps) {
     </svg>
   );
 }
+
+// ---------- For a launcher (a desktop's Dock, say) ----------
+
+/** Google Calendar's logo, for the white tile. No fixed size: it fills the box it is put in. */
+export function AppLogo(props: IconProps) {
+  return <CalendarLogo viewBox="-24 -24 560 560" {...props} />;
+}
+
+/** The Dock tile behind AppLogo: undefined is the plain white tile, a CSS color or gradient is a tile in that color, "full" means AppLogo is itself the whole icon. */
+export const appTile: string | undefined = undefined;

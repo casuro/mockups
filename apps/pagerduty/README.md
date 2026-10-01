@@ -143,6 +143,8 @@ import {
 } from "./apps/pagerduty";
 // The brand mark is not re-exported by index.ts (for a desktop launcher, say):
 import { PagerDutyLogo } from "./apps/pagerduty/icons";
+// Or the launcher logo and its Dock tile (see the repo README):
+import { AppLogo, appTile } from "./apps/pagerduty/icons";
 ```
 
 `PagerDutyLogo` is PagerDuty green (`#06AC38`) and fills the box it is put

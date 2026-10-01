@@ -1,9 +1,15 @@
-import { useState, type CSSProperties } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 import { AppIcon, MacOS, useMacOS, type DockItem, type MacWindowInput } from "../desktops/macos";
+import { SlackLogo } from "../apps/slack/icons";
+import { GmailLogo } from "../apps/gmail/icons";
+import { AppLogo as LinearApp, appTile as linearTile } from "../apps/linear/icons";
+import { NotionLogo } from "../apps/notion/icons";
+import { AppLogo as ZoomApp, appTile as zoomTile } from "../apps/zoom/icons";
 import "./macos.css";
 
 // desktops/macos.html's desktop, driving the React version: the same Dock
-// and placeholder windows (Finder, Safari, Notes, Terminal, System Settings).
+// and placeholder windows (Finder, Safari, Notes, Terminal, System Settings),
+// then app kits' logos as Dock icons: each passed as it is, the Dock draws the tile.
 
 const muted = "var(--text-3)";
 const fill: CSSProperties = { position: "absolute", inset: 0, display: "flex" };
@@ -107,11 +113,34 @@ const WINDOWS: Record<string, MacWindowInput> = {
   settings: { id: "settings", title: "System Settings", dockId: "settings", width: 560, height: 340 },
 };
 
+// Logos from app kits, as an episode passes them: the logo, and a tile only when it needs one.
+const APPS: Omit<DockItem, "onOpen">[] = [
+  { id: "slack", name: "Slack", icon: <SlackLogo /> },
+  { id: "gmail", name: "Gmail", icon: <GmailLogo /> },
+  { id: "linear", name: "Linear", icon: <LinearApp />, tile: linearTile },  // a kit's AppLogo with its appTile
+  { id: "notion", name: "Notion", icon: <NotionLogo /> },
+  { id: "zoom", name: "Zoom", icon: <ZoomApp />, tile: zoomTile },        // "full": already a whole app icon
+  { id: "acme", name: "Acme CRM", icon: "A", tile: "linear-gradient(160deg, #ff9a4d, #f0532c)" },  // a brand color, a letter for a logo
+  { id: "metrics", name: "Metrics", icon: "📊" },                         // an emoji, on the white tile
+  { id: "ops", name: "Ops", icon: "Ops" },                                // a short word, shrunk to fit
+  { id: "launch", name: "Launch", icon: <span>🚀</span>, tile: "#ffd60a" },  // an emoji in a plain element, a light color
+];
+for (const a of APPS) WINDOWS[a.id] = { id: a.id, title: a.name, dockId: a.id, width: 640, height: 400 };
+
 export function MacOSPreview() {
   const mac = useMacOS({ windows: [WINDOWS.finder, WINDOWS.notes], onEvent: (e) => console.debug("macos", e) });
-  const dock: DockItem[] = (["finder", "safari", "notes", "terminal", "settings"] as const).map((id) => ({
-    id, name: id === "settings" ? "System Settings" : WINDOWS[id].app ?? WINDOWS[id].title, icon: <AppIcon name={id} />, onOpen: () => mac.open(WINDOWS[id]),
-  }));
+  const dock: DockItem[] = [
+    ...(["finder", "safari", "notes", "terminal", "settings"] as const).map((id) => ({
+      id, name: id === "settings" ? "System Settings" : WINDOWS[id].app ?? WINDOWS[id].title, icon: <AppIcon name={id} />, onOpen: () => mac.open(WINDOWS[id]),
+    })),
+    // Opening an app also brings a notification from it, with its icon.
+    ...APPS.map((a) => ({ ...a, onOpen: () => { mac.open(WINDOWS[a.id]); mac.toast(a.name, `${a.name} is open`, { app: a.id }); } })),
+  ];
+  // A notification from an app shows that app's icon.
+  useEffect(() => {
+    const t = setTimeout(() => mac.toast("Priya Shah", "Can you look at the Q3 numbers before standup?", { app: "slack" }), 800);
+    return () => clearTimeout(t);
+  }, [mac.toast]);
   const dark = mac.state.theme === "dark";
   return (
     <div style={{ height: "100vh" }}>
@@ -119,7 +148,7 @@ export function MacOSPreview() {
         renderWindow={(w) => (
           <div className="mac-sample">
             {w.id === "finder" ? <Finder /> : w.id === "trash" ? <Finder trash /> : w.id === "safari" ? <Safari /> : w.id === "notes" ? <Notes />
-              : w.id === "terminal" ? <Terminal /> : <Settings dark={dark} toggle={() => mac.setTheme(dark ? "light" : "dark")} />}
+              : w.id === "terminal" ? <Terminal /> : w.id !== "settings" ? <p style={{ padding: 24, color: muted }}>{w.title}</p> : <Settings dark={dark} toggle={() => mac.setTheme(dark ? "light" : "dark")} />}
           </div>
         )} />
     </div>

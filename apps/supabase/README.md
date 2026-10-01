@@ -131,6 +131,8 @@ import {
 } from "./apps/supabase";
 // The brand mark is not re-exported by index.ts (for a desktop launcher, say):
 import { SupabaseLogo } from "./apps/supabase/icons";
+// Or the launcher logo and its Dock tile (see the repo README):
+import { AppLogo, appTile } from "./apps/supabase/icons";
 ```
 
 `index.ts` also re-exports every other type in `types.ts` (`SupabaseColumn`, `SupabaseColumnType`, `SupabaseValue`, `SupabaseJson`, `SupabaseIndex`, `SupabaseTableSeed`, `SupabaseSchemaSeed`, `SupabaseSnippet`, `SupabaseFilter`, `SupabaseSort`, `SupabaseTableState`, `TableRef`, `TableAt`).

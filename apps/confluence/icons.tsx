@@ -85,3 +85,13 @@ export const PanelIcon = {
   warning: solid(<path d="M13.7 3.4 22 18.5A2 2 0 0 1 20.3 21H3.7A2 2 0 0 1 2 18.5l8.3-15.1a2 2 0 0 1 3.4 0zM12 15.5a1.3 1.3 0 1 0 0 2.6 1.3 1.3 0 0 0 0-2.6zM12 8a1 1 0 0 0-1 1v4a1 1 0 1 0 2 0V9a1 1 0 0 0-1-1z" />, 18),
   success: solid(<path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20zm4.3 6.3L10.5 14l-2.8-2.7a1 1 0 0 0-1.4 1.4l3.5 3.5a1 1 0 0 0 1.4 0l6.5-6.5a1 1 0 0 0-1.4-1.4z" />, 18),
 };
+
+// ---------- For a launcher (a desktop's Dock, say) ----------
+
+/** The Confluence mark in white, for the Confluence blue tile. No fixed size: it fills the box it is put in. */
+export function AppLogo(props: IconProps) {
+  return <Logo fill="#fff" {...props} />;
+}
+
+/** The Dock tile behind AppLogo: undefined is the plain white tile, a CSS color or gradient is a tile in that color, "full" means AppLogo is itself the whole icon. */
+export const appTile: string | undefined = "#1868DB";

@@ -98,11 +98,11 @@ export function RecordDot({ on }: { on: boolean }) {
 export const APP_ICONS = { notes: Note, poll: Poll, docs: Docs, timer: Timer, bot: Bot, apps: Apps, whiteboard: Whiteboard, sparkle: Sparkle } as const;
 
 /** Zoom's logo (thesvg.org), with gradient ids unique to each copy. */
-export function ZoomLogo() {
+export function ZoomLogo(props: IconProps) {
   const id = `zl${useId().replace(/:/g, "")}`;
   const stops: [string, string][] = [[".00006%", "#0845BF"], ["19.11%", "#0950DE"], ["38.23%", "#0B59F6"], ["50%", "#0B5CFF"], ["67.32%", "#0E5EFE"], ["77.74%", "#1665FC"], ["86.33%", "#246FF9"], ["93.88%", "#387FF4"], ["100%", "#4F90EE"]];
   return (
-    <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="256" height="256" preserveAspectRatio="xMidYMid" viewBox="0 0 256 256">
+    <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid" viewBox="0 0 256 256" {...props}>
       <defs>
         <linearGradient id={id} x1="23.666%" x2="76.334%" y1="95.6118%" y2="4.3882%">
           {stops.map(([o, c]) => <stop key={o} offset={o} stopColor={c} />)}
@@ -113,3 +113,13 @@ export function ZoomLogo() {
     </svg>
   );
 }
+
+// ---------- For a launcher (a desktop's Dock, say) ----------
+
+/** Zoom's app icon, full bleed: the blue rounded square is part of the drawing. No fixed size: it fills the box it is put in. */
+export function AppLogo(props: IconProps) {
+  return <ZoomLogo {...props} />;
+}
+
+/** The Dock tile behind AppLogo: undefined is the plain white tile, a CSS color or gradient is a tile in that color, "full" means AppLogo is itself the whole icon. */
+export const appTile: string | undefined = "full";

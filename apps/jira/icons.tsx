@@ -150,9 +150,9 @@ export function ProjectAvatar({ color = "#ff8b00", style }: { color?: string; st
 
 // ---------- Brand marks ----------
 
-export function JiraLogo() {
+export function JiraLogo(props: IconProps) {
   return (
-    <svg aria-hidden="true" fill="#0052CC" viewBox="0 0 24 24"><path d="M11.571 11.513H0a5.218 5.218 0 0 0 5.232 5.215h2.13v2.057A5.215 5.215 0 0 0 12.575 24V12.518a1.005 1.005 0 0 0-1.005-1.005zm5.723-5.756H5.736a5.215 5.215 0 0 0 5.215 5.214h2.129v2.058a5.218 5.218 0 0 0 5.215 5.214V6.758a1.001 1.001 0 0 0-1.001-1.001zM23.013 0H11.455a5.215 5.215 0 0 0 5.215 5.215h2.129v2.057A5.215 5.215 0 0 0 24 12.483V1.005A1.001 1.001 0 0 0 23.013 0Z" /></svg>
+    <svg aria-hidden="true" fill="#0052CC" viewBox="0 0 24 24" {...props}><path d="M11.571 11.513H0a5.218 5.218 0 0 0 5.232 5.215h2.13v2.057A5.215 5.215 0 0 0 12.575 24V12.518a1.005 1.005 0 0 0-1.005-1.005zm5.723-5.756H5.736a5.215 5.215 0 0 0 5.215 5.214h2.129v2.058a5.218 5.218 0 0 0 5.215 5.214V6.758a1.001 1.001 0 0 0-1.001-1.001zM23.013 0H11.455a5.215 5.215 0 0 0 5.215 5.215h2.129v2.057A5.215 5.215 0 0 0 24 12.483V1.005A1.001 1.001 0 0 0 23.013 0Z" /></svg>
   );
 }
 
@@ -198,3 +198,13 @@ export function AtlassianLogo() {
     <svg aria-hidden="true" preserveAspectRatio="xMidYMid" viewBox="0 0 256 256"><defs><linearGradient x1="99.7%" y1="15.8%" x2="39.8%" y2="97.4%" id={id}><stop stopColor="#0052CC" offset="0%" /><stop stopColor="#2684FF" offset="92.3%" /></linearGradient></defs><path d="M76 118c-4-4-10-4-13 1L1 245a7 7 0 0 0 6 10h88c3 0 5-1 6-4 19-39 8-98-25-133Z" fill={`url(#${id})`} /><path d="M122 4c-35 56-33 117-10 163l42 84c1 3 4 4 7 4h87a7 7 0 0 0 7-10L134 4c-2-5-9-5-12 0Z" fill="#2681FF" /></svg>
   );
 }
+
+// ---------- For a launcher (a desktop's Dock, say) ----------
+
+/** The Jira mark in white, for the Jira blue tile. No fixed size: it fills the box it is put in. */
+export function AppLogo(props: IconProps) {
+  return <JiraLogo fill="#fff" {...props} />;
+}
+
+/** The Dock tile behind AppLogo: undefined is the plain white tile, a CSS color or gradient is a tile in that color, "full" means AppLogo is itself the whole icon. */
+export const appTile: string | undefined = "#1868DB";

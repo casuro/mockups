@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useRef, useState } from "react";
-import type { MacEvent, MacState, MacTheme, MacWindow, MacWindowInput } from "./types";
+import type { MacEvent, MacState, MacTheme, MacToastFrom, MacWindow, MacWindowInput } from "./types";
 
 // The desktop behind <MacOS>: which windows are open, where, and in what
 // order. What the world does (open a window, toast) and what the person does
@@ -24,8 +24,12 @@ export interface MacOSDesktop {
   toggleMaximize: (id: string) => void;
   moveTo: (id: string, x: number, y: number) => void;
   resizeTo: (id: string, width: number, height: number) => void;
-  /** A notification banner in the top right corner, gone after a few seconds. */
-  toast: (title: string, body?: string) => void;
+  /**
+   * A notification banner in the top right corner, gone after a few seconds.
+   * `from` names the app it comes from, by Dock id (`{ app: "slack" }`), or
+   * gives an icon (`{ icon: <SlackLogo /> }`); without it, the Apple logo.
+   */
+  toast: (title: string, body?: string, from?: MacToastFrom) => void;
   dismissToast: (id: number) => void;
   setTheme: (theme: MacTheme) => void;
   /** Reports a person's action to `onEvent` (used by <MacOS>). */
@@ -105,9 +109,9 @@ export function useMacOS(options: MacOSOptions = {}): MacOSDesktop {
   const resizeTo = useCallback((id: string, width: number, height: number) => patch(id, () => ({ width, height })), [patch]);
 
   const dismissToast = useCallback((id: number) => setState((s) => ({ ...s, toasts: s.toasts.filter((t) => t.id !== id) })), []);
-  const toast = useCallback((title: string, body?: string) => {
+  const toast = useCallback((title: string, body?: string, from?: MacToastFrom) => {
     const id = ++toastId.current;
-    setState((s) => ({ ...s, toasts: [{ id, title, body }, ...s.toasts] }));
+    setState((s) => ({ ...s, toasts: [{ id, title, body, ...from }, ...s.toasts] }));
     setTimeout(() => dismissToast(id), 4200);
   }, [dismissToast]);
   const setTheme = useCallback((theme: MacTheme) => setState((s) => ({ ...s, theme })), []);

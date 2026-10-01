@@ -7,7 +7,7 @@ import type { ReactNode } from "react";
 export interface MacWindowInput {
   id: string;
   title: string;
-  /** A small icon for the Window menu. */
+  /** The window's icon in the Window menu: a logo, drawn on a tile (default: its Dock item's icon). */
   icon?: ReactNode;
   /** What the window shows. Leave it out and pass `renderWindow` to <MacOS> instead. */
   content?: ReactNode;
@@ -34,7 +34,17 @@ export interface MacWindow extends Required<Pick<MacWindowInput, "id" | "title" 
 export interface DockItem {
   id: string;
   name: string;
+  /**
+   * The app's logo: an <svg>, an <img> or a component (`<SlackLogo />`). The
+   * Dock puts it on a macOS app icon tile and sizes it; pass the logo, not a tile.
+   */
   icon: ReactNode;
+  /**
+   * What the logo sits on (see AppTile): leave it out for the white glass tile,
+   * a CSS color or gradient for a tile of that color, `"full"` for a logo that
+   * is already a whole square icon, `"none"` for no tile.
+   */
+  tile?: string;
   /** Called on click. A window whose `dockId` is this item is restored first, if there is one. */
   onOpen?: () => void;
 }
@@ -43,7 +53,15 @@ export interface MacToast {
   id: number;
   title: string;
   body?: string;
+  /** The Dock id of the app it comes from: its icon is shown. */
+  app?: string;
+  /** An icon of its own, drawn on a tile like a Dock icon (`tile` as in DockItem). */
+  icon?: ReactNode;
+  tile?: string;
 }
+
+/** Where a notification comes from: `toast(title, body, { app: "slack" })`. */
+export type MacToastFrom = Pick<MacToast, "app" | "icon" | "tile">;
 
 export type MacTheme = "light" | "dark";
 

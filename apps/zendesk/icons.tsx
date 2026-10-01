@@ -47,10 +47,20 @@ export const Bolt = icon(<path d="M13 3L5 14h6l-1 7 8-11h-6z" />);
 export const CHANNEL = { email: Email, web: Web, chat: Chat };
 
 /** The Zendesk mark (thesvg.org), as in the mockup. */
-export function ZendeskLogo() {
+export function ZendeskLogo(props: IconProps) {
   return (
-    <svg className="zd-logo" aria-label="Zendesk" fill="currentColor" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <svg className="zd-logo" aria-label="Zendesk" fill="currentColor" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" {...props}>
       <path d="M12.914 2.904V16.29L24 2.905H12.914zM0 2.906C0 5.966 2.483 8.45 5.543 8.45s5.542-2.484 5.543-5.544H0zm11.086 4.807L0 21.096h11.086V7.713zm7.37 7.84c-3.063 0-5.542 2.48-5.542 5.543H24c0-3.06-2.48-5.543-5.543-5.543z" />
     </svg>
   );
 }
+
+// ---------- For a launcher (a desktop's Dock, say) ----------
+
+/** The Zendesk mark in white, for the Zendesk dark green tile. No fixed size: it fills the box it is put in. */
+export function AppLogo(props: IconProps) {
+  return <ZendeskLogo fill="#fff" {...props} />;
+}
+
+/** The Dock tile behind AppLogo: undefined is the plain white tile, a CSS color or gradient is a tile in that color, "full" means AppLogo is itself the whole icon. */
+export const appTile: string | undefined = "#03363D";

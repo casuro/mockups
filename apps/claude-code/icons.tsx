@@ -120,3 +120,13 @@ export function GitHub(props: IconProps) {
     </svg>
   );
 }
+
+// ---------- For a launcher (a desktop's Dock, say) ----------
+
+/** The Claude mark in white, for the clay tile (as Claude's app icon). No fixed size: it fills the box it is put in. */
+export function AppLogo(props: IconProps) {
+  return <ClaudeMark fill="#fff" {...props} />;
+}
+
+/** The Dock tile behind AppLogo: undefined is the plain white tile, a CSS color or gradient is a tile in that color, "full" means AppLogo is itself the whole icon. */
+export const appTile: string | undefined = "#D97757";

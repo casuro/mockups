@@ -95,3 +95,13 @@ export function Slash() {
     </svg>
   );
 }
+
+// ---------- For a launcher (a desktop's Dock, say) ----------
+
+/** Supabase's mark in a square box, for the dark tile. No fixed size: it fills the box it is put in. */
+export function AppLogo(props: IconProps) {
+  return <SupabaseLogo viewBox="-2 0 113 113" {...props} />;
+}
+
+/** The Dock tile behind AppLogo: undefined is the plain white tile, a CSS color or gradient is a tile in that color, "full" means AppLogo is itself the whole icon. */
+export const appTile: string | undefined = "#1C1C1C";

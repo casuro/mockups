@@ -115,3 +115,13 @@ export const GLYPHS: Record<ChatGPTGlyph, (props: IconProps) => ReactNode> = {
   checklist: glyph(<><path d="M9 11l2 2 4-4" /><rect x="4" y="3" width="16" height="18" rx="3" /></>),
   sparkle: glyph(<path d="M12 3c.5 4.5 2.5 6.5 7 7-4.5.5-6.5 2.5-7 7-.5-4.5-2.5-6.5-7-7 4.5-.5 6.5-2.5 7-7z" />),
 };
+
+// ---------- For a launcher (a desktop's Dock, say) ----------
+
+/** The OpenAI mark in black, for the white tile (as ChatGPT's app icon). No fixed size: it fills the box it is put in. */
+export function AppLogo(props: IconProps) {
+  return <Logo color="#000" viewBox="-2 0 260 260" {...props} />;
+}
+
+/** The Dock tile behind AppLogo: undefined is the plain white tile, a CSS color or gradient is a tile in that color, "full" means AppLogo is itself the whole icon. */
+export const appTile: string | undefined = undefined;
