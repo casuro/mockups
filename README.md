@@ -20,8 +20,22 @@ it whose windows take any React content, so an app kit can run inside a
 desktop window. Preview them with `?app=macos`, `?app=windows` and
 `?app=linux`.
 
+Every app kit's `icons.tsx` exports its logo for a launcher, in one shape:
+`AppLogo`, an svg with no fixed size that fills the box it is put in, and
+`appTile`, the Dock tile it sits on - `undefined` for the plain white tile,
+a CSS color or gradient for a brand-colored tile (`AppLogo` is then the
+glyph drawn for it, usually white), or `"full"` when `AppLogo` is itself the
+whole square icon (Zoom). Each pairing follows the real app's icon. A desktop
+launcher uses them as they are:
+
+```tsx
+import { AppLogo as SlackLogo, appTile as slackTile } from "./apps/slack/icons";
+
+const item = { id: "slack", name: "Slack", icon: <SlackLogo />, tile: slackTile };
+```
+
 Any app's name works in `?app=`: calendar, calendly, chatgpt, claude-code,
 confluence, datadog, docs, gmail, greenhouse, intercom, jira, linear, meet,
-notion, outlook, slack, teams, whatsapp, zendesk, zoom.
+notion, outlook, pagerduty, slack, supabase, teams, whatsapp, zendesk, zoom.
 
 `npm run check` type-checks the React versions and the previews.

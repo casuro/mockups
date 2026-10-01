@@ -59,10 +59,20 @@ export const Close = icon("M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17
 export const PersonAdd = icon("M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z");
 export const Domain = icon("M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z");
 
-export function DocsLogo() {
+export function DocsLogo(props: IconProps) {
   return (
-    <svg className="logo-svg" aria-hidden="true" fill="#4285F4" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <svg className="logo-svg" aria-hidden="true" fill="#4285F4" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" {...props}>
       <path d="M14.727 6.727H14V0H4.91c-.905 0-1.637.732-1.637 1.636v20.728c0 .904.732 1.636 1.636 1.636h14.182c.904 0 1.636-.732 1.636-1.636V6.727h-6zm-.545 10.455H7.09v-1.364h7.09v1.364zm2.727-3.273H7.091v-1.364h9.818v1.364zm0-3.273H7.091V9.273h9.818v1.363zM14.727 6h6l-6-6v6z" />
     </svg>
   );
 }
+
+// ---------- For a launcher (a desktop's Dock, say) ----------
+
+/** Google Docs' logo, for the white tile. No fixed size: it fills the box it is put in. */
+export function AppLogo(props: IconProps) {
+  return <DocsLogo {...props} />;
+}
+
+/** The Dock tile behind AppLogo: undefined is the plain white tile, a CSS color or gradient is a tile in that color, "full" means AppLogo is itself the whole icon. */
+export const appTile: string | undefined = undefined;

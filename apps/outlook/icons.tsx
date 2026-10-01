@@ -178,3 +178,13 @@ export function FileIcon({ name, ...props }: { name: string } & IconProps) {
   if (ext === "pdf") return <Pdf {...props} />;
   return <GenericFile {...props} />;
 }
+
+// ---------- For a launcher (a desktop's Dock, say) ----------
+
+/** Outlook's logo in a square box, for the white tile. No fixed size: it fills the box it is put in. */
+export function AppLogo(props: IconProps) {
+  return <Logo viewBox="40.01 55.24 610 610" {...props} name="outlook" />;
+}
+
+/** The Dock tile behind AppLogo: undefined is the plain white tile, a CSS color or gradient is a tile in that color, "full" means AppLogo is itself the whole icon. */
+export const appTile: string | undefined = undefined;

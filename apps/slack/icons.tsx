@@ -76,9 +76,9 @@ export const Expand = rounded(<path d="M12 3.5h4.5V8M8 16.5H3.5V12M16.5 3.5l-5.5
 export const Minimize = rounded(<path d="M4.5 10h11" />);
 export const LinkRounded = rounded(<path d="M8.5 11.5a3 3 0 004.2 0l2.5-2.5a3 3 0 00-4.2-4.2L10 5.8M11.5 8.5a3 3 0 00-4.2 0L4.8 11a3 3 0 004.2 4.2l1-1" />);
 
-export function SlackLogo() {
+export function SlackLogo(props: IconProps) {
   return (
-    <svg aria-hidden="true" viewBox="0 0 2447.6 2452.5" xmlns="http://www.w3.org/2000/svg">
+    <svg aria-hidden="true" viewBox="0 0 2447.6 2452.5" xmlns="http://www.w3.org/2000/svg" {...props}>
       <g clipRule="evenodd" fillRule="evenodd">
         <path d="m897.4 0c-135.3.1-244.8 109.9-244.7 245.2-.1 135.3 109.5 245.1 244.8 245.2h244.8v-245.1c.1-135.3-109.5-245.1-244.9-245.3.1 0 .1 0 0 0m0 654h-652.6c-135.3.1-244.9 109.9-244.8 245.2-.2 135.3 109.4 245.1 244.7 245.3h652.7c135.3-.1 244.9-109.9 244.8-245.2.1-135.4-109.5-245.2-244.8-245.3z" fill="#36c5f0" />
         <path d="m2447.6 899.2c.1-135.3-109.5-245.1-244.8-245.2-135.3.1-244.9 109.9-244.8 245.2v245.3h244.8c135.3-.1 244.9-109.9 244.8-245.3zm-652.7 0v-654c.1-135.2-109.4-245-244.7-245.2-135.3.1-244.9 109.9-244.8 245.2v654c-.2 135.3 109.4 245.1 244.7 245.3 135.3-.1 244.9-109.9 244.8-245.3z" fill="#2eb67d" />
@@ -88,3 +88,13 @@ export function SlackLogo() {
     </svg>
   );
 }
+
+// ---------- For a launcher (a desktop's Dock, say) ----------
+
+/** Slack's logo in a square box, for the white tile. No fixed size: it fills the box it is put in. */
+export function AppLogo(props: IconProps) {
+  return <SlackLogo viewBox="-2.45 0 2452.5 2452.5" {...props} />;
+}
+
+/** The Dock tile behind AppLogo: undefined is the plain white tile, a CSS color or gradient is a tile in that color, "full" means AppLogo is itself the whole icon. */
+export const appTile: string | undefined = undefined;

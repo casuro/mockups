@@ -152,6 +152,8 @@ import {
 } from "./apps/datadog";
 // The brand marks are not re-exported by index.ts:
 import { DatadogLogo } from "./apps/datadog/icons";
+// Nor is the launcher logo and its Dock tile (see the repo README):
+import { AppLogo, appTile } from "./apps/datadog/icons";
 ```
 
 `index.ts` re-exports every type in `types.ts` (`export type *`), plus

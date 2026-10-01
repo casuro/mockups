@@ -75,3 +75,13 @@ export function ZoomLogo(props: IconProps) {
     </svg>
   );
 }
+
+// ---------- For a launcher (a desktop's Dock, say) ----------
+
+/** PagerDuty's mark in white, for the PagerDuty green tile. No fixed size: it fills the box it is put in. */
+export function AppLogo(props: IconProps) {
+  return <PagerDutyLogo fill="#fff" {...props} />;
+}
+
+/** The Dock tile behind AppLogo: undefined is the plain white tile, a CSS color or gradient is a tile in that color, "full" means AppLogo is itself the whole icon. */
+export const appTile: string | undefined = "#06AC38";
