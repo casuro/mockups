@@ -35,7 +35,8 @@ const item = { id: "slack", name: "Slack", icon: <SlackLogo />, tile: slackTile 
 ```
 
 Any app's name works in `?app=`: calendar, calendly, chatgpt, claude-code,
-confluence, datadog, docs, gmail, greenhouse, intercom, jira, linear, meet,
-notion, outlook, pagerduty, slack, supabase, teams, whatsapp, zendesk, zoom.
+confluence, datadog, docs, github, gmail, greenhouse, intercom, jira, linear,
+meet, notion, outlook, pagerduty, slack, supabase, teams, whatsapp, zendesk,
+zoom.
 
 `npm run check` type-checks the React versions and the previews.
