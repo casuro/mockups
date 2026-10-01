@@ -131,6 +131,8 @@ import {
   type DocsCommentSeed, type DocsSuggestionSeed, type DocsReplyInput, type DocsThread, type DocsReply,
   type DocsMode, type DocsRole,
 } from "./apps/docs";
+// The launcher logo and its Dock tile are not re-exported by index.ts (see the repo README):
+import { AppLogo, appTile } from "./apps/docs/icons";
 ```
 
 ### The hook

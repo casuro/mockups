@@ -136,6 +136,8 @@ import {
   type ZendeskSeed, type ZendeskState, type ZendeskEvent, type ZendeskTicket, type ZendeskTicketInput,
   type ZendeskMessage, type ZendeskMessageInput, type TicketStatus,
 } from "./apps/zendesk";
+// The launcher logo and its Dock tile are not re-exported by index.ts (see the repo README):
+import { AppLogo, appTile } from "./apps/zendesk/icons";
 ```
 
 `DEFAULT_VIEWS` is the six views used when `seed.views` is left out (ids

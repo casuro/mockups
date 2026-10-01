@@ -132,6 +132,8 @@ import {
   type TeamsSeed, type TeamsState, type TeamsEvent, type TeamsMessage, type TeamsMessageInput,
   type TeamsMeetingState, type Where, type MeetingRef, type TeamsView, type Presence,
 } from "./apps/teams";
+// The launcher logo and its Dock tile are not re-exported by index.ts (see the repo README):
+import { AppLogo, appTile } from "./apps/teams/icons";
 ```
 
 `index.ts` also re-exports every other type in `types.ts` (`TeamsPerson`, `TeamsChatSeed`, `TeamsTeamSeed`, `TeamsChannelSeed`, `TeamsMeetingSeed`, `TeamsActivitySeed`, `TeamsActivityItem`, `TeamsCalendarEvent`, `TeamsCallRecord`, `TeamsFileRecord`, `TeamsCall`, `TeamsFile`, `TeamsReaction`, `TeamsConversationState`). `keyOf(where)` gives the state key (`"chat:priya"`, `"ch:eng/general"`); `whereOf(key)` goes back and returns `null` for anything else (a "Meet now" id like `"meet:12"`).

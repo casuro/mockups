@@ -134,6 +134,8 @@ import {
   type ZoomChatInput, type ZoomChatMessage, type ZoomScreen, type ZoomWhiteboard, type ZoomNote,
   type ZoomApp, type ZoomShare, type ZoomSecurity,
 } from "./apps/zoom";
+// The launcher logo and its Dock tile are not re-exported by index.ts (see the repo README):
+import { AppLogo, appTile } from "./apps/zoom/icons";
 ```
 
 ### The hook

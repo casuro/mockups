@@ -131,6 +131,8 @@ import {
   type GreenhouseSeed, type GreenhouseState, type GreenhouseEvent, type GreenhouseCandidate, type GreenhouseCandidateInput,
   type GreenhouseScorecard, type GreenhouseActivityInput, type GreenhouseInterview,
 } from "./apps/greenhouse";
+// The launcher logo and its Dock tile are not re-exported by index.ts (see the repo README):
+import { AppLogo, appTile } from "./apps/greenhouse/icons";
 ```
 
 `index.ts` also re-exports every other type in `types.ts`

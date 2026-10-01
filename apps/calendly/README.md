@@ -120,6 +120,8 @@ import {
   type CalendlySeed, type CalendlyState, type CalendlyEvent, type CalendlyBooking,
   type CalendlyAvailability, type Day, type SlotTime,
 } from "./apps/calendly";
+// The launcher logo and its Dock tile are not re-exported by index.ts (see the repo README):
+import { AppLogo, appTile } from "./apps/calendly/icons";
 ```
 
 `index.ts` also re-exports every other type in `types.ts` (`CalendlyHost`, `CalendlyEventType`, `CalendlyQuestion`, `CalendlyTimeZone`, `CalendlyForm`). Two helpers: `localToday(): Day` is today on the browser's clock as `"YYYY-MM-DD"`, and `dayOf(year: number, month: number, date: number): Day` builds a day with a zero-based `month` (like `Date`: `dayOf(2026, 9, 2)` is `"2026-10-02"`), rolling over out-of-range dates.

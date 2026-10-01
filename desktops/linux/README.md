@@ -222,9 +222,9 @@ redrawn.
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { casuro } from "@/lib/casuro";
 import { Linux, useLinux, type LinuxApp, type LinuxWindow, type LinuxWindowInput } from "./desktops/linux";
-// The app kit's logo from src/apps/<app>/icons.tsx, e.g. SlackLogo:
-import { SlackLogo } from "./apps/slack/icons";
-import { GmailLogo } from "./apps/gmail/icons";
+// Each app kit's logo for a launcher, from src/apps/<app>/icons.tsx:
+import { AppLogo as SlackLogo } from "./apps/slack/icons";
+import { AppLogo as GmailLogo } from "./apps/gmail/icons";
 import { SlackScene } from "./SlackScene";   // the episode's own scenes, each rendering an app kit
 import { GmailScene } from "./GmailScene";
 
