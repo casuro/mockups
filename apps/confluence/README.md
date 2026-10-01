@@ -136,6 +136,8 @@ import {
   type ConfluenceSeed, type ConfluenceState, type ConfluenceEvent, type ConfluencePage, type ConfluencePageSeed,
   type ConfluenceBlock, type ConfluenceComment,
 } from "./apps/confluence";
+// The launcher logo and its Dock tile are not re-exported by index.ts (see the repo README):
+import { AppLogo, appTile } from "./apps/confluence/icons";
 ```
 
 `index.ts` also re-exports every other type in `types.ts`

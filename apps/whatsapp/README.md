@@ -119,6 +119,8 @@ import {
   type WhatsAppProps, type WhatsAppApp, type WhatsAppOptions, type DeliverOptions, type Person, type ChatInfo,
   type WhatsAppSeed, type WhatsAppState, type WhatsAppEvent, type WhatsAppMessage, type WhatsAppMessageInput, type Ticks,
 } from "./apps/whatsapp";
+// The launcher logo and its Dock tile are not re-exported by index.ts (see the repo README):
+import { AppLogo, appTile } from "./apps/whatsapp/icons";
 ```
 
 `index.ts` also re-exports every other type in `types.ts` (`WhatsAppPerson`, `WhatsAppChatSeed`, `WhatsAppChatState`, `WhatsAppQuote`, `WhatsAppReaction`, `WhatsAppImage`, `WhatsAppDocument`).

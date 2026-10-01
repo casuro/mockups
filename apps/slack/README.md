@@ -113,6 +113,8 @@ import {
   type SlackProps, type SlackWorkspace, type SlackOptions, type DeliverOptions, type Person,
   type SlackSeed, type SlackState, type SlackEvent, type SlackMessage, type SlackMessageInput, type Where,
 } from "./apps/slack";
+// The launcher logo and its Dock tile are not re-exported by index.ts (see the repo README):
+import { AppLogo, appTile } from "./apps/slack/icons";
 ```
 
 `index.ts` also re-exports every other type in `types.ts` (`SlackPerson`, `SlackChannelSeed`, `SlackDmSeed`, `SlackHuddleSeed`, `SlackCard`, `SlackFile`, `SlackLink`, `SlackReaction`, `SlackBookmark`, `SlackConversationState`, `SlackHuddleState`). `keyOf(where)` turns a `Where` into a state key (`"channel:incidents"`, `"dm:priya"`); `whereOf(key)` goes back.

@@ -131,6 +131,8 @@ import {
   type LinearSeed, type LinearState, type LinearEvent, type LinearIssue, type LinearIssueInput, type LinearActivity,
   type LinearActivityInput, type Priority,
 } from "./apps/linear";
+// The launcher logo and its Dock tile are not re-exported by index.ts (see the repo README):
+import { AppLogo, appTile } from "./apps/linear/icons";
 ```
 
 `PRIORITIES` is `["No priority", "Urgent", "High", "Medium", "Low"]`,

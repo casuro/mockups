@@ -128,6 +128,8 @@ import {
   type ChatGPTChatInput, type ChatGPTMessageInput, type ChatGPTChat, type ChatGPTMessage,
   type ChatGPTFile, type ChatGPTSource, type ChatGPTImage, type ChatGPTThought, type ChatGPTTool,
 } from "./apps/chatgpt";
+// The launcher logo and its Dock tile are not re-exported by index.ts (see the repo README):
+import { AppLogo, appTile } from "./apps/chatgpt/icons";
 ```
 
 `index.ts` re-exports every type in `types.ts` (`export type *`).

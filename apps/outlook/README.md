@@ -137,6 +137,8 @@ import {
   type OutlookSeed, type OutlookState, type OutlookEvent, type OutlookConversation, type OutlookConversationInput,
   type OutlookMessage, type OutlookMessageInput,
 } from "./apps/outlook";
+// The launcher logo and its Dock tile are not re-exported by index.ts (see the repo README):
+import { AppLogo, appTile } from "./apps/outlook/icons";
 ```
 
 `index.ts` also re-exports every other type in `types.ts` (`OutlookPerson`, `OutlookFolder`, `BuiltInFolder`, `CategoryColor`, `OutlookAttachment`, `OutlookInviteSeed`, `OutlookInvite`, `OutlookBusy`, `RsvpResponse`, `OutlookCompose`, `ComposeKind`, `Density`, `PanePosition`, `ListFilter`). `listOf(state, outlook.people, outlook.me)` returns the conversations the list shows right now (folder, pivot, search and filter applied), newest first.

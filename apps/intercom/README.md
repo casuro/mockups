@@ -136,6 +136,8 @@ import {
   type IntercomSeed, type IntercomState, type IntercomEvent, type IntercomConversationSeed, type IntercomConversationState,
   type IntercomCustomer, type IntercomMessage, type IntercomMessageInput, type IntercomSuggestion,
 } from "./apps/intercom";
+// The launcher logo and its Dock tile are not re-exported by index.ts (see the repo README):
+import { AppLogo, appTile } from "./apps/intercom/icons";
 ```
 
 `index.ts` also re-exports every other type in `types.ts`

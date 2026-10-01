@@ -146,6 +146,8 @@ import {
   type ItemInput, type Item, type Hunk, type PermissionRequest, type PermissionAnswer, type PlanAnswer,
   type TodoItem, type PrCheck, type FileChange, type Pane, type Lang, type Model,
 } from "./apps/claude-code";
+// The launcher logo and its Dock tile are not re-exported by index.ts (see the repo README):
+import { AppLogo, appTile } from "./apps/claude-code/icons";
 ```
 
 `index.ts` re-exports every type in `types.ts` (`export type *`).

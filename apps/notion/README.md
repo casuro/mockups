@@ -143,6 +143,8 @@ import {
   type NotionProperty, type NotionValue, type NotionShare, type NotionComment, type NotionColor, type NotionSketch,
   type RichText, type CodeLanguage,
 } from "./apps/notion";
+// The launcher logo and its Dock tile are not re-exported by index.ts (see the repo README):
+import { AppLogo, appTile } from "./apps/notion/icons";
 ```
 
 ### The hook

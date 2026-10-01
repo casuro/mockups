@@ -132,6 +132,8 @@ import {
   type JiraProps, type JiraProject, type JiraOptions, type ByOptions, type IssuePatch, type FlagInput, type Person, type Status,
   type JiraSeed, type JiraState, type JiraEvent, type JiraIssue, type JiraIssueInput, type JiraView, type JiraField,
 } from "./apps/jira";
+// The launcher logo and its Dock tile are not re-exported by index.ts (see the repo README):
+import { AppLogo, appTile } from "./apps/jira/icons";
 ```
 
 `index.ts` also re-exports every other type in `types.ts` (`JiraPerson`,

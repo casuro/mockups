@@ -125,6 +125,8 @@ import {
   type GmailSeed, type GmailState, type GmailEvent, type GmailMail, type GmailMailInput,
   type GmailMessage, type GmailMessageInput, type GmailFolder, type GmailTab,
 } from "./apps/gmail";
+// The launcher logo and its Dock tile are not re-exported by index.ts (see the repo README):
+import { AppLogo, appTile } from "./apps/gmail/icons";
 ```
 
 `index.ts` also re-exports every other type in `types.ts` (`GmailPerson`, `GmailInvite`, `GmailRsvp`, `GmailView`, `GmailAction`, `GmailAgendaItem`, `GmailNote`, `GmailCompose`, `GmailDensity`, `GmailPane`).

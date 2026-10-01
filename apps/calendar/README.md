@@ -128,6 +128,8 @@ import {
   type CalendarSeed, type CalendarState, type CalendarEvent, type CalendarEntry, type CalendarEntryInput,
   type CalendarPerson, type CalendarCalendar, type CalendarGuest, type CalendarView, type Rsvp,
 } from "./apps/calendar";
+// The launcher logo and its Dock tile are not re-exported by index.ts (see the repo README):
+import { AppLogo, appTile } from "./apps/calendar/icons";
 ```
 
 ### The hook

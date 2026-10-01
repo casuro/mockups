@@ -129,6 +129,8 @@ import {
   type MeetChatInput, type MeetChatMessage, type MeetQuestionInput, type MeetQuestion, type MeetPoll,
   type MeetLayout, type MeetPanel, type MeetActivity, type MeetShareSource, type MeetHostControls,
 } from "./apps/meet";
+// The launcher logo and its Dock tile are not re-exported by index.ts (see the repo README):
+import { AppLogo, appTile } from "./apps/meet/icons";
 ```
 
 ### The hook
