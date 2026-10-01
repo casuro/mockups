@@ -13,512 +13,275 @@
     --bg: #ffffff; --canvas: #f6f8fa; --overlay: #ffffff; --hover: #f6f8fa; --hover-2: #818b981a;
     --text: #1f2328; --muted: #59636e; --faint: #818b98; --border: #d1d9e0; --border-muted: #d1d9e0b3;
     --link: #0969da; --accent: #0969da; --accent-bg: #ddf4ff; --accent-line: #54aeff66; --underline: #fd8c73;
-    --green: #1a7f37; --green-bg: #dafbe1; --green-btn: #1f883d; --green-btn-hover: #1c8139;
-    --red: #d1242f; --red-bg: #ffebe9; --purple: #8250df; --purple-bg: #fbefff;
-    --amber: #bf8700; --yellow: #9a6700; --yellow-bg: #fff8c5; --yellow-line: #d4a72c66;
-    --btn: #f6f8fa; --btn-hover: #eff2f5; --counter: #818b981f; --folder: #54aeff;
+    --green: #1a7f37; --green-btn: #1f883d; --green-btn-hover: #1c8139; --red: #d1242f; --purple: #8250df; --amber: #bf8700;
+    --btn: #f6f8fa; --btn-hover: #eff2f5; --counter: #818b981f;
     --add-bg: #dafbe1; --add-num: #aceebb; --del-bg: #ffebe9; --del-num: #ffcecb; --hunk-bg: #ddf4ff;
-    --shadow: 0 0 0 1px #d1d9e080, 0 6px 12px -3px #25292e0a, 0 6px 18px 0 #25292e1f; --shadow-lg: 0 0 0 1px #d1d9e0, 0 40px 80px #25292e3d;
-    --scrim: rgba(31,35,40,.5);
+    --shadow: 0 0 0 1px #d1d9e080, 0 6px 12px -3px #25292e0a, 0 6px 18px 0 #25292e1f;
     /* The job log is dark in both themes, like GitHub's. */
-    --log-bg: #0d1117; --log-head: #161b22; --log-hover: #161b22; --log-text: #f0f6fc; --log-muted: #9198a1; --log-border: #3d444d; --log-input: #010409;
+    --log-bg: #0d1117; --log-hover: #161b22; --log-text: #f0f6fc; --log-muted: #9198a1; --log-border: #3d444d;
   }
   :root[data-theme="dark"] {
     color-scheme: dark;
     --bg: #0d1117; --canvas: #151b23; --overlay: #151b23; --hover: #151b23; --hover-2: #656c7633;
     --text: #f0f6fc; --muted: #9198a1; --faint: #656c76; --border: #3d444d; --border-muted: #3d444db3;
     --link: #4493f8; --accent: #1f6feb; --accent-bg: #388bfd1a; --accent-line: #388bfd66; --underline: #f78166;
-    --green: #3fb950; --green-bg: #2ea04326; --green-btn: #238636; --green-btn-hover: #29903b;
-    --red: #f85149; --red-bg: #f8514926; --purple: #ab7df8; --purple-bg: #ab7df826;
-    --amber: #d29922; --yellow: #d29922; --yellow-bg: #bb800926; --yellow-line: #bb800966;
-    --btn: #212830; --btn-hover: #262c36; --counter: #2f3742; --folder: #9198a1;
+    --green: #3fb950; --green-btn: #238636; --green-btn-hover: #29903b; --red: #f85149; --purple: #8957e5; --amber: #d29922;
+    --btn: #212830; --btn-hover: #262c36; --counter: #2f3742;
     --add-bg: #2ea04326; --add-num: #3fb9504d; --del-bg: #f8514926; --del-num: #f851494d; --hunk-bg: #388bfd1a;
-    --shadow: 0 0 0 1px #3d444d, 0 6px 12px -3px #01040966, 0 6px 18px 0 #01040966; --shadow-lg: 0 0 0 1px #3d444d, 0 40px 80px #010409;
-    --scrim: rgba(1,4,9,.6);
+    --shadow: 0 0 0 1px #3d444d, 0 6px 12px -3px #01040966, 0 6px 18px 0 #01040966;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { height: 100%; }
   body { font-family: var(--font); font-size: 14px; line-height: 1.5; color: var(--text); background: var(--bg); overflow: hidden; -webkit-font-smoothing: antialiased; }
   button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; text-align: inherit; }
   button:disabled { cursor: default; }
-  input, textarea, select { font: inherit; color: inherit; }
+  textarea { font: inherit; color: inherit; }
   a { color: var(--link); text-decoration: none; cursor: pointer; }
   a:hover { text-decoration: underline; }
   svg { flex: none; }
-  code, .mono { font-family: var(--mono); font-size: 12px; }
   .ic { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; vertical-align: text-bottom; }
   .ic .f { fill: currentColor; stroke: none; }
-  .muted { color: var(--muted); }
   .app { display: flex; flex-direction: column; height: 100vh; height: 100dvh; position: relative; }
   :focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+  .grow { flex: 1; min-width: 0; }
 
-  /* Buttons, counters, labels, avatars */
-  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 32px; padding: 0 12px; border: 1px solid var(--border); border-radius: 6px; background: var(--btn); font-size: 14px; font-weight: 500; white-space: nowrap; color: var(--text); }
-  .btn:hover { background: var(--btn-hover); text-decoration: none; }
-  .btn.sm { height: 28px; padding: 0 8px; font-size: 12px; }
+  /* Buttons, counters, labels, avatars, status icons */
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 32px; padding: 0 12px; border: 1px solid var(--border); border-radius: 6px; background: var(--btn); font-weight: 500; white-space: nowrap; }
+  .btn:hover { background: var(--btn-hover); }
+  .btn .ic { color: var(--muted); }
   .btn.primary { background: var(--green-btn); border-color: rgba(31,35,40,.15); color: #fff; }
   .btn.primary:hover { background: var(--green-btn-hover); }
-  .btn.danger { color: var(--red); }
-  .btn.danger:hover { background: var(--red); border-color: var(--red); color: #fff; }
-  .btn.merged { background: var(--purple); border-color: rgba(31,35,40,.15); color: #fff; }
-  .btn:disabled { color: var(--faint); background: var(--btn); border-color: var(--border); }
-  .btn.primary:disabled { background: var(--green-btn); color: rgba(255,255,255,.8); opacity: .6; }
-  .btn .ic { color: var(--muted); }
-  .btn.primary .ic, .btn.danger:hover .ic { color: inherit; }
-  .icon-btn { width: 32px; height: 32px; display: inline-grid; place-items: center; border-radius: 6px; color: var(--muted); }
+  .btn:disabled, .btn.primary:disabled { color: var(--faint); background: var(--btn); border-color: var(--border); }
+  .icon-btn { width: 32px; height: 32px; display: inline-grid; place-items: center; border: 1px solid var(--border); border-radius: 6px; color: var(--muted); }
   .icon-btn:hover { background: var(--hover-2); }
-  .icon-btn.bordered { border: 1px solid var(--border); }
-  .counter { display: inline-block; min-width: 20px; padding: 0 6px; border-radius: 2em; background: var(--counter); font-size: 12px; font-weight: 500; line-height: 18px; text-align: center; color: var(--text); }
-  .label { display: inline-block; padding: 0 7px; border-radius: 2em; font-size: 12px; font-weight: 500; line-height: 18px; white-space: nowrap; border: 1px solid transparent; }
-  .pill { display: inline-block; padding: 0 7px; border: 1px solid var(--border); border-radius: 2em; font-size: 12px; font-weight: 500; line-height: 18px; color: var(--muted); white-space: nowrap; }
-  .branch { display: inline-block; max-width: 100%; padding: 2px 6px; border-radius: 6px; background: var(--accent-bg); color: var(--link); font-family: var(--mono); font-size: 12px; line-height: 16px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; vertical-align: middle; }
+  .counter { display: inline-block; min-width: 20px; padding: 0 6px; border-radius: 2em; background: var(--counter); font-size: 12px; font-weight: 500; line-height: 18px; text-align: center; }
+  .label { display: inline-block; padding: 0 7px; border-radius: 2em; font-size: 12px; font-weight: 500; line-height: 18px; white-space: nowrap; }
+  .pill { display: inline-block; padding: 0 7px; border: 1px solid var(--border); border-radius: 2em; font-size: 12px; font-weight: 500; line-height: 18px; color: var(--muted); }
+  .branch { display: inline-block; max-width: 100%; padding: 2px 6px; border-radius: 6px; background: var(--accent-bg); color: var(--link); font: 12px/16px var(--mono); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; vertical-align: middle; }
   .av { display: inline-grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; overflow: hidden; flex: none; background: #6e7781; color: #fff; font-size: 9px; font-weight: 600; vertical-align: middle; box-shadow: 0 0 0 1px var(--border-muted); }
   .av img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .av.s16 { width: 16px; height: 16px; } .av.s24 { width: 24px; height: 24px; font-size: 10px; } .av.s32 { width: 32px; height: 32px; font-size: 12px; } .av.s40 { width: 40px; height: 40px; font-size: 14px; }
+  .av.s32 { width: 32px; height: 32px; font-size: 12px; } .av.s40 { width: 40px; height: 40px; font-size: 14px; }
   .box { border: 1px solid var(--border); border-radius: 6px; background: var(--bg); }
-  .box-h { display: flex; align-items: center; gap: 8px; padding: 8px 16px; background: var(--canvas); border-bottom: 1px solid var(--border); border-radius: 6px 6px 0 0; min-height: 48px; }
+  .box-h { display: flex; align-items: center; gap: 16px; padding: 0 16px; min-height: 54px; background: var(--canvas); border-bottom: 1px solid var(--border); border-radius: 6px 6px 0 0; }
   .state { display: inline-flex; align-items: center; gap: 4px; height: 32px; padding: 0 12px; border-radius: 2em; color: #fff; font-weight: 500; white-space: nowrap; }
-  .state.open { background: var(--green-btn); } .state.merged { background: var(--purple); } .state.closed { background: var(--red); }
-  :root[data-theme="dark"] .state.merged { background: #8957e5; }
-  .input { height: 32px; padding: 0 12px; border: 1px solid var(--border); border-radius: 6px; background: var(--bg); outline: 0; }
-  .input:focus, textarea.input:focus { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
-  textarea.input { height: auto; padding: 8px 12px; resize: vertical; display: block; width: 100%; line-height: 1.5; }
-
-  /* Status icons */
+  .state.open { background: var(--green-btn); } .state.merged { background: var(--purple); }
   .st { width: 16px; height: 16px; vertical-align: text-bottom; }
   .st.lg { width: 24px; height: 24px; }
-  .st.success { color: var(--green); } .st.failure { color: var(--red); } .st.in_progress, .st.queued, .st.waiting { color: var(--amber); } .st.cancelled, .st.skipped { color: var(--muted); }
+  .st.success { color: var(--green); } .st.failure { color: var(--red); } .st.in_progress, .st.queued { color: var(--amber); } .st.cancelled { color: var(--muted); }
   .st .on { stroke: var(--bg); }
   .st.in_progress .arc { transform-origin: 8px 8px; animation: gh-spin 1s linear infinite; }
   @keyframes gh-spin { to { transform: rotate(360deg); } }
 
-  /* Global header */
+  /* Global header and repository tabs */
   .gh-top { flex: none; background: var(--canvas); border-bottom: 1px solid var(--border); position: relative; z-index: 30; }
   .gh-bar { display: flex; align-items: center; gap: 8px; height: 64px; padding: 0 16px; }
-  .gh-mark { width: 32px; height: 32px; color: var(--text); display: block; }
-  .gh-logo { display: grid; place-items: center; border-radius: 50%; margin: 0 4px 0 8px; }
-  .crumbs { display: flex; align-items: center; min-width: 0; font-size: 14px; }
-  .crumbs button { padding: 4px 6px; border-radius: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .gh-mark { width: 32px; height: 32px; display: block; }
+  .gh-logo { display: grid; margin: 0 4px 0 8px; }
+  .crumbs { display: flex; align-items: center; min-width: 0; }
+  .crumbs button { padding: 4px 6px; border-radius: 6px; white-space: nowrap; }
   .crumbs button:hover { background: var(--hover-2); }
   .crumbs button.repo { font-weight: 600; }
   .crumbs .sep { color: var(--faint); }
-  .gh-bar .grow { flex: 1; min-width: 0; }
-  .gh-search { display: flex; align-items: center; gap: 8px; width: 272px; height: 32px; padding: 0 8px; border: 1px solid var(--border); border-radius: 6px; color: var(--muted); font-size: 14px; }
+  .gh-search { display: flex; align-items: center; gap: 8px; width: 272px; height: 32px; padding: 0 8px; border: 1px solid var(--border); border-radius: 6px; color: var(--muted); }
   .gh-search:hover { background: var(--hover-2); }
-  .gh-search span { flex: 1; overflow: hidden; white-space: nowrap; }
+  .gh-search span { flex: 1; white-space: nowrap; }
   .gh-search kbd { font: 11px/1 var(--mono); padding: 2px 5px; border: 1px solid var(--border); border-radius: 4px; }
-  .gh-divider { width: 1px; height: 20px; background: var(--border); margin: 0 4px; }
-  .plus-btn { width: auto; padding: 0 8px; gap: 2px; display: inline-flex; align-items: center; }
   .notif { position: relative; }
   .notif i { position: absolute; top: -5px; right: -5px; width: 14px; height: 14px; border-radius: 50%; background: var(--accent); border: 2px solid var(--canvas); }
   .me-btn { border-radius: 50%; margin-left: 4px; display: grid; }
-  .pop { position: absolute; z-index: 60; min-width: 200px; padding: 8px; border-radius: 12px; background: var(--overlay); box-shadow: var(--shadow); font-size: 14px; }
-  .pop button.mi { display: flex; align-items: center; gap: 8px; width: 100%; padding: 6px 8px; border-radius: 6px; }
-  .pop button.mi:hover { background: var(--hover-2); }
-  .pop button.mi .ic { color: var(--muted); }
-  .pop button.mi .chk { width: 16px; color: var(--text); }
-  .pop hr { border: 0; border-top: 1px solid var(--border-muted); margin: 8px -8px; }
-  .pop .pop-t { padding: 4px 8px 8px; font-size: 12px; font-weight: 600; color: var(--muted); }
-  .me-pop { top: 56px; right: 12px; width: 264px; }
-  .me-pop .who { display: flex; align-items: center; gap: 8px; padding: 4px 8px 8px; }
-  .me-pop .who b { display: block; line-height: 20px; } .me-pop .who span { display: block; color: var(--muted); line-height: 20px; }
-  .plus-pop { top: 52px; right: 148px; }
-
-  /* Repository tabs */
-  .repo-nav { display: flex; gap: 8px; padding: 0 16px; overflow-x: auto; scrollbar-width: none; }
-  .repo-nav::-webkit-scrollbar { display: none; }
-  .tab { display: inline-flex; align-items: center; gap: 8px; height: 48px; padding: 0 8px; position: relative; white-space: nowrap; flex: none; }
+  .me-pop { position: absolute; z-index: 60; top: 56px; right: 12px; width: 264px; padding: 8px; border-radius: 12px; background: var(--overlay); box-shadow: var(--shadow); }
+  .me-pop .who { display: flex; align-items: center; gap: 8px; padding: 4px 8px 8px; line-height: 20px; }
+  .me-pop .who b, .me-pop .who span { display: block; } .me-pop .who span { color: var(--muted); }
+  .me-pop button { display: flex; align-items: center; gap: 8px; width: 100%; padding: 6px 8px; border-radius: 6px; }
+  .me-pop button:hover { background: var(--hover-2); }
+  .me-pop .ic { color: var(--muted); }
+  .me-pop hr { border: 0; border-top: 1px solid var(--border-muted); margin: 8px -8px; }
+  .repo-nav, .pr-tabs { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; }
+  .repo-nav { padding: 0 16px; }
+  .repo-nav::-webkit-scrollbar, .pr-tabs::-webkit-scrollbar { display: none; }
+  .tab { display: inline-flex; align-items: center; height: 48px; position: relative; white-space: nowrap; flex: none; }
   .tab > span { display: inline-flex; align-items: center; gap: 8px; padding: 5px 8px; border-radius: 6px; }
   .tab:hover > span { background: var(--hover-2); }
   .tab .ic { color: var(--muted); }
   .tab.on { font-weight: 600; }
   .tab.on::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; border-radius: 6px; background: var(--underline); }
-  .tab { padding: 0; }
-
-  /* Page shell */
-  .main { flex: 1; min-height: 0; overflow: auto; position: relative; }
+  .main { flex: 1; min-height: 0; overflow: auto; }
   .main.fixed { overflow: hidden; display: flex; flex-direction: column; }
   .container { max-width: 1280px; margin: 0 auto; padding: 24px 32px 48px; }
-  h1, h2, h3 { font-weight: 600; }
-  .scrim { position: absolute; inset: 0; background: var(--scrim); z-index: 80; display: grid; place-items: start center; padding: 80px 16px 16px; overflow: auto; }
-  .dialog { width: 100%; max-width: 480px; border-radius: 12px; background: var(--overlay); box-shadow: var(--shadow-lg); }
-  .dialog-h { display: flex; align-items: center; gap: 8px; padding: 8px 8px 8px 16px; border-bottom: 1px solid var(--border); font-weight: 600; }
-  .dialog-h .grow { flex: 1; }
-  .dialog-b { padding: 16px; display: grid; gap: 12px; }
-  .dialog-f { display: flex; justify-content: flex-end; gap: 8px; padding: 12px 16px; border-top: 1px solid var(--border); }
-  .radio { display: grid; grid-template-columns: 16px 1fr; gap: 0 8px; align-items: start; cursor: pointer; }
-  .radio input { margin-top: 4px; }
-  .radio b { font-weight: 600; } .radio span { grid-column: 2; font-size: 12px; color: var(--muted); }
   .toast { position: absolute; left: 50%; bottom: 24px; transform: translate(-50%, 20px); background: #25292e; color: #fff; padding: 10px 16px; border-radius: 6px; font-size: 13px; opacity: 0; pointer-events: none; transition: .2s; z-index: 100; box-shadow: 0 8px 24px rgba(1,4,9,.3); max-width: calc(100% - 32px); }
   .toast.show { opacity: 1; transform: translate(-50%, 0); }
 
-  /* Code tab */
-  .repo-head { display: flex; align-items: center; gap: 8px; padding-bottom: 16px; margin-bottom: 16px; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
-  .repo-head h1 { font-size: 20px; line-height: 32px; display: flex; align-items: center; gap: 8px; min-width: 0; }
-  .repo-head .grow { flex: 1; }
-  .code-grid { display: grid; grid-template-columns: minmax(0, 1fr) 296px; gap: 24px; }
-  .code-bar { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; position: relative; flex-wrap: wrap; }
-  .code-bar .grow { flex: 1; }
-  .code-bar .meta { display: inline-flex; align-items: center; gap: 4px; padding: 0 8px; height: 32px; border-radius: 6px; font-weight: 600; white-space: nowrap; }
-  .code-bar .meta:hover { background: var(--hover-2); }
-  .code-bar .meta span { font-weight: 400; color: var(--muted); }
-  .branch-pop { top: 36px; left: 0; width: 280px; }
-  .branch-pop .mi span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .files .last { display: flex; align-items: center; gap: 8px; padding: 0 16px; height: 52px; background: var(--canvas); border-bottom: 1px solid var(--border); border-radius: 6px 6px 0 0; min-width: 0; }
-  .files .last b { font-weight: 600; white-space: nowrap; }
-  .files .last .msg { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--muted); }
-  .files .last .r { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 12px; white-space: nowrap; }
-  .files .last .r b { color: var(--text); font-size: 14px; display: inline-flex; align-items: center; gap: 6px; }
-  .file { display: grid; grid-template-columns: minmax(120px, 30%) minmax(0, 1fr) auto; gap: 16px; align-items: center; width: 100%; padding: 0 16px; height: 40px; border-top: 1px solid var(--border-muted); }
-  .file:first-of-type { border-top: 0; }
-  .file:hover { background: var(--hover); }
-  .file .n { display: flex; align-items: center; gap: 10px; min-width: 0; }
-  .file .n span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .file:hover .n span { color: var(--link); text-decoration: underline; }
-  .file .n .ic { color: var(--muted); } .file .n .dir { color: var(--folder); }
-  .file .m, .file .w { color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .file .w { text-align: right; }
-  .readme { margin-top: 16px; }
-  .readme .box-h { background: var(--bg); font-weight: 600; gap: 8px; }
-  .md { padding: 32px; }
-  .md h1 { font-size: 28px; padding-bottom: 8px; border-bottom: 1px solid var(--border-muted); margin-bottom: 16px; }
-  .md h2 { font-size: 21px; padding-bottom: 6px; border-bottom: 1px solid var(--border-muted); margin: 24px 0 16px; }
-  .md p, .md ul, .md pre { margin-bottom: 16px; font-size: 16px; }
-  .md ul { padding-left: 2em; }
-  .md code { font-size: 85%; padding: 3px 6px; border-radius: 6px; background: var(--counter); }
-  .md pre { padding: 16px; border-radius: 6px; background: var(--canvas); overflow: auto; font: 13.6px/1.45 var(--mono); }
-  .badge { display: inline-flex; font: 600 11px/20px var(--font); border-radius: 4px; overflow: hidden; color: #fff; vertical-align: middle; margin-right: 6px; }
-  .badge b { padding: 0 6px; background: #555; font-weight: 600; } .badge i { padding: 0 6px; font-style: normal; background: #3fb950; }
-  .about h3 { font-size: 16px; margin-bottom: 12px; }
-  .about p { font-size: 16px; margin-bottom: 16px; }
-  .about .topics { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 16px; }
-  .about .topics span { padding: 0 10px; border-radius: 2em; background: var(--accent-bg); color: var(--link); font-size: 12px; font-weight: 500; line-height: 22px; }
-  .about .row { display: flex; align-items: center; gap: 8px; color: var(--muted); margin-top: 8px; }
-  .about .row b { color: var(--text); }
-  .about section { padding: 16px 0; border-top: 1px solid var(--border-muted); margin-top: 16px; }
-  .langbar { display: flex; height: 8px; border-radius: 6px; overflow: hidden; margin-bottom: 8px; gap: 2px; }
-  .langs { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 12px; }
-  .langs i { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
-  .langs b { font-weight: 600; margin-right: 4px; }
-
   /* Pull request list */
-  .list-bar { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
-  .list-bar .search { flex: 1; display: flex; align-items: center; gap: 8px; height: 32px; padding: 0 12px; border: 1px solid var(--border); border-radius: 6px; background: var(--canvas); color: var(--muted); min-width: 0; }
-  .list-bar .search:focus-within { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); background: var(--bg); }
-  .list-bar .search input { flex: 1; min-width: 0; border: 0; outline: 0; background: none; color: var(--text); }
-  .list-h { gap: 16px; padding: 0 16px; min-height: 54px; }
-  .list-h button { display: inline-flex; align-items: center; gap: 4px; color: var(--muted); white-space: nowrap; }
-  .list-h button.on { color: var(--text); font-weight: 600; }
-  .list-h button:hover { color: var(--text); }
-  .list-h .grow { flex: 1; }
-  .list-h .f { display: flex; gap: 24px; }
-  .pr-row { display: flex; gap: 8px; width: 100%; padding: 8px 16px; border-top: 1px solid var(--border-muted); align-items: flex-start; }
+  .box-h button { display: inline-flex; align-items: center; gap: 4px; color: var(--muted); white-space: nowrap; }
+  .box-h button.on, .box-h b { color: var(--text); font-weight: 600; }
+  .pr-row { display: flex; gap: 8px; padding: 8px 16px; border-top: 1px solid var(--border-muted); cursor: pointer; }
   .pr-row:first-child { border-top: 0; }
   .pr-row:hover { background: var(--hover); }
-  .pr-row .ic.open { color: var(--green); } .pr-row .ic.merged { color: var(--purple); } .pr-row .ic.closed { color: var(--red); }
+  .pr-row .ic.open { color: var(--green); } .pr-row .ic.merged { color: var(--purple); }
   .pr-row > .ic { margin-top: 4px; }
-  .pr-row .t { flex: 1; min-width: 0; }
-  .pr-row .t b { font-size: 16px; font-weight: 600; line-height: 24px; margin-right: 4px; }
-  .pr-row:hover .t b { color: var(--link); }
-  .pr-row .t .label { margin-right: 4px; vertical-align: 2px; }
-  .pr-row .t .st { width: 14px; height: 14px; margin-left: 2px; vertical-align: -1px; }
-  .pr-row .sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
-  .pr-row .rt { display: flex; align-items: center; gap: 16px; flex: none; padding-top: 4px; color: var(--muted); font-size: 12px; min-width: 96px; justify-content: flex-end; }
-  .pr-row .rt span { display: inline-flex; align-items: center; gap: 4px; }
-  .empty { padding: 40px 16px; text-align: center; color: var(--muted); }
-  .empty b { display: block; font-size: 20px; color: var(--text); margin-bottom: 4px; }
+  .pr-row b { font-size: 16px; font-weight: 600; line-height: 24px; margin-right: 4px; }
+  .pr-row:hover b { color: var(--link); }
+  .pr-row .label { margin-right: 4px; vertical-align: 2px; }
+  .pr-row .st { width: 14px; height: 14px; margin-left: 2px; vertical-align: -1px; }
+  .pr-row .sub, .pr-row .rt { font-size: 12px; color: var(--muted); }
+  .pr-row .rt { display: flex; align-items: center; gap: 4px; flex: none; height: 24px; }
 
   /* Pull request */
-  .pr-title { font-size: 32px; font-weight: 400; line-height: 1.25; word-break: break-word; }
+  .pr-title { font-size: 32px; font-weight: 400; line-height: 1.25; overflow-wrap: anywhere; }
   .pr-title span { color: var(--muted); font-weight: 300; }
   .pr-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 8px; padding-bottom: 16px; color: var(--muted); }
-  .pr-meta b { color: var(--muted); font-weight: 600; }
-  .pr-tabs { display: flex; gap: 8px; border-bottom: 1px solid var(--border); margin-bottom: 24px; overflow-x: auto; scrollbar-width: none; align-items: center; }
-  .pr-tabs::-webkit-scrollbar { display: none; }
-  .pr-tabs .grow { flex: 1; }
-  .diffstat { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 600; white-space: nowrap; padding: 0 8px; flex: none; }
+  .pr-meta b { font-weight: 600; }
+  .pr-tabs { border-bottom: 1px solid var(--border); margin-bottom: 24px; align-items: center; }
+  .diffstat { font-size: 12px; font-weight: 600; white-space: nowrap; padding: 0 8px; flex: none; }
   .diffstat .a { color: var(--green); } .diffstat .d { color: var(--red); }
-  .diffstat i { display: inline-block; width: 8px; height: 8px; margin-left: 1px; background: var(--counter); }
-  .diffstat i.a { background: var(--green); } .diffstat i.d { background: var(--red); }
   .pr-grid { display: grid; grid-template-columns: minmax(0, 1fr) 296px; gap: 24px; }
-  .banner { display: flex; align-items: center; gap: 12px; padding: 16px; margin-bottom: 16px; border: 1px solid var(--yellow-line); border-radius: 6px; background: var(--yellow-bg); }
-  .banner .grow { flex: 1; min-width: 0; }
   .tl { position: relative; padding-left: 56px; }
   .tl::before { content: ""; position: absolute; left: 75px; top: 0; bottom: 0; width: 2px; background: var(--border-muted); }
   .tl-item { position: relative; margin-bottom: 16px; }
   .tl-item > .av { position: absolute; left: -56px; top: 0; }
   .comment { position: relative; border: 1px solid var(--border); border-radius: 6px; background: var(--bg); }
-  .comment-h { display: flex; align-items: center; gap: 6px; padding: 0 16px; min-height: 38px; background: var(--canvas); border-bottom: 1px solid var(--border); border-radius: 6px 6px 0 0; color: var(--muted); flex-wrap: wrap; }
+  .comment-h { display: flex; align-items: center; gap: 6px; padding: 0 16px; min-height: 38px; background: var(--canvas); border-bottom: 1px solid var(--border); border-radius: 6px 6px 0 0; color: var(--muted); }
   .comment-h b { color: var(--text); font-weight: 600; }
-  .comment-h .grow { flex: 1; }
   .comment.mine { border-color: var(--accent-line); } .comment.mine .comment-h { background: var(--accent-bg); border-bottom-color: var(--accent-line); }
   .comment-b { padding: 16px; overflow-wrap: anywhere; }
-  .comment-b p { margin-bottom: 12px; } .comment-b p:last-child, .comment-b ul:last-child { margin-bottom: 0; }
-  .comment-b ul { padding-left: 2em; margin-bottom: 12px; }
-  .comment-b code { padding: 2px 5px; border-radius: 6px; background: var(--counter); font-size: 85%; }
-  .ev { position: relative; display: flex; gap: 8px; align-items: flex-start; margin: 0 0 16px 4px; color: var(--muted); min-height: 32px; padding-top: 5px; }
-  .ev .dot { flex: none; width: 32px; height: 32px; margin: -5px 0 0 0; border-radius: 50%; display: grid; place-items: center; background: var(--canvas); border: 2px solid var(--bg); color: var(--muted); position: relative; }
-  .ev .dot.green { background: var(--green-btn); color: #fff; } .ev .dot.purple { background: var(--purple); color: #fff; } .ev .dot.red { background: var(--red); color: #fff; }
-  .ev .dot.plain { background: var(--bg); width: 16px; margin: 3px 8px 0; height: 16px; border: 0; }
+  .comment-b p, .comment-b ul { margin-bottom: 12px; } .comment-b :last-child { margin-bottom: 0; }
+  .comment-b ul { padding-left: 2em; }
+  .comment-b code { padding: 2px 5px; border-radius: 6px; background: var(--counter); font: 85% var(--mono); }
+  .ev { position: relative; display: flex; gap: 8px; align-items: center; margin: 0 0 16px 4px; color: var(--muted); min-height: 32px; }
+  .ev .dot { flex: none; width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; background: var(--canvas); border: 2px solid var(--bg); }
+  .ev .dot.green { background: var(--green-btn); color: #fff; } .ev .dot.purple { background: var(--purple); color: #fff; }
+  .ev .dot.plain { background: var(--bg); }
   .ev .body { flex: 1; min-width: 0; }
   .ev b { color: var(--text); font-weight: 600; }
-  .ev .sha { font-family: var(--mono); font-size: 12px; color: var(--muted); }
-  .ev.commit { margin-bottom: 8px; min-height: 0; padding-top: 0; }
-  .ev.commit .body { display: flex; gap: 8px; align-items: center; min-width: 0; }
-  .ev.commit .msg { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--muted); font-size: 13px; }
-  .ev.commit .msg:hover { color: var(--link); }
-  .ev.commit + .tl-item, .ev.commit + .ev:not(.commit) { margin-top: 16px; }
-  .review-body { margin: 8px 0 0 40px; }
+  .ev code, .sha { font: 12px var(--mono); }
+  .ev.commit .body { display: flex; gap: 8px; align-items: center; font-size: 13px; }
+  .ev.commit .msg { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .tl-end { border-top: 2px solid var(--border-muted); margin: 24px 0 0 -56px; padding: 16px 0 0 56px; position: relative; background: var(--bg); }
+  .tl-end .tl-item { margin-bottom: 0; }
   .side-sec { padding: 0 0 16px; margin-bottom: 16px; border-bottom: 1px solid var(--border-muted); font-size: 12px; }
-  .side-sec h4 { display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 8px; }
+  .side-sec h4 { font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 8px; }
   .side-sec .p { display: flex; align-items: center; gap: 6px; margin-top: 6px; font-weight: 600; }
-  .side-sec .p .grow { flex: 1; }
-  .side-sec .labels { display: flex; flex-wrap: wrap; gap: 4px; }
-
-  /* Merge box */
-  .mergebox { border: 1px solid var(--border); border-radius: 6px; margin-bottom: 16px; position: relative; background: var(--bg); }
+  .side-sec .label { margin-right: 4px; }
+  .mergebox { border: 1px solid var(--border); border-radius: 6px; margin-bottom: 16px; background: var(--bg); }
   .mergebox.ok { border-color: var(--green); } .mergebox.merged { border-color: var(--purple); }
-  .mb-sec { display: flex; gap: 12px; padding: 16px; border-bottom: 1px solid var(--border); align-items: flex-start; }
+  .mb-sec { display: flex; gap: 12px; padding: 16px; border-bottom: 1px solid var(--border); align-items: center; }
   .mb-sec:last-child { border-bottom: 0; }
-  .mb-sec .i { flex: none; width: 32px; height: 32px; display: grid; place-items: center; border-radius: 50%; background: var(--counter); color: var(--muted); }
-  .mb-sec .i.ok { background: var(--green-btn); color: #fff; } .mb-sec .i.bad { background: var(--red); color: #fff; } .mb-sec .i.wait { background: none; }
-  .mb-sec .i.purple { background: var(--purple); color: #fff; }
-  .mb-sec .i .st { width: 24px; height: 24px; }
-  .mb-sec .b { flex: 1; min-width: 0; }
+  .mb-sec .i { flex: none; width: 32px; height: 32px; display: grid; place-items: center; border-radius: 50%; color: #fff; }
+  .mb-sec .i.ok { background: var(--green-btn); } .mb-sec .i.bad { background: var(--red); } .mb-sec .i.purple { background: var(--purple); }
   .mb-sec h4 { font-size: 14px; font-weight: 600; }
   .mb-sec p { font-size: 12px; color: var(--muted); }
-  .mb-sec .tog { color: var(--muted); font-size: 12px; white-space: nowrap; padding: 6px 0; }
-  .mb-sec .tog:hover { color: var(--link); }
-  .checks { border-bottom: 1px solid var(--border); background: var(--canvas); max-height: 260px; overflow: auto; }
-  .check { display: flex; align-items: center; gap: 8px; padding: 8px 16px 8px 20px; border-top: 1px solid var(--border-muted); font-size: 13px; }
+  .checks { border-bottom: 1px solid var(--border); background: var(--canvas); }
+  .check { display: flex; align-items: center; gap: 8px; padding: 8px 16px 8px 24px; border-top: 1px solid var(--border-muted); font-size: 13px; }
   .check:first-child { border-top: 0; }
-  .check .nm { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .check .nm b { font-weight: 600; } .check .nm span { color: var(--muted); }
-  .check .req { color: var(--muted); font-size: 12px; white-space: nowrap; }
+  .check .nm { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--muted); }
+  .check .nm b { font-weight: 600; color: var(--text); }
   .mb-foot { background: var(--canvas); border-radius: 0 0 6px 6px; display: block; }
-  .mb-foot .row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-  .mb-foot .hint { font-size: 12px; color: var(--muted); margin-top: 8px; }
-  .mb-foot .input { width: 100%; margin-bottom: 8px; }
+  .mb-foot p { margin-top: 8px; }
   .composer h4 { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
-  .composer .tabs { display: flex; gap: 0; padding: 8px 8px 0; background: var(--canvas); border-bottom: 1px solid var(--border); border-radius: 6px 6px 0 0; }
-  .composer .tabs span { padding: 8px 16px; border: 1px solid transparent; border-bottom: 0; border-radius: 6px 6px 0 0; color: var(--muted); }
-  .composer .tabs span.on { background: var(--bg); border-color: var(--border); color: var(--text); margin-bottom: -1px; }
-  .composer .pad { padding: 8px; }
-  .composer .foot { display: flex; justify-content: flex-end; gap: 8px; padding: 0 8px 8px; }
-
-  /* Commits and checks tabs */
-  .commit-day { display: flex; align-items: center; gap: 8px; color: var(--muted); margin: 0 0 12px 4px; }
-  .commit-row { display: flex; gap: 12px; align-items: center; padding: 8px 16px; border-top: 1px solid var(--border-muted); }
-  .commit-row:first-child { border-top: 0; }
-  .commit-row .t { flex: 1; min-width: 0; }
-  .commit-row .t b { display: block; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .commit-row .t span { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
-  .commit-row .sha { font-family: var(--mono); font-size: 12px; }
-
-  /* Files changed */
-  .files-bar { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; position: sticky; top: 0; z-index: 5; background: var(--bg); padding: 8px 0; flex-wrap: wrap; }
-  .files-bar .grow { flex: 1; }
-  .diff { margin-bottom: 16px; }
-  .diff-h { display: flex; align-items: center; gap: 8px; padding: 0 8px 0 4px; min-height: 44px; background: var(--canvas); border-bottom: 1px solid var(--border); border-radius: 6px 6px 0 0; }
-  .diff.shut .diff-h { border-bottom: 0; border-radius: 6px; }
-  .diff-h .path { font-family: var(--mono); font-size: 12px; font-weight: 600; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; direction: rtl; text-align: left; }
-  .diff-h label { display: inline-flex; align-items: center; gap: 6px; padding: 0 8px; height: 28px; border: 1px solid var(--border); border-radius: 6px; font-size: 12px; cursor: pointer; white-space: nowrap; }
-  .diff-h label.on { background: var(--accent-bg); border-color: var(--accent-line); }
+  .composer .box { padding: 8px; display: grid; gap: 8px; justify-items: end; }
+  .composer textarea { display: block; width: 100%; padding: 8px 12px; border: 1px solid var(--border); border-radius: 6px; background: var(--bg); line-height: 1.5; resize: vertical; outline: 0; }
+  .composer textarea:focus { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+  .diff-h { display: flex; align-items: center; gap: 8px; padding: 0 8px 0 16px; min-height: 44px; background: var(--canvas); border-bottom: 1px solid var(--border); border-radius: 6px 6px 0 0; font: 600 12px var(--mono); }
   .diff-body { overflow-x: auto; border-radius: 0 0 6px 6px; }
   .diff table { border-collapse: collapse; width: 100%; font: 12px/20px var(--mono); }
-  .diff td { padding: 0 10px; white-space: pre; vertical-align: top; }
+  .diff td { padding: 0 10px; white-space: pre; }
   .diff td.n { width: 1%; min-width: 50px; text-align: right; color: var(--muted); user-select: none; }
-  .diff td.c { width: 100%; }
-  .diff tr.add td.c { background: var(--add-bg); } .diff tr.add td.n { background: var(--add-num); color: var(--text); }
-  .diff tr.del td.c { background: var(--del-bg); } .diff tr.del td.n { background: var(--del-num); color: var(--text); }
+  .diff tr.add td { background: var(--add-bg); } .diff tr.add td.n { background: var(--add-num); color: var(--text); }
+  .diff tr.del td { background: var(--del-bg); } .diff tr.del td.n { background: var(--del-num); color: var(--text); }
   .diff tr.hunk td { background: var(--hunk-bg); color: var(--muted); padding-top: 4px; padding-bottom: 4px; }
-  .diff .big { padding: 24px 16px; text-align: center; color: var(--muted); }
-  .diff .big a { display: block; font-weight: 600; }
 
-  /* Actions: workflows sidebar and the list of runs */
+  /* Actions: the workflows and their runs */
   .split { display: grid; grid-template-columns: 296px minmax(0, 1fr); min-height: 100%; }
   .main.fixed .split { flex: 1; min-height: 0; }
-  .side { border-right: 1px solid var(--border); padding: 16px; background: var(--bg); overflow: auto; }
-  .side h2 { font-size: 20px; padding: 0 8px; display: flex; align-items: center; }
-  .side h2 .grow { flex: 1; }
-  .side .x { display: none; }
-  .side .grp { padding: 16px 8px 4px; font-size: 12px; font-weight: 600; color: var(--muted); }
-  .side hr { border: 0; border-top: 1px solid var(--border-muted); margin: 8px 0; }
-  .side-item { display: flex; align-items: center; gap: 8px; width: 100%; min-height: 32px; padding: 6px 8px; border-radius: 6px; position: relative; line-height: 20px; }
+  .side { border-right: 1px solid var(--border); padding: 16px; overflow: auto; }
+  .side h2 { font-size: 20px; font-weight: 600; padding: 0 8px 12px; }
+  .side h3 { font-size: 12px; font-weight: 600; color: var(--muted); padding: 0 8px 4px; }
+  .side-item { display: flex; align-items: center; gap: 8px; width: 100%; padding: 6px 8px; border-radius: 6px; position: relative; line-height: 20px; white-space: nowrap; }
   .side-item:hover { background: var(--hover-2); }
-  .side-item span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .side-item span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
   .side-item .ic { color: var(--muted); }
   .side-item.on { background: var(--hover-2); font-weight: 600; }
   .side-item.on::before { content: ""; position: absolute; left: -8px; top: 4px; bottom: 4px; width: 4px; border-radius: 6px; background: var(--accent); }
-  .side-toggle { display: none; }
-  .side-scrim { display: none; }
-  .act-main { padding: 24px 32px 48px; min-width: 0; }
-  .act-main > .in { max-width: 1012px; margin: 0 auto; }
-  .act-title { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
-  .act-title h1 { font-size: 20px; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .act-sub { color: var(--muted); margin-bottom: 16px; }
-  .run-row { display: grid; grid-template-columns: 16px minmax(0, 1fr) minmax(0, 220px) 132px 28px; gap: 12px; align-items: flex-start; width: 100%; padding: 12px 16px; border-top: 1px solid var(--border-muted); }
+  .act-main { padding: 24px 32px 48px; min-width: 0; max-width: 1076px; width: 100%; margin: 0 auto; }
+  .act-main h1 { font-size: 20px; font-weight: 600; margin-bottom: 16px; }
+  .run-row { display: grid; grid-template-columns: 16px minmax(0, 1fr) minmax(0, 220px) 132px; gap: 12px; padding: 12px 16px; border-top: 1px solid var(--border-muted); cursor: pointer; }
   .run-row:first-child { border-top: 0; }
   .run-row:hover { background: var(--hover); }
   .run-row > .st { margin-top: 3px; }
   .run-row .t b { display: block; font-weight: 600; font-size: 16px; line-height: 22px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .run-row:hover .t b { color: var(--link); }
-  .run-row .t span { display: block; font-size: 12px; color: var(--muted); margin-top: 2px; }
-  .run-row .t span b { display: inline; font-size: 12px; line-height: inherit; color: var(--text); }
-  .run-row .br { padding-top: 2px; min-width: 0; }
-  .run-row .when { font-size: 12px; color: var(--muted); display: grid; gap: 2px; }
-  .run-row .when span { display: flex; align-items: center; gap: 6px; white-space: nowrap; }
-  .run-row .icon-btn { width: 28px; height: 28px; margin-top: -2px; }
+  .run-row .t span, .run-row .when { font-size: 12px; color: var(--muted); }
+  .run-row .t span b { display: inline; font-size: 12px; color: var(--text); }
+  .run-row .when span { display: flex; align-items: center; gap: 6px; white-space: nowrap; margin-bottom: 2px; }
 
-  /* A run: header, sidebar with its jobs, summary */
-  .run-head { flex: none; padding: 16px 24px; border-bottom: 1px solid var(--border); background: var(--bg); }
+  /* A run: its header, its jobs, and the log of one of them */
+  .run-head { flex: none; padding: 16px 24px; border-bottom: 1px solid var(--border); }
   .run-head .crumb { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; color: var(--muted); margin-bottom: 4px; }
   .run-head .crumb:hover { color: var(--link); }
-  .run-head .row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; position: relative; }
-  .run-head h1 { flex: 1; min-width: 200px; font-size: 20px; font-weight: 400; line-height: 28px; display: flex; gap: 8px; align-items: flex-start; }
+  .run-head .row { display: flex; align-items: flex-start; gap: 8px; flex-wrap: wrap; }
+  .run-head h1 { flex: 1; min-width: 200px; font-size: 20px; font-weight: 600; line-height: 28px; display: flex; gap: 8px; }
   .run-head h1 .st { margin-top: 2px; }
-  .run-head h1 b { font-weight: 600; } .run-head h1 span { color: var(--muted); }
-  .run-pop { top: 36px; right: 0; width: 220px; }
-  .run-side { padding: 16px; }
-  .run-main { overflow: auto; min-width: 0; min-height: 0; background: var(--canvas); padding: 24px; }
-  .run-main > * { max-width: 1280px; }
-  .card { border: 1px solid var(--border); border-radius: 6px; background: var(--bg); margin-bottom: 16px; }
-  .card-h { padding: 12px 16px; border-bottom: 1px solid var(--border-muted); }
-  .card-h b { font-weight: 600; } .card-h span { display: block; font-size: 12px; color: var(--muted); }
-  .run-info { display: flex; flex-wrap: wrap; gap: 16px 40px; padding: 16px; }
-  .run-info .k { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
-  .run-info .v { display: flex; align-items: center; gap: 6px; font-weight: 600; flex-wrap: wrap; }
-  .run-info .v .sha { font-family: var(--mono); font-size: 12px; font-weight: 400; color: var(--muted); }
-  .run-info .v.big { font-size: 16px; }
-  .gate { display: flex; align-items: center; gap: 12px; padding: 16px; margin-bottom: 16px; border: 1px solid var(--yellow-line); border-radius: 6px; background: var(--yellow-bg); }
-  .gate .grow { flex: 1; min-width: 0; } .gate b { font-weight: 600; } .gate p { font-size: 12px; color: var(--muted); }
-  .graph { overflow-x: auto; padding: 24px 16px; }
-  .graph .in { position: relative; }
-  .graph .in > svg { position: absolute; inset: 0; width: 100%; height: 100%; fill: none; stroke: var(--border); stroke-width: 2; }
-  .gjob { position: absolute; display: flex; align-items: center; gap: 8px; padding: 0 12px; border: 1px solid var(--border); border-radius: 6px; background: var(--bg); box-shadow: 0 1px 1px rgba(31,35,40,.06); }
-  .gjob:hover { background: var(--hover); border-color: var(--faint); }
-  .gjob span { flex: 1; min-width: 0; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .gjob small { color: var(--muted); font-size: 12px; white-space: nowrap; }
-  .annot { display: flex; gap: 12px; padding: 12px 16px; border-top: 1px solid var(--border-muted); width: 100%; }
-  .annot:first-of-type { border-top: 0; }
-  .annot:hover { background: var(--hover); }
-  .annot .ic.failure { color: var(--red); } .annot .ic.warning { color: var(--amber); } .annot .ic { margin-top: 3px; }
-  .annot .b { flex: 1; min-width: 0; }
-  .annot .b b { font-weight: 600; } .annot .b span { color: var(--muted); font-size: 12px; margin-left: 4px; }
-  .annot .b pre { font: 12px/18px var(--mono); white-space: pre-wrap; overflow-wrap: anywhere; margin-top: 2px; }
-  .art { display: flex; align-items: center; gap: 12px; padding: 10px 16px; border-top: 1px solid var(--border-muted); }
-  .art:first-of-type { border-top: 0; }
-  .art .n { flex: 1; min-width: 0; display: flex; align-items: center; gap: 8px; font-weight: 600; }
-  .art .n a { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .art .s { color: var(--muted); font-size: 12px; white-space: nowrap; }
-
-  /* Job log: dark in both themes */
+  .run-head h1 span span { color: var(--muted); font-weight: 400; }
+  .run-head .meta { display: flex; align-items: center; gap: 6px 10px; flex-wrap: wrap; margin-top: 8px; font-size: 12px; color: var(--muted); }
+  .run-head .meta b { color: var(--text); font-weight: 600; }
   .job-main { min-width: 0; min-height: 0; padding: 16px; background: var(--canvas); display: flex; }
-  .log { flex: 1; min-width: 0; min-height: 0; display: flex; flex-direction: column; border-radius: 6px; background: var(--log-bg); color: var(--log-text); border: 1px solid var(--log-border); color-scheme: dark; position: relative; }
-  .log-h { flex: none; display: flex; align-items: center; gap: 8px; padding: 12px 16px; border-bottom: 1px solid var(--log-border); flex-wrap: wrap; }
-  .log-h .t { flex: 1; min-width: 160px; }
-  .log-h h2 { font-size: 16px; line-height: 24px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .log { flex: 1; min-width: 0; min-height: 0; display: flex; flex-direction: column; border-radius: 6px; background: var(--log-bg); color: var(--log-text); border: 1px solid var(--log-border); color-scheme: dark; }
+  .log-h { flex: none; padding: 12px 16px; border-bottom: 1px solid var(--log-border); }
+  .log-h h2 { font-size: 16px; font-weight: 600; line-height: 24px; }
   .log-h p { font-size: 12px; color: var(--log-muted); }
-  .log-search { display: flex; align-items: center; gap: 8px; width: 280px; height: 32px; padding: 0 8px 0 12px; border: 1px solid var(--log-border); border-radius: 6px; background: var(--log-input); color: var(--log-muted); }
-  .log-search:focus-within { border-color: #1f6feb; box-shadow: inset 0 0 0 1px #1f6feb; }
-  .log-search input { flex: 1; min-width: 0; border: 0; outline: 0; background: none; color: var(--log-text); font-size: 14px; }
-  .log-search input::placeholder { color: var(--log-muted); }
-  .log-search .cnt { font-size: 12px; white-space: nowrap; }
-  .log .icon-btn { color: var(--log-muted); }
-  .log .icon-btn:hover { background: #656c7633; color: var(--log-text); }
-  .log-pop { top: 52px; right: 12px; width: 220px; background: #151b23; box-shadow: 0 0 0 1px #3d444d, 0 6px 18px #01040999; color: var(--log-text); }
-  .log-pop button.mi:hover { background: #656c7633; }
-  .log-pop button.mi .chk { color: var(--log-text); }
-  .log-pop hr { border-top-color: #3d444db3; }
-  .log-body { flex: 1; min-height: 0; overflow: auto; padding: 8px 0 24px; font: 12px/20px var(--mono); overscroll-behavior: contain; }
-  .step-h { display: flex; align-items: center; gap: 8px; width: 100%; padding: 6px 16px 6px 12px; color: var(--log-muted); font: inherit; font-size: 13px; position: sticky; top: -8px; background: var(--log-bg); z-index: 1; }
+  .log-body { flex: 1; min-height: 0; overflow: auto; position: relative; padding: 8px 0 24px; font: 12px/20px var(--mono); overscroll-behavior: contain; }
+  .step-h { display: flex; align-items: center; gap: 8px; width: 100%; padding: 6px 16px 6px 12px; color: var(--log-muted); font: 13px var(--font); position: sticky; top: -8px; background: var(--log-bg); }
   .step-h:hover { background: var(--log-hover); color: var(--log-text); }
-  .step-h .chev { transition: transform .12s; }
-  .step.open > .step-h .chev { transform: rotate(90deg); }
+  .step.open > .step-h .ic { transform: rotate(90deg); }
   .step.open > .step-h, .step.failure > .step-h, .step.in_progress > .step-h { color: var(--log-text); }
-  .step-h .nm { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: var(--font); }
-  .step-h .d { font-family: var(--font); font-size: 12px; color: var(--log-muted); white-space: nowrap; }
-  .step-h .st.success { color: #3fb950; } .step-h .st.failure { color: #f85149; } .step-h .st.in_progress, .step-h .st.queued, .step-h .st.waiting { color: #d29922; } .step-h .st.cancelled, .step-h .st.skipped { color: #9198a1; }
+  .step-h .d { font-size: 12px; color: var(--log-muted); }
+  .step-h .st.success { color: #3fb950; } .step-h .st.failure { color: #f85149; } .step-h .st.in_progress { color: #d29922; } .step-h .st.queued, .step-h .st.cancelled { color: #656c76; }
   .step-h .st .on { stroke: var(--log-bg); }
-  .step.queued > .step-h .st { color: #656c76; }
-  .lines { padding: 2px 0 10px; overflow-x: auto; }
-  .ln { display: flex; align-items: flex-start; min-width: 100%; }
-  .log.nowrap .ln { width: max-content; }
+  .lines { padding: 2px 0 10px; }
+  .ln { display: flex; }
   .ln:hover { background: var(--log-hover); }
-  .ln .no { flex: none; width: 56px; padding-right: 12px; text-align: right; color: var(--log-muted); font: inherit; user-select: none; }
-  .ln .no:hover { color: #4493f8; text-decoration: underline; }
-  .ln .ts { flex: none; padding-right: 12px; color: var(--log-muted); white-space: nowrap; }
+  .ln .no { flex: none; width: 56px; padding-right: 12px; text-align: right; color: var(--log-muted); user-select: none; }
   .ln .tx { flex: 1; min-width: 0; white-space: pre-wrap; overflow-wrap: anywhere; padding-right: 16px; }
-  .log.nowrap .ln .tx { white-space: pre; overflow-wrap: normal; flex: none; }
-  .ln.in .tx { padding-left: 18px; }
-  .ln.grp .tx { cursor: pointer; }
-  .ln .fold { display: inline-block; width: 12px; height: 12px; margin-right: 6px; vertical-align: -1px; fill: currentColor; stroke: none; transition: transform .12s; }
-  .ln.grp.open .fold { transform: rotate(90deg); }
-  .ln.hl, .ln.hl:hover { background: #388bfd26; box-shadow: inset 2px 0 0 #4493f8; }
-  .ln.hl .no { color: var(--log-text); }
-  .ln.err { background: #f8514926; } .ln.warn { background: #bb800926; } .ln.note { background: #388bfd1a; }
-  .ln.cmd .tx { color: #4493f8; }
-  .ln mark { background: #bb800966; color: inherit; border-radius: 2px; }
   .log-empty { padding: 4px 16px 4px 56px; color: var(--log-muted); }
-  .c-red { color: #ff7b72; } .c-green { color: #3fb950; } .c-yellow { color: #d29922; } .c-blue { color: #58a6ff; } .c-magenta { color: #bc8cff; } .c-cyan { color: #39c5cf; } .c-gray { color: #9198a1; } .c-white { color: #ffffff; }
-  .c-bold { font-weight: 700; } .c-dim { opacity: .7; }
-  .bg-red { background: #da3633; color: #fff; } .bg-green { background: #238636; color: #fff; } .bg-yellow { background: #9e6a03; color: #fff; } .bg-blue { background: #1f6feb; color: #fff; } .bg-cyan { background: #1b7c83; color: #fff; }
+  .c-red { color: #ff7b72; } .c-green { color: #3fb950; } .c-yellow { color: #d29922; } .c-blue { color: #58a6ff; } .c-cyan { color: #39c5cf; } .c-gray { color: #9198a1; } .c-bold { font-weight: 700; }
+  .bg-red { background: #da3633; color: #fff; } .bg-cyan { background: #1b7c83; color: #fff; }
 
-  /* Narrow: a tablet stacks the side columns, a phone turns sidebars into drawers */
+  /* Narrow: the side columns stack, and the lists of workflows and jobs become rows of chips */
   @media (max-width: 1011px) {
-    .code-grid, .pr-grid { grid-template-columns: minmax(0, 1fr); }
+    .pr-grid { grid-template-columns: minmax(0, 1fr); }
     .gh-search { width: 32px; padding: 0; justify-content: center; }
-    .gh-search span, .gh-search kbd { display: none; }
+    .gh-search span { display: none; }
     .split { grid-template-columns: 240px minmax(0, 1fr); }
-    .run-row { grid-template-columns: 16px minmax(0, 1fr) 132px 28px; }
+    .run-row { grid-template-columns: 16px minmax(0, 1fr) 132px; }
     .run-row .br { grid-column: 2; grid-row: 2; }
     .run-row .when { grid-row: 1 / span 2; grid-column: 3; }
-    .run-row .icon-btn { grid-row: 1 / span 2; grid-column: 4; }
   }
   @media (max-width: 760px) {
     .gh-bar { height: 56px; padding: 0 12px; gap: 6px; }
-    .hide-sm { display: none !important; }
+    .hide-sm { display: none; }
     .gh-logo { margin: 0 2px; }
     .me-pop { top: 50px; right: 8px; }
     .repo-nav { padding: 0 8px; gap: 4px; }
-    .container { padding: 16px 16px 40px; }
-    .act-main { padding: 16px 16px 40px; }
-    .split { display: block; }
-    .main.fixed .split { display: flex; flex-direction: column; }
-    .side { position: absolute; z-index: 70; top: 0; bottom: 0; left: 0; width: min(300px, 86%); transform: translateX(-102%); transition: transform .2s; box-shadow: none; }
-    .drawer .side { transform: none; box-shadow: var(--shadow-lg); }
-    .drawer .side-scrim { display: block; position: absolute; inset: 0; z-index: 65; background: var(--scrim); }
-    .side .x { display: inline-grid; }
-    .side-toggle { display: inline-flex; }
+    .container, .act-main { padding: 16px 16px 40px; }
+    .split, .main.fixed .split { display: flex; flex-direction: column; }
+    .side { flex: none; display: flex; gap: 4px; align-items: center; padding: 8px 12px; border-right: 0; border-bottom: 1px solid var(--border); }
+    .side h2, .side h3 { display: none; }
+    .side-item { width: auto; flex: none; }
+    .side-item.on::before { display: none; }
     .run-head { padding: 12px 16px; }
-    .run-main { padding: 16px; flex: 1; }
     .job-main { padding: 0; flex: 1; }
-    .log { border-radius: 0; border-width: 1px 0 0; }
-    .log-h { padding: 10px 12px; }
-    .log-search { width: auto; flex: 1 1 160px; order: 3; }
+    .log { border-radius: 0; border-width: 0; }
     .ln .no { width: 40px; padding-right: 8px; }
-    .run-row { grid-template-columns: 16px minmax(0, 1fr) 28px; padding: 12px; }
+    .run-row { grid-template-columns: 16px minmax(0, 1fr); padding: 12px; }
     .run-row .t b { white-space: normal; }
     .run-row .when { grid-row: 3; grid-column: 2; display: flex; gap: 12px; }
-    .run-row .icon-btn { grid-row: 1; grid-column: 3; }
     .pr-title { font-size: 24px; }
     .tl { padding-left: 0; }
     .tl::before { left: 19px; }
     .tl-item > .av { display: none; }
     .tl-end { margin-left: 0; padding-left: 0; }
-    .review-body { margin-left: 0; }
-    .pr-row .rt { min-width: 0; }
-    .list-h { gap: 8px; } .list-h .f { display: none; }
-    .file { grid-template-columns: minmax(0, 1fr) auto; }
-    .file .m { display: none; }
-    .files .last .r span { display: none; }
-    .md { padding: 16px; }
-    .mb-sec { padding: 12px; }
-    .diff-h label span { display: none; }
+    .mb-sec { padding: 12px; flex-wrap: wrap; }
     .diff td { padding: 0 6px; } .diff td.n { min-width: 34px; }
-    .scrim { padding-top: 24px; }
-    .gate, .banner { flex-wrap: wrap; }
   }
 </style>
 </head>
@@ -545,55 +308,30 @@ const I = {
   menu: '<path d="M1.75 3.5h12.5M1.75 8h12.5M1.75 12.5h12.5"/>',
   search: '<circle cx="7" cy="7" r="4.75"/><path d="M10.5 10.5l3.75 3.75"/>',
   plus: '<path d="M8 2.75v10.5M2.75 8h10.5"/>',
-  caret: '<path class="f" d="M4.4 6.2h7.2L8 10.2z"/>',
   chev: '<path d="M6 3.75L10.25 8 6 12.25"/>',
-  down: '<path d="M3.75 6L8 10.25 12.25 6"/>',
   left: '<path d="M7.25 3.5L2.75 8l4.5 4.5M3 8h10.25"/>',
   bell: '<path d="M8 1.75a4.25 4.25 0 00-4.25 4.25v2.6L2.5 11.25h11L12.25 8.6V6A4.25 4.25 0 008 1.75zM6.4 13.4a1.7 1.7 0 003.2 0"/>',
   code: '<path d="M5.25 4.25L1.5 8l3.75 3.75M10.75 4.25L14.5 8l-3.75 3.75"/>',
   issue: '<circle cx="8" cy="8" r="6.25"/><circle class="f" cx="8" cy="8" r="1.5"/>',
   pr: '<circle cx="3.75" cy="3.5" r="1.75"/><circle cx="3.75" cy="12.5" r="1.75"/><circle cx="12.25" cy="12.5" r="1.75"/><path d="M3.75 5.25v5.5M12.25 10.75V6.5a2 2 0 00-2-2H7.75M9.5 2.5l-2 2 2 2"/>',
   merge: '<circle cx="4" cy="3.5" r="1.75"/><circle cx="4" cy="12.5" r="1.75"/><circle cx="12" cy="8.25" r="1.75"/><path d="M4 5.25v5.5M4 5.25c.3 2.2 2.2 3 6.25 3"/>',
-  closed: '<circle cx="3.75" cy="3.5" r="1.75"/><circle cx="3.75" cy="12.5" r="1.75"/><circle cx="12.25" cy="12.5" r="1.75"/><path d="M3.75 5.25v5.5M12.25 10.75V8.5M10.5 2.25l3.5 3.5M14 2.25l-3.5 3.5"/>',
   play: '<circle cx="8" cy="8" r="6.25"/><path class="f" d="M6.5 5.4v5.2l4.2-2.6z"/>',
   table: '<rect x="1.75" y="1.75" width="12.5" height="12.5" rx="2"/><path d="M1.75 6h12.5M6 6v8.25"/>',
   shield: '<path d="M8 1.5l5.25 2v4.1c0 3-2.1 5.4-5.25 6.9-3.15-1.5-5.25-3.9-5.25-6.9V3.5z"/>',
   graph: '<path d="M1.75 1.75v12.5h12.5M4.5 10.5l3-3.5 2.5 2 3.5-4.75"/>',
   gear: '<circle cx="8" cy="8" r="2.25"/><path d="M8 1.5v1.9M8 12.6v1.9M1.5 8h1.9M12.6 8h1.9M3.4 3.4l1.35 1.35M11.25 11.25l1.35 1.35M3.4 12.6l1.35-1.35M11.25 4.75l1.35-1.35"/>',
-  repo: '<path d="M3.25 12.5V3A1.75 1.75 0 015 1.25h7.75v9.5H5a1.75 1.75 0 000 3.5h7.75v-3.5"/>',
-  lock: '<rect x="3.25" y="7" width="9.5" height="7.25" rx="1.5"/><path d="M5.5 7V4.75a2.5 2.5 0 015 0V7"/>',
-  branch: '<circle cx="4" cy="3.5" r="1.75"/><circle cx="4" cy="12.5" r="1.75"/><circle cx="12" cy="4.5" r="1.75"/><path d="M4 5.25v5.5M12 6.25v.25a2.5 2.5 0 01-2.5 2.5h-3A2.5 2.5 0 004 10.75"/>',
   commit: '<circle cx="8" cy="8" r="2.75"/><path d="M1 8h4.25M10.75 8H15"/>',
   eye: '<path d="M1.5 8S3.9 3.5 8 3.5 14.5 8 14.5 8 12.1 12.5 8 12.5 1.5 8 1.5 8z"/><circle cx="8" cy="8" r="2"/>',
-  star: '<path d="M8 1.75l1.9 3.95 4.35.6-3.15 3.05.75 4.3L8 11.6l-3.85 2.05.75-4.3L1.75 6.3l4.35-.6z"/>',
-  fork: '<circle cx="4" cy="3.5" r="1.75"/><circle cx="12" cy="3.5" r="1.75"/><circle cx="8" cy="12.5" r="1.75"/><path d="M4 5.25v1a2 2 0 002 2h4a2 2 0 002-2v-1M8 8.25v2.5"/>',
-  folder: '<path class="f" d="M1.75 2h4.1c.3 0 .6.15.8.4L7.8 3.75h6.45c.4 0 .75.35.75.75v8.75c0 .4-.35.75-.75.75H1.75a.75.75 0 01-.75-.75V2.75c0-.4.35-.75.75-.75z"/>',
-  file: '<path d="M3.75 1.75h5.5l3 3v9.5h-8.5zM9 1.75V5h3.25"/>',
   comment: '<path d="M2.25 2.75h11.5v7.75H8.25l-3 2.75V10.5h-3z"/>',
   check: '<path d="M3 8.5l3.25 3.25L13 4.75"/>',
   x: '<path d="M4 4l8 8M12 4l-8 8"/>',
-  kebab: '<circle class="f" cx="3" cy="8" r="1.4"/><circle class="f" cx="8" cy="8" r="1.4"/><circle class="f" cx="13" cy="8" r="1.4"/>',
-  clock: '<circle cx="8" cy="8" r="6.25"/><path d="M8 4.5V8l2.4 1.5"/>',
   cal: '<rect x="1.75" y="2.75" width="12.5" height="11.5" rx="2"/><path d="M1.75 6.5h12.5M5 1.25v3M11 1.25v3"/>',
   timer: '<circle cx="8" cy="9" r="5.25"/><path d="M8 6v3M6.25 1.5h3.5M12.25 4.25l.9-.9"/>',
   sync: '<path d="M2.5 7.5a5.5 5.5 0 019.7-3L13.5 6M13.5 2.5V6H10M13.5 8.5a5.5 5.5 0 01-9.7 3L2.5 10M2.5 13.5V10H6"/>',
-  home: '<path d="M2 7.5L8 2l6 5.5v6.75h-4V10H6v4.25H2z"/>',
-  download: '<path d="M8 2v8M4.75 7L8 10.25 11.25 7M2.75 13.25h10.5"/>',
-  pkg: '<path d="M8 1.5l5.75 3v7L8 14.5l-5.75-3v-7zM2.25 4.5L8 7.5l5.75-3M8 7.5v7"/>',
-  rocket: '<path d="M9 2.6c2.3-1 4-.8 4.4-.7.1.4.3 2.1-.7 4.4L9.4 9.6 6.4 6.6zM6.4 6.6L3.6 7 2.2 9l2.4.5M9.4 9.6L9 12.4l-2 1.4-.5-2.4M4.6 11.4L3 13"/>',
-  ext: '<path d="M6.5 3H3v10h10V9.5M9.5 2.5h4v4M13.5 2.5L8 8"/>',
   moon: '<path d="M13.5 9.6A6 6 0 016.4 2.5a6 6 0 107.1 7.1z"/>',
   person: '<circle cx="8" cy="5" r="3"/><path d="M2.5 14c.6-3 2.8-4.5 5.5-4.5s4.9 1.5 5.5 4.5"/>',
   out: '<path d="M6.5 2.5h-4v11h4M10 5l3 3-3 3M13 8H6"/>',
-  alert: '<path d="M8 2l6.25 11.5H1.75zM8 6.5v3M8 11.6v.01"/>',
-  book: '<path d="M8 3.5C6.5 2.5 4.5 2.25 1.75 2.5v10c2.75-.25 4.75 0 6.25 1 1.5-1 3.5-1.25 6.25-1v-10C11.5 2.25 9.5 2.5 8 3.5zM8 3.5v10"/>',
   workflow: '<rect x="1.75" y="1.75" width="5" height="5" rx="1"/><rect x="9.25" y="9.25" width="5" height="5" rx="1"/><path d="M4.25 6.75v3a2 2 0 002 2h3"/>',
-  db: '<ellipse cx="8" cy="4" rx="5.5" ry="2.25"/><path d="M2.5 4v8c0 1.25 2.45 2.25 5.5 2.25s5.5-1 5.5-2.25V4M2.5 8c0 1.25 2.45 2.25 5.5 2.25S13.5 9.25 13.5 8"/>',
-  server: '<rect x="1.75" y="2.25" width="12.5" height="4.75" rx="1"/><rect x="1.75" y="9" width="12.5" height="4.75" rx="1"/><path d="M4.5 4.6h.01M4.5 11.4h.01"/>',
-  tri: '<path class="f" d="M5.5 3.5l5.5 4.5-5.5 4.5z"/>',
-  xcircle: '<circle cx="8" cy="8" r="6.25"/><path d="M5.75 5.75l4.5 4.5M10.25 5.75l-4.5 4.5"/>',
-  full: '<path d="M2.5 6V2.5H6M10 2.5h3.5V6M13.5 10v3.5H10M6 13.5H2.5V10"/>',
-  tag: '<path d="M1.75 1.75h5.5l7 7-5.5 5.5-7-7zM4.75 4.75h.01"/>',
 };
 const ic = (n, cls = "") => `<svg class="ic${cls ? " " + cls : ""}" viewBox="0 0 16 16" aria-hidden="true">${I[n]}</svg>`;
 // A status, as GitHub draws it: a filled circle with a check or a cross, a spinning ring, a ring with a dot.
@@ -602,11 +340,9 @@ const ST = {
   failure: '<circle cx="8" cy="8" r="8" fill="currentColor"/><path class="on" d="M5.4 5.4l5.2 5.2M10.6 5.4l-5.2 5.2" fill="none" stroke-width="1.6" stroke-linecap="round"/>',
   in_progress: '<circle cx="8" cy="8" r="6.75" fill="none" stroke="currentColor" stroke-width="2" opacity=".3"/><path class="arc" d="M8 1.25A6.75 6.75 0 0114.75 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="8" cy="8" r="2.5" fill="currentColor"/>',
   queued: '<circle cx="8" cy="8" r="6.75" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="8" cy="8" r="2.5" fill="currentColor"/>',
-  waiting: '<circle cx="8" cy="8" r="6.75" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 4.5V8l2.4 1.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>',
   cancelled: '<path d="M5.1 1.5h5.8l3.6 3.6v5.8l-3.6 3.6H5.1l-3.6-3.6V5.1z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M8 4.75v3.75M8 11v.01" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>',
-  skipped: '<circle cx="8" cy="8" r="6.75" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M3.4 12.6l9.2-9.2" fill="none" stroke="currentColor" stroke-width="1.5"/>',
 };
-const ST_LABEL = { success: "Success", failure: "Failure", in_progress: "In progress", queued: "Queued", waiting: "Waiting", cancelled: "Cancelled", skipped: "Skipped" };
+const ST_LABEL = { success: "Success", failure: "Failure", in_progress: "In progress", queued: "Queued", cancelled: "Cancelled" };
 const st = (s, cls = "") => `<svg class="st ${s}${cls ? " " + cls : ""}" viewBox="0 0 16 16" role="img" aria-label="${ST_LABEL[s]}">${ST[s]}</svg>`;
 
 // ---------- Time ----------
@@ -617,125 +353,31 @@ function ago(t) {
   if (d < 45 * SEC) return "now";
   if (d < HOUR) { const m = Math.max(1, Math.round(d / MIN)); return `${m} minute${m === 1 ? "" : "s"} ago`; }
   if (d < DAY) { const h = Math.round(d / HOUR); return `${h} hour${h === 1 ? "" : "s"} ago`; }
-  if (d < 2 * DAY) return "yesterday";
-  if (d < 30 * DAY) return `${Math.round(d / DAY)} days ago`;
-  return "on " + new Date(t).toLocaleDateString("en-US", { month: "short", day: "numeric" });
+  return d < 2 * DAY ? "yesterday" : `${Math.round(d / DAY)} days ago`;
 }
-// A duration in seconds, as GitHub writes it: "42s", "1m 12s", "1h 4m".
-function dur(s) {
-  s = Math.max(0, Math.round(s));
-  if (s < 60) return `${s}s`;
-  if (s < 3600) return `${Math.floor(s / 60)}m ${s % 60}s`;
-  return `${Math.floor(s / 3600)}h ${Math.floor((s % 3600) / 60)}m`;
-}
-const day = t => new Date(t).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+// A duration in seconds, as GitHub writes it: "42s", "1m 12s".
+const dur = s => s < 60 ? `${s}s` : `${Math.floor(s / 60)}m ${s % 60}s`;
 
 // ---------- The repository ----------
 const ME = "naman";
-const PEOPLE = {
-  naman: { name: "Naman Shukla" }, hana: { name: "Hana Kim" }, marcus: { name: "Marcus Chen" },
-  sofia: { name: "Sofia Alvarez" }, dev: { name: "Dev Patel" }, lena: { name: "Lena Okafor" },
-};
-const avatar = (k, cls = "") => `<span class="av${cls ? " " + cls : ""}">${PHOTOS[k] ? `<img src="${PHOTOS[k]}" alt="">` : esc((PEOPLE[k]?.name ?? k).split(" ").map(w => w[0]).slice(0, 2).join(""))}</span>`;
+const PEOPLE = { naman: "Naman Shukla", hana: "Hana Kim", marcus: "Marcus Chen", sofia: "Sofia Alvarez", dev: "Dev Patel", lena: "Lena Okafor" };
+const avatar = (k, cls = "") => `<span class="av${cls ? " " + cls : ""}"><img src="${PHOTOS[k]}" alt=""></span>`;
+const REPO = { owner: "casuro", name: "core", issues: 14 };
+const LABELS = { database: "#bfd4f2", migration: "#d4c5f9", "flaky-test": "#fbca04", checkout: "#f9d0c4", dependencies: "#0366d6", ci: "#c2e0c6" };
 
-const REPO = {
-  owner: "casuro", name: "core", visibility: "Private", branch: "main",
-  about: "Casuro's API and background jobs: assessments, spaces and billing.",
-  topics: ["typescript", "node", "postgres", "vitest"],
-  branches: ["main", "dev/assessment-spaces", "naman/fix-checkout-flake", "lena/bump-vitest", "marcus/cap-retries"],
-  commits: 3214, issues: 14, watchers: 6, stars: 12, forks: 0,
-  // Branch protection on main: the checks that must pass and the approvals a pull request needs.
-  required: ["lint", "test (shard 1/2)", "test (shard 2/2)", "build", "Analyze (javascript-typescript)"], approvals: 1,
-  languages: [["TypeScript", 86.4, "#3178c6"], ["PLpgSQL", 9.1, "#336790"], ["JavaScript", 3.2, "#f1e05a"], ["Shell", 1.3, "#89e051"]],
-  last: { by: "marcus", message: "fix(checkout): cap retries to protect the db pool (#917)", sha: "e7b2d40", at: T0 - 9 * MIN, status: "success" },
-  files: [
-    { name: ".github", dir: true, message: "ci: split tests into two shards (#898)", at: T0 - 3 * DAY },
-    { name: "db", dir: true, message: "feat(db): checkout idempotency keys (#901)", at: T0 - 2 * DAY },
-    { name: "docs", dir: true, message: "docs: runbook for a checkout retry storm", at: T0 - 5 * DAY },
-    { name: "scripts", dir: true, message: "chore: migrate script prints timings", at: T0 - 9 * DAY },
-    { name: "src", dir: true, message: "fix(checkout): cap retries to protect the db pool (#917)", at: T0 - 9 * MIN },
-    { name: "test", dir: true, message: "fix: retry idempotent requests (#905)", at: T0 - 3 * HOUR },
-    { name: ".eslintrc.cjs", message: "chore: lint the test folder too", at: T0 - 21 * DAY },
-    { name: ".gitignore", message: "chore: ignore coverage output", at: T0 - 40 * DAY },
-    { name: "README.md", message: "docs: how CI and deploys work", at: T0 - 6 * DAY },
-    { name: "package-lock.json", message: "chore(deps): bump pg to 8.13", at: T0 - 4 * DAY },
-    { name: "package.json", message: "chore(deps): bump pg to 8.13", at: T0 - 4 * DAY },
-    { name: "tsconfig.json", message: "build: target ES2022", at: T0 - 60 * DAY },
-    { name: "vitest.config.ts", message: "ci: split tests into two shards (#898)", at: T0 - 3 * DAY },
-  ],
-  readme: `# core
-
-[badge:CI:passing] [badge:deploy:production]
-
-The API and background jobs behind Casuro: assessments, spaces and billing. One Node service, one Postgres database.
-
-## Getting started
-
-\`\`\`
-npm ci
-npm run db:migrate
-npm test
-\`\`\`
-
-## CI and deploys
-
-- **CI** runs on every pull request: \`lint\`, the tests in two shards, \`build\`, and a deploy to staging.
-- **Deploy to production** runs on every push to \`main\` and waits for a review in the \`production\` environment.
-- **CodeQL** scans pull requests and \`main\` nightly.
-
-A pull request needs one approving review and green required checks before it can merge.`,
-};
-const LABELS = { database: "#bfd4f2", migration: "#d4c5f9", "flaky-test": "#fbca04", checkout: "#f9d0c4", dependencies: "#0366d6", ci: "#c2e0c6", infra: "#5319e7" };
-
-// ---------- Pull requests ----------
-const D912 = {
-  migration: `@@ -0,0 +1,16 @@
-+-- 0141: assessment_spaces, one row per assessment in a space
-+CREATE TABLE assessment_spaces (
-+  id            bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-+  assessment_id bigint NOT NULL REFERENCES assessments (id) ON DELETE CASCADE,
-+  space_id      bigint NOT NULL REFERENCES spaces (id) ON DELETE CASCADE,
-+  owner_id      bigint REFERENCES users (id),
-+  created_at    timestamptz NOT NULL DEFAULT now(),
-+  UNIQUE (assessment_id, space_id)
-+);
-+
-+-- The backfill finds the rows that still have no owner through this index.
-+CREATE INDEX assessment_spaces_owner_null_idx
-+  ON assessment_spaces (id) WHERE owner_id IS NULL;
-+
-+INSERT INTO assessment_spaces (assessment_id, space_id)
-+SELECT id, space_id FROM assessments WHERE space_id IS NOT NULL;`,
-  job: `@@ -0,0 +1,28 @@
-+import { db } from "../db";
-+import { logger } from "../logger";
-+
-+const BATCH_SQL = \`
-+  UPDATE assessment_spaces AS a
-+  SET owner_id = s.space_owner
-+  FROM spaces AS s
-+  WHERE a.space_id = s.id
-+    AND a.id IN (
-+      SELECT id FROM assessment_spaces
-+      WHERE owner_id IS NULL
-+      ORDER BY id
-+      LIMIT $1
-+      FOR UPDATE SKIP LOCKED
-+    )\`;
-+
-+/** Copies the legacy spaces.space_owner into assessment_spaces.owner_id, one batch at a time. */
-+export async function backfillAssessmentSpaceOwners({ batchSize = 5_000, pauseMs = 200 } = {}) {
-+  let total = 0;
-+  for (;;) {
-+    const { rowCount } = await db.query(BATCH_SQL, [batchSize]);
-+    if (!rowCount) break;
-+    total += rowCount;
-+    logger.info("assessment_spaces backfill", { batch: rowCount, total });
-+    await new Promise((r) => setTimeout(r, pauseMs));
-+  }
-+  return total;
-+}`,
-  model: `@@ -12,10 +12,16 @@ export class Space extends Model {
+const PRS = [
+  {
+    number: 912, title: "feat(db): add assessment_spaces with backfill", author: "dev", state: "open", branch: "dev/assessment-spaces", base: "main", at: T0 - 26 * HOUR,
+    labels: ["database", "migration"], reviewers: { naman: "requested", hana: "commented" },
+    body: "Adds the `assessment_spaces` table and backfills `owner_id` from the legacy `space_owner` column (CAS-912).\n\n- `0141_create_assessment_spaces.sql` creates the table and its index\n- The backfill runs as a job, in batches, so it can be stopped and picked up again\n- RLS on the table waits until the backfill reports zero rows without an owner\n\nRollout: run the job Tuesday night, after the deploy freeze lifts.",
+    timeline: [
+      { type: "commit", by: "dev", sha: "8be2a04", text: "fix(jobs): batch the backfill in chunks of 5k", at: T0 - 5 * HOUR },
+      { type: "comment", by: "hana", at: T0 - 4 * HOUR, text: "Batching looks right to me. I would like @naman to look at the lock on `spaces` before this goes in." },
+      { type: "comment", by: "marcus", at: T0 - 40 * MIN, text: "The red X on `test (shard 2/2)` is the checkout retry flake again (CAS-934), not this change. A re-run should clear it." },
+      { type: "commit", by: "dev", sha: "c41d9e7", text: "test: cover a resumed backfill", at: T0 - 30 * SEC },
+      { type: "event", icon: "eye", by: "dev", text: "requested a review from **naman**", at: T0 - 28 * SEC },
+    ],
+    files: [{ path: "src/models/space.ts", diff: `@@ -12,10 +12,16 @@ export class Space extends Model {
    static tableName = "spaces";
 
    id!: number;
@@ -754,462 +396,247 @@ const D912 = {
 +    assessments: hasMany("assessments"),
 +    assessmentSpaces: hasMany("assessment_spaces"),
 +  };
- }`,
-};
-const PRS = [
-  {
-    number: 912, title: "feat(db): add assessment_spaces with backfill", author: "dev", state: "open", branch: "dev/assessment-spaces", base: "main", at: T0 - 26 * HOUR,
-    labels: ["database", "migration"], reviewers: { naman: "requested", hana: "commented" }, assignees: ["dev"],
-    body: "Adds the `assessment_spaces` table and backfills `owner_id` from the legacy `space_owner` column (CAS-912).\n\n- `0141_create_assessment_spaces.sql` creates the table and its index\n- The backfill runs as a job, so it can be stopped and picked up again\n- RLS on the table waits until the backfill reports zero rows without an owner\n\nRollout: run the job Tuesday night, after the deploy freeze lifts.",
-    timeline: [
-      { type: "commit", sha: "3f1a9c2" }, { type: "commit", sha: "71c0e5d" },
-      { type: "event", icon: "eye", by: "dev", text: "requested a review from **hana** and **naman**", at: T0 - 25 * HOUR },
-      { type: "comment", by: "hana", at: T0 - 22 * HOUR, text: "The single `UPDATE` holds a lock on `spaces` for the whole backfill. On prod-size data that is minutes of blocked writes. Can we batch it?" },
-      { type: "commit", sha: "8be2a04" },
-      { type: "comment", by: "dev", at: T0 - 5 * HOUR, text: "Good call. It now runs in batches of 5,000 with a 200ms pause between them, and picks up where it stopped." },
-      { type: "review", by: "hana", state: "commented", at: T0 - 4 * HOUR, text: "Batching looks right to me. I would like @naman to look at the lock on `spaces` before this goes in." },
-      { type: "comment", by: "marcus", at: T0 - 40 * MIN, text: "The red X on `test (shard 2/2)` is the checkout retry flake again (CAS-934), not this change. A re-run should clear it." },
-      { type: "commit", sha: "c41d9e7" },
-    ],
-    commits: [
-      { sha: "3f1a9c2", message: "feat(db): create assessment_spaces table", by: "dev", at: T0 - 26 * HOUR },
-      { sha: "71c0e5d", message: "feat(jobs): backfill owners from space_owner", by: "dev", at: T0 - 26 * HOUR + 4 * MIN },
-      { sha: "8be2a04", message: "fix(jobs): batch the backfill in chunks of 5k", by: "dev", at: T0 - 5 * HOUR - 6 * MIN },
-      { sha: "c41d9e7", message: "test: cover a resumed backfill", by: "dev", at: T0 - 30 * SEC },
-    ],
-    files: [
-      { path: "db/migrations/0141_create_assessment_spaces.sql", diff: D912.migration },
-      { path: "src/jobs/backfillAssessmentSpaceOwners.ts", diff: D912.job },
-      { path: "src/models/space.ts", diff: D912.model },
-      { path: "db/schema.sql", additions: 359, deletions: 34 },
-    ],
+ }` }],
   },
   {
     number: 915, title: "fix(checkout): make retry timing injectable", author: "naman", state: "open", branch: "naman/fix-checkout-flake", base: "main", at: T0 - 20 * HOUR,
-    labels: ["flaky-test", "checkout"], reviewers: { marcus: "requested" }, assignees: ["naman"],
-    body: "`checkout.retry.test.ts` fails about 1 run in 10 on CI: the jittered delay can land close to the test's fixed 450ms wait (CAS-934).\n\n`withRetry` now takes `sleep` and `random`, and the test passes fakes for both, so there is no real timer left to race.",
-    timeline: [{ type: "commit", sha: "b60c1f8" }, { type: "event", icon: "eye", by: "naman", text: "requested a review from **marcus**", at: T0 - 20 * HOUR }],
-    commits: [{ sha: "b60c1f8", message: "fix(checkout): make retry timing injectable", by: "naman", at: T0 - 20 * HOUR }], files: [],
+    labels: ["flaky-test", "checkout"], reviewers: { marcus: "requested" }, timeline: [], files: [],
+    body: "`checkout.retry.test.ts` fails about 1 run in 10 on CI: the jittered delay can land close to the test's fixed 450ms wait (CAS-934).\n\n`withRetry` now takes `sleep` and `random`, and the test passes fakes for both.",
   },
   {
     number: 910, title: "chore(deps): bump vitest to 2.1.4", author: "lena", state: "open", branch: "lena/bump-vitest", base: "main", at: T0 - 28 * HOUR,
-    labels: ["dependencies"], reviewers: {}, assignees: [],
-    body: "Picks up the sharding fix in vitest 2.1.4. No config changes.",
-    timeline: [{ type: "commit", sha: "0d94e77" }], commits: [{ sha: "0d94e77", message: "chore(deps): bump vitest to 2.1.4", by: "lena", at: T0 - 28 * HOUR }], files: [],
-  },
-  {
-    number: 917, title: "fix(checkout): cap retries to protect the db pool", author: "marcus", state: "merged", branch: "marcus/cap-retries", base: "main", at: T0 - 50 * MIN, mergedAt: T0 - 9 * MIN, mergedBy: "marcus",
-    labels: ["checkout"], reviewers: { hana: "approved" }, assignees: ["marcus"],
-    body: "Deploy #1482 made every failed checkout call retry up to 3 times, and each retry holds a connection. Caps concurrent retries at 8 so the pool cannot be exhausted.",
-    timeline: [{ type: "commit", sha: "e7b2d40" }, { type: "review", by: "hana", state: "approved", at: T0 - 15 * MIN, text: "" }],
-    commits: [{ sha: "e7b2d40", message: "fix(checkout): cap retries to protect the db pool", by: "marcus", at: T0 - 50 * MIN }], files: [],
+    labels: ["dependencies"], reviewers: {}, timeline: [], files: [], body: "Picks up the sharding fix in vitest 2.1.4. No config changes.",
   },
   {
     number: 905, title: "fix: retry idempotent requests", author: "marcus", state: "merged", branch: "marcus/retry-idempotent", base: "main", at: T0 - 2 * DAY, mergedAt: T0 - 3 * HOUR - 12 * MIN, mergedBy: "marcus",
-    labels: ["checkout"], reviewers: { naman: "approved" }, assignees: ["marcus"],
-    body: "Retries idempotent requests to the payment provider on 502, 503 and 504, with jittered backoff.",
-    timeline: [{ type: "commit", sha: "a3f9e1c" }, { type: "review", by: "naman", state: "approved", at: T0 - 4 * HOUR, text: "" }],
-    commits: [{ sha: "a3f9e1c", message: "fix: retry idempotent requests", by: "marcus", at: T0 - 2 * DAY }], files: [],
+    labels: ["checkout"], reviewers: { naman: "approved" }, files: [], body: "Retries idempotent requests to the payment provider on 502, 503 and 504, with jittered backoff.",
+    timeline: [{ type: "event", icon: "check", color: "green", by: "naman", text: "approved these changes", at: T0 - 4 * HOUR }, { type: "event", icon: "merge", color: "purple", by: "marcus", text: "merged commit `a3f9e1c` into `main`", at: T0 - 3 * HOUR - 12 * MIN }],
   },
   {
     number: 898, title: "ci: split tests into two shards", author: "hana", state: "merged", branch: "hana/shard-tests", base: "main", at: T0 - 4 * DAY, mergedAt: T0 - 3 * DAY, mergedBy: "hana",
-    labels: ["ci"], reviewers: { dev: "approved" }, assignees: ["hana"], body: "Runs the test job as a 2-way matrix. CI drops from about 3 minutes to 1m 30s.",
-    timeline: [{ type: "commit", sha: "5ac27d1" }], commits: [{ sha: "5ac27d1", message: "ci: split tests into two shards", by: "hana", at: T0 - 4 * DAY }], files: [],
-  },
-  {
-    number: 893, title: "wip: pgbouncer transaction pooling", author: "marcus", state: "closed", branch: "marcus/pgbouncer-txn", base: "main", at: T0 - 8 * DAY, closedAt: T0 - 6 * DAY,
-    labels: ["infra"], reviewers: {}, assignees: [], body: "Experiment. Closing: prepared statements break under transaction pooling.",
-    timeline: [{ type: "commit", sha: "91f0b3a" }], commits: [{ sha: "91f0b3a", message: "wip: pgbouncer transaction pooling", by: "marcus", at: T0 - 8 * DAY }], files: [],
+    labels: ["ci"], reviewers: { dev: "approved" }, timeline: [], files: [], body: "Runs the test job as a 2-way matrix. CI drops from about 3 minutes to 1m 12s.",
   },
 ];
 
 // ---------- Workflows, and what each job prints ----------
-const WORKFLOWS = [
-  { id: "ci", name: "CI", file: "ci.yml" },
-  { id: "deploy", name: "Deploy to production", file: "deploy.yml" },
-  { id: "codeql", name: "CodeQL", file: "codeql.yml" },
-];
-// Log lines are what a runner writes: ANSI colors, ##[group] ... ##[endgroup] folds,
-// ##[command], ##[warning] and ##[error] (which also become the run's annotations).
+const WORKFLOWS = [{ id: "ci", name: "CI" }, { id: "deploy", name: "Deploy to production" }, { id: "codeql", name: "CodeQL" }];
+// Log lines carry ANSI colors, the way a runner writes them.
 const A = (n, s) => `\x1b[${n}m${s}\x1b[0m`;
-const green = s => A(32, s), red = s => A(31, s), yellow = s => A(33, s), cyan = s => A(36, s), gray = s => A(90, s), bold = s => A(1, s);
+const green = s => A(32, s), red = s => A(31, s), yellow = s => A(33, s), cyan = s => A(36, s), gray = s => A(90, s), blue = s => A(34, s), bold = s => A(1, s);
 const L = s => s.split("\n");
-const run$ = cmd => L(`##[group]Run ${cmd}\n${gray(cmd)}\nshell: /usr/bin/bash -e {0}\n##[endgroup]`);
-const npm$ = script => L(`\n> @casuro/core@2.14.0 ${script.split(" ")[0]}\n> ${script.split(" ").slice(1).join(" ")}\n`);
-
-// One step of a job: [name, seconds it takes on a runner, its log lines, extras].
+// One step of a job: [name, seconds it takes on a runner, its log lines, whether it fails].
 const S = {
   setup: c => ["Set up job", 2, L(`Current runner version: '2.319.1'
-##[group]Operating System
-Ubuntu
-24.04.1
-LTS
-##[endgroup]
-##[group]Runner Image
-Image: ubuntu-24.04
-Version: 20260922.1.0
-##[endgroup]
-##[group]GITHUB_TOKEN Permissions
-Contents: read
-Metadata: read
-PullRequests: read
-##[endgroup]
+Runner Image: ubuntu-24.04 (20260922.1.0)
 Secret source: Actions
 Prepare workflow directory
-Prepare all required actions
-Getting action download info
-Download action repository 'actions/checkout@v4' (SHA:11bd71901bbe5b1630ceea73d27597364c9af683)
-Download action repository 'actions/setup-node@v4' (SHA:39370e3970a6d050c480ffad4ff0ed4d3fdee5af)
+Download action repository 'actions/checkout@v4'
+Download action repository 'actions/setup-node@v4'
 Complete job name: ${c.job}`)],
-  checkout: c => ["Checkout", 1, L(`##[group]Run actions/checkout@v4
-with:
-  repository: casuro/core
-  fetch-depth: 1
-##[endgroup]
+  checkout: c => ["Checkout", 1, L(`${blue("Run actions/checkout@v4")}
 Syncing repository: casuro/core
-##[group]Getting Git version info
-Working directory is '/home/runner/work/core/core'
-##[command]/usr/bin/git version
-git version 2.46.1
-##[endgroup]
-##[group]Fetching the repository
-##[command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --depth=1 origin +${c.sha}:${c.ref}
+${blue(`/usr/bin/git fetch --no-tags --prune --depth=1 origin ${c.sha}`)}
 From https://github.com/casuro/core
  * [new ref]         ${c.sha} -> ${c.ref}
-##[endgroup]
-##[command]/usr/bin/git checkout --progress --force ${c.ref}
 HEAD is now at ${c.sha} ${c.message}`)],
-  node: () => ["Setup Node", 3, L(`##[group]Run actions/setup-node@v4
-with:
-  node-version: 22
-  cache: npm
-##[endgroup]
+  node: () => ["Setup Node", 3, L(`${blue("Run actions/setup-node@v4")}
 Found in cache @ /opt/hostedtoolcache/node/22.9.0/x64
-##[group]Environment details
 node: v22.9.0
 npm: 10.8.3
-##[endgroup]
-##[command]/opt/hostedtoolcache/node/22.9.0/x64/bin/npm config get cache
-/home/runner/.npm
 Cache restored from key: node-cache-Linux-x64-npm-5f1e9a7c20d4`)],
-  install: () => ["Install dependencies", 14, [...run$("npm ci"), ...L(`${yellow("npm warn")} deprecated inflight@1.0.6: This module is not supported, and leaks memory.
+  install: () => ["Install dependencies", 14, L(`${blue("Run npm ci")}
+${yellow("npm warn")} deprecated inflight@1.0.6: This module is not supported, and leaks memory.
 
 added 812 packages, and audited 813 packages in 14s
-
-143 packages are looking for funding
-  run \`npm fund\` for details
-
-found ${green("0")} vulnerabilities`)]],
-  migrate: () => ["Run migrations", 4, [...run$("npm run db:migrate"), ...npm$("db:migrate node scripts/migrate.js"), ...L(`Connecting to postgres://postgres:***@localhost:5432/core_test
+found ${green("0")} vulnerabilities`)],
+  migrate: () => ["Run migrations", 4, L(`${blue("Run npm run db:migrate")}
+Connecting to postgres://postgres:***@localhost:5432/core_test
   ${gray("applied")} 0139_add_space_settings.sql ${gray("(41ms)")}
   ${gray("applied")} 0140_checkout_idempotency_keys.sql ${gray("(63ms)")}
   ${gray("applied")} 0141_create_assessment_spaces.sql ${gray("(118ms)")}
-${green("✓")} 141 migrations applied`)]],
-  lint: () => ["Run lint", 21, [...run$("npm run lint"), ...npm$("lint eslint . && tsc --noEmit"), ...L(`
-/home/runner/work/core/core/src/billing/retry.ts
-##[warning file=src/billing/retry.ts,line=31]Unexpected any. Specify a different type (@typescript-eslint/no-explicit-any)
+${green("✓")} 141 migrations applied`)],
+  lint: () => ["Run lint", 21, L(`${blue("Run npm run lint")}
 
-${yellow("✖ 1 problem (0 errors, 1 warning)")}
-`)]],
-  tests: (c, o) => {
-    const two = o.shard === 2;
-    const head = [...run$(`npm test -- --shard=${o.shard}/2`), ...npm$(`test vitest run --shard=${o.shard}/2`), ...L(`${A(46, " RUN ")} ${cyan("v2.1.3")} ${gray("/home/runner/work/core/core")}
-`)];
-    const pass = two
-      ? L(` ${green("✓")} test/jobs/backfillAssessmentSpaceOwners.test.ts ${gray("(3 tests)")} 1843ms
- ${green("✓")} test/migrations/0141.test.ts ${gray("(1 test)")} 388ms
- ${green("✓")} test/billing/invoices.test.ts ${gray("(12 tests)")} 742ms
- ${green("✓")} test/billing/checkout.test.ts ${gray("(11 tests)")} 1320ms`)
-      : L(` ${green("✓")} test/api/assessments.test.ts ${gray("(18 tests)")} 2104ms
+> @casuro/core@2.14.0 lint
+> eslint . && tsc --noEmit
+
+/home/runner/work/core/core/src/billing/retry.ts
+  31:42  ${yellow("warning")}  Unexpected any. Specify a different type  ${gray("@typescript-eslint/no-explicit-any")}
+
+${yellow("✖ 1 problem (0 errors, 1 warning)")}`)],
+  tests: (c, shard, fail) => {
+    const head = L(`${blue(`Run npm test -- --shard=${shard}/2`)}
+
+> @casuro/core@2.14.0 test
+> vitest run --shard=${shard}/2
+
+${A(46, " RUN ")} ${cyan("v2.1.3")} ${gray("/home/runner/work/core/core")}
+`);
+    const files = shard === 1
+      ? L(` ${green("✓")} test/api/assessments.test.ts ${gray("(18 tests)")} 2104ms
  ${green("✓")} test/api/spaces.test.ts ${gray("(14 tests)")} 1688ms
  ${green("✓")} test/api/auth.test.ts ${gray("(9 tests)")} 611ms
  ${green("✓")} test/models/space.test.ts ${gray("(7 tests)")} 302ms
- ${green("✓")} test/jobs/reminders.test.ts ${gray("(5 tests)")} 954ms`);
-    if (!o.fail) return ["Run tests", two ? 48 : 41, [...head, ...pass, ...(two ? L(` ${green("✓")} test/billing/checkout.retry.test.ts ${gray("(4 tests)")} 214ms`) : []), ...L(`
-${gray(" Test Files ")} ${bold(green(two ? "5 passed" : "5 passed"))} ${gray("(5)")}
-${gray("      Tests ")} ${bold(green(two ? "31 passed" : "53 passed"))} ${gray(two ? "(31)" : "(53)")}
-${gray("   Start at ")} 16:42:07
-${gray("   Duration ")} ${two ? "6.12s" : "7.48s"}
-`)]];
-    return ["Run tests", 52, [...head, ...pass, ...L(` ${red("❯")} test/billing/checkout.retry.test.ts ${gray("(4 tests | ")}${red("1 failed")}${gray(")")} 5236ms
+ ${green("✓")} test/jobs/reminders.test.ts ${gray("(5 tests)")} 954ms`)
+      : L(` ${green("✓")} test/jobs/backfillAssessmentSpaceOwners.test.ts ${gray("(3 tests)")} 1843ms
+ ${green("✓")} test/migrations/0141.test.ts ${gray("(1 test)")} 388ms
+ ${green("✓")} test/billing/invoices.test.ts ${gray("(12 tests)")} 742ms
+ ${green("✓")} test/billing/checkout.test.ts ${gray("(11 tests)")} 1320ms`);
+    if (!fail) return ["Run tests", shard === 1 ? 41 : 48, [...head, ...files, ...(shard === 2 ? [` ${green("✓")} test/billing/checkout.retry.test.ts ${gray("(4 tests)")} 214ms`] : []), ...L(`
+${gray(" Test Files ")} ${bold(green("5 passed"))} ${gray("(5)")}
+${gray("      Tests ")} ${bold(green(shard === 1 ? "53 passed" : "31 passed"))} ${gray(shard === 1 ? "(53)" : "(31)")}
+${gray("   Duration ")} ${shard === 1 ? "7.48s" : "6.12s"}`)]];
+    return ["Run tests", 52, [...head, ...files, ...L(` ${red("❯")} test/billing/checkout.retry.test.ts ${gray("(4 tests | ")}${red("1 failed")}${gray(")")} 5236ms
    ${green("✓")} checkout retry ${gray(">")} does not retry a 400
    ${green("✓")} checkout retry ${gray(">")} gives up after 3 attempts
    ${red("×")} checkout retry ${gray(">")} retries a 503 from the payment provider ${red("5003ms")}
      ${red("→ Test timed out in 5000ms.")}
    ${green("✓")} checkout retry ${gray(">")} backs off with jitter
 
-${red("⎯⎯⎯⎯⎯⎯⎯")} ${A(41, " Failed Tests 1 ")} ${red("⎯⎯⎯⎯⎯⎯⎯")}
-
 ${A(41, " FAIL ")} test/billing/checkout.retry.test.ts ${gray(">")} checkout retry ${gray(">")} retries a 503 from the payment provider
-##[error file=test/billing/checkout.retry.test.ts,line=12]checkout retry > retries a 503 from the payment provider: Test timed out in 5000ms.
-${gray("If this is a long-running test, pass a timeout value as the last argument or configure it globally with \"testTimeout\".")}
+${bold(red("Error: Test timed out in 5000ms."))}
  ${cyan("❯")} test/billing/checkout.retry.test.ts:${yellow("12")}:${yellow("3")}
-    ${gray("10|")}
     ${gray("11|")} describe("checkout retry", () => {
     ${gray("12|")}   it("retries a 503 from the payment provider", async () => {
     ${gray("  |")}   ${red("^")}
     ${gray("13|")}     const charge = vi.fn()
-    ${gray("14|")}       .mockRejectedValueOnce(providerError(503))
 
 ${gray(" Test Files ")} ${bold(red("1 failed"))} ${gray("|")} ${bold(green("4 passed"))} ${gray("(5)")}
 ${gray("      Tests ")} ${bold(red("1 failed"))} ${gray("|")} ${bold(green("30 passed"))} ${gray("(31)")}
-${gray("   Start at ")} 11:36:41
 ${gray("   Duration ")} 11.04s
 
-##[error]Process completed with exit code 1.`)], { fail: true }];
+${bold(red("Error: Process completed with exit code 1."))}`)], true];
   },
-  build: () => ["Build", 18, [...run$("npm run build"), ...npm$("build tsc -p tsconfig.build.json"), ...L(`dist/ ${gray("214 files, 1.8 MB")}
-${green("✓")} built in 16.4s`)]],
-  upload: () => ["Upload artifact", 3, L(`##[group]Run actions/upload-artifact@v4
-with:
-  name: core-dist
-  path: dist
-##[endgroup]
-With the provided path, there will be 214 files uploaded
-Artifact name is valid!
-Finished uploading artifact content to blob storage!
-Artifact core-dist.zip successfully finalized. Artifact ID 2019334871
-Artifact core-dist has been successfully uploaded! Final size is 1.8 MB`), { artifact: { name: "core-dist", size: "1.8 MB" } }],
-  download: () => ["Download artifact", 2, L(`##[group]Run actions/download-artifact@v4
-with:
-  name: core-dist
-##[endgroup]
-Downloading single artifact
-Found 1 artifact(s)
-Artifact download completed successfully.
-Total of 1 artifact(s) downloaded`)],
-  staging: c => ["Deploy to staging", 16, [...run$("./scripts/deploy.sh staging"), ...L(`Deploying core@${c.sha} to ${bold("staging")}
-  ${gray("image")} registry.casuro.dev/core:${c.sha}
-  rollout 1/3 pods ready
-  rollout 2/3 pods ready
-  rollout 3/3 pods ready
-${green("✓")} https://core.staging.casuro.dev is healthy`)]],
-  docker: c => ["Build and push image", 144, [...run$("docker buildx build --push -t registry.casuro.dev/api-gateway:" + c.sha + " ."), ...L(`#1 [internal] load build definition from Dockerfile
-#1 DONE 0.0s
-#2 [internal] load metadata for docker.io/library/node:22-slim
-#2 DONE 0.6s
-#3 [deps 1/3] FROM docker.io/library/node:22-slim
-#3 ${cyan("CACHED")}
-#4 [deps 2/3] COPY package.json package-lock.json ./
-#4 DONE 0.1s
-#5 [deps 3/3] RUN npm ci --omit=dev
-#5 DONE 38.4s
-#6 [build 1/2] COPY . .
-#6 DONE 0.4s
-#7 [build 2/2] RUN npm run build
-#7 DONE 21.7s
-#8 exporting to image
-#8 pushing layers 41.2s done
-#8 pushing manifest for registry.casuro.dev/api-gateway:${c.sha}
-#8 DONE 44.9s
-${green("✓")} pushed registry.casuro.dev/api-gateway:${c.sha}`)]],
-  production: c => ["Deploy api-gateway to production", 34, [...run$("./scripts/deploy.sh production"), ...L(`Deploying api-gateway@${c.sha} to ${bold("production")}
-  ${gray("image")} registry.casuro.dev/api-gateway:${c.sha}
+  build: () => ["Build", 18, L(`${blue("Run npm run build")}
+
+> @casuro/core@2.14.0 build
+> tsc -p tsconfig.build.json
+
+dist/ ${gray("214 files, 1.8 MB")}
+${green("✓")} built in 16.4s`)],
+  docker: c => ["Build and push image", 146, L(`${blue(`Run docker buildx build --push -t registry.casuro.dev/api-gateway:${c.sha} .`)}
+#1 [deps 1/2] COPY package.json package-lock.json ./
+#1 DONE 0.1s
+#2 [deps 2/2] RUN npm ci --omit=dev
+#2 DONE 38.4s
+#3 [build] RUN npm run build
+#3 DONE 21.7s
+#4 exporting to image
+#4 DONE 44.9s
+${green("✓")} pushed registry.casuro.dev/api-gateway:${c.sha}`)],
+  production: c => ["Deploy api-gateway to production", 34, L(`${blue("Run ./scripts/deploy.sh production")}
+Deploying api-gateway@${c.sha} to ${bold("production")}
   canary 1/12 pods ready
   ${gray("canary error rate")} 0.02% ${gray("(threshold 1%)")}
-  rollout 4/12 pods ready
-  rollout 8/12 pods ready
   rollout 12/12 pods ready
-${green("✓")} api-gateway ${c.sha} is live in production`)]],
-  smoke: () => ["Smoke test", 9, [...run$("npm run smoke -- --env production"), ...L(` ${green("✓")} GET /healthz ${gray("200 in 41ms")}
+${green("✓")} api-gateway ${c.sha} is live in production`)],
+  smoke: () => ["Smoke test", 9, L(`${blue("Run npm run smoke -- --env production")}
+ ${green("✓")} GET /healthz ${gray("200 in 41ms")}
  ${green("✓")} POST /api/v1/checkout ${gray("(dry run) 200 in 118ms")}
- ${green("✓")} GET /api/v1/assessments ${gray("200 in 63ms")}
-${green("3 checks passed")}`)]],
-  codeqlInit: () => ["Initialize CodeQL", 11, L(`##[group]Run github/codeql-action/init@v3
-with:
-  languages: javascript-typescript
-##[endgroup]
-Loaded configuration: default queries for javascript-typescript
-Using CodeQL CLI version 2.19.0
-Creating database at /home/runner/work/_temp/codeql_databases/javascript`)],
-  codeqlScan: () => ["Perform CodeQL Analysis", 58, L(`##[group]Run github/codeql-action/analyze@v3
-with:
-  category: /language:javascript-typescript
-##[endgroup]
+${green("2 checks passed")}`)],
+  scan: () => ["Perform CodeQL Analysis", 69, L(`${blue("Run github/codeql-action/analyze@v3")}
 Extracting 412 TypeScript files
 Running queries: 214 queries in javascript-security-extended
-Interpreting results
-${green("✓")} No new alerts in code changed by this pull request
-Uploading results as a SARIF file`)],
-  postNode: () => ["Post Setup Node", 0, L(`Post job cleanup.
-Cache hit occurred on the primary key node-cache-Linux-x64-npm-5f1e9a7c20d4, not saving cache.`), { post: true }],
-  postCheckout: () => ["Post Checkout", 0, L(`Post job cleanup.
-##[command]/usr/bin/git version
-git version 2.46.1
-##[command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader`), { post: true }],
-  done: () => ["Complete job", 0, L(`Cleaning up orphan processes`), { post: true }],
+${green("✓")} No new alerts in code changed by this pull request`)],
+  post: () => ["Post steps", 0, L(`Post job cleanup.
+Cache hit occurred on the primary key node-cache-Linux-x64-npm-5f1e9a7c20d4, not saving cache.`)],
+  done: () => ["Complete job", 0, ["Cleaning up orphan processes"]],
 };
-// The jobs of each workflow: the steps they run and the jobs they wait for.
+// The jobs of each workflow, and the steps each runs.
+const START = ["setup", "checkout", "node", "install"];
 const JOBS = {
-  lint: { name: "lint", steps: ["setup", "checkout", "node", "install", "lint", "postNode", "postCheckout", "done"] },
-  test1: { name: "test (shard 1/2)", steps: ["setup", "checkout", "node", "install", "migrate", "tests", "postNode", "postCheckout", "done"], shard: 1 },
-  test2: { name: "test (shard 2/2)", steps: ["setup", "checkout", "node", "install", "migrate", "tests", "postNode", "postCheckout", "done"], shard: 2 },
-  build: { name: "build", needs: ["lint"], steps: ["setup", "checkout", "node", "install", "build", "upload", "postNode", "postCheckout", "done"] },
-  staging: { name: "deploy-staging", needs: ["test1", "test2", "build"], steps: ["setup", "download", "staging", "done"] },
-  image: { name: "build-image", steps: ["setup", "checkout", "docker", "postCheckout", "done"] },
-  deploy: { name: "deploy", needs: ["image"], env: "production", steps: ["setup", "production", "smoke", "done"] },
-  analyze: { name: "Analyze (javascript-typescript)", steps: ["setup", "checkout", "codeqlInit", "codeqlScan", "postCheckout", "done"] },
+  lint: { name: "lint", steps: [...START, "lint", "post", "done"] },
+  test1: { name: "test (shard 1/2)", steps: [...START, "migrate", "tests", "post", "done"], shard: 1 },
+  test2: { name: "test (shard 2/2)", steps: [...START, "migrate", "tests", "post", "done"], shard: 2 },
+  build: { name: "build", steps: [...START, "build", "post", "done"] },
+  deploy: { name: "deploy", steps: ["setup", "checkout", "docker", "production", "smoke", "done"] },
+  analyze: { name: "Analyze (javascript-typescript)", steps: ["setup", "checkout", "scan", "done"] },
 };
-const WF_JOBS = { ci: ["lint", "test1", "test2", "build", "staging"], deploy: ["image", "deploy"], codeql: ["analyze"] };
-const EVENT = { pull_request: "pull request", push: "push", schedule: "schedule", workflow_dispatch: "manual run" };
+const WF_JOBS = { ci: ["lint", "test1", "test2", "build"], deploy: ["deploy"], codeql: ["analyze"] };
 
-// What a job will print, step by step: the script the runner below plays.
-function plan(run, jobId, fail) {
-  const j = JOBS[jobId], c = { job: j.name, sha: run.sha, message: run.title, ref: run.pr ? `refs/remotes/pull/${run.pr}/merge` : `refs/remotes/origin/${run.branch}` };
-  return j.steps.map(k => { const [name, secs, lines, extra] = S[k](c, { shard: j.shard, fail }); return { id: k, name, secs, lines, ...extra }; });
+// ---------- Runs, and the runner that plays each job's script ----------
+// A runner's seconds pass SPEED times faster on screen, so a 1m 12s run streams in about 45s.
+const SPEED = 1.6, TICK = 200;
+const ended = s => s === "success" || s === "failure" || s === "cancelled";
+// What a job prints, step by step. `run.fail` names the job that fails on the first attempt.
+function plan(run, job) {
+  const j = JOBS[job.id], c = { job: j.name, sha: run.sha, message: run.title, ref: run.pr ? `pull/${run.pr}/merge` : `origin/${run.branch}` };
+  return j.steps.map(k => S[k](c, j.shard, run.fail === job.id && run.attempt === 1));
 }
-function newJob(run, jobId) {
-  const j = JOBS[jobId];
-  return { id: jobId, name: j.name, needs: j.needs ?? [], env: j.env ?? null, status: "queued", startedAt: null, secs: null, steps: plan(run, jobId).map(s => ({ id: s.id, name: s.name, status: "queued", startedAt: null, secs: null, lines: [] })) };
-}
+const newJob = (run, id) => ({ id, name: JOBS[id].name, status: "queued", secs: null, at: 0, steps: plan(run, { id }).map(([name]) => ({ name, status: "queued", secs: null, lines: [] })) });
 const RUNS = [];
-// A run as it was triggered: every job queued. `fail` names the job that fails on the first attempt.
 function addRun(o) {
-  const run = { status: "queued", attempt: 1, artifacts: [], secs: null, fail: null, approved: false, ...o };
+  const run = { status: "queued", attempt: 1, secs: null, created: o.at, ...o };
   run.jobs = WF_JOBS[run.workflow].map(id => newJob(run, id));
+  if (o.status === "cancelled") run.jobs.forEach(j => j.status = "cancelled");
   RUNS.push(run);
   return run;
 }
-addRun({ id: 4821, workflow: "ci", title: "test: cover a resumed backfill", event: "pull_request", branch: "dev/assessment-spaces", sha: "c41d9e7", actor: "dev", pr: 912, at: T0 - 8 * SEC, shown: T0 - 28 * SEC });
-addRun({ id: 732, workflow: "codeql", title: "test: cover a resumed backfill", event: "pull_request", branch: "dev/assessment-spaces", sha: "c41d9e7", actor: "dev", pr: 912, at: T0 + 5 * SEC, shown: T0 - 28 * SEC });
-addRun({ id: 1483, workflow: "deploy", title: "fix(checkout): cap retries to protect the db pool (#917)", event: "push", branch: "main", sha: "e7b2d40", actor: "marcus", at: T0 - 8 * MIN });
-addRun({ id: 4820, workflow: "ci", title: "fix(checkout): cap retries to protect the db pool (#917)", event: "push", branch: "main", sha: "e7b2d40", actor: "marcus", at: T0 - 9 * MIN });
-addRun({ id: 1482, workflow: "deploy", title: "fix: retry idempotent requests (#905)", event: "push", branch: "main", sha: "a3f9e1c", actor: "marcus", at: T0 - 3 * HOUR - 6 * MIN, approved: true });
-addRun({ id: 4819, workflow: "ci", title: "fix: retry idempotent requests (#905)", event: "push", branch: "main", sha: "a3f9e1c", actor: "marcus", at: T0 - 3 * HOUR - 10 * MIN });
-addRun({ id: 4818, workflow: "ci", title: "fix(jobs): batch the backfill in chunks of 5k", event: "pull_request", branch: "dev/assessment-spaces", sha: "8be2a04", actor: "dev", pr: 912, at: T0 - 5 * HOUR - 5 * MIN, fail: "test2" });
-addRun({ id: 731, workflow: "codeql", title: "Nightly scan", event: "schedule", branch: "main", sha: "a3f9e1c", actor: "hana", at: T0 - 9 * HOUR });
-addRun({ id: 4817, workflow: "ci", title: "fix(checkout): make retry timing injectable", event: "pull_request", branch: "naman/fix-checkout-flake", sha: "b60c1f8", actor: "naman", pr: 915, at: T0 - 20 * HOUR });
-addRun({ id: 4816, workflow: "ci", title: "chore(deps): bump vitest to 2.1.4", event: "pull_request", branch: "lena/bump-vitest", sha: "0d94e77", actor: "lena", pr: 910, at: T0 - 28 * HOUR, cancelAt: 31 });
-
-// ---------- The runner: plays each job's script, step by step ----------
-// A runner's seconds pass SPEED times faster on screen, so a 1m 42s run streams in about a minute.
-const SPEED = 1.6, TICK = 200;
-const ended = s => s === "success" || s === "failure" || s === "cancelled" || s === "skipped";
-const active = run => !ended(run.status);
-const plans = new Map();
-function planOf(run, job) {
-  const key = `${run.id}/${job.id}/${run.attempt}`;
-  if (!plans.has(key)) plans.set(key, plan(run, job.id, run.fail === job.id && run.attempt === 1));
-  return plans.get(key);
-}
-function startStep(job, now) { const s = job.steps[job.at]; s.status = "in_progress"; s.startedAt = now; }
 function stepJob(run, job, now) {
-  if (job.status === "queued" || job.status === "waiting") {
-    const needs = job.needs.map(id => run.jobs.find(j => j.id === id).status);
-    if (needs.some(s => s !== "success" && ended(s))) { job.status = "skipped"; job.steps.forEach(s => s.status = "skipped"); return; }
-    if (!needs.every(s => s === "success")) return;
-    if (job.env && !run.approved) { job.status = "waiting"; return; }
-    job.status = "in_progress"; job.startedAt = now; job.at = 0; startStep(job, now);
-    return;
-  }
+  if (job.status === "queued") { job.status = "in_progress"; job.startedAt = job.steps[0].startedAt = now; job.steps[0].status = "in_progress"; return; }
   if (job.status !== "in_progress") return;
-  const step = job.steps[job.at], p = planOf(run, job)[job.at];
-  const done = Math.min(1, (now - step.startedAt) / Math.max(300, p.secs * 1000 / SPEED));
-  for (let n = Math.floor(done * p.lines.length); step.lines.length < n;) step.lines.push({ t: now, s: p.lines[step.lines.length] });
+  const step = job.steps[job.at], [, secs, lines, fail] = plan(run, job)[job.at];
+  const done = Math.min(1, (now - step.startedAt) / Math.max(300, secs * 1000 / SPEED));
+  for (let n = Math.floor(done * lines.length); step.lines.length < n;) step.lines.push(lines[step.lines.length]);
   if (done < 1) return;
-  step.status = p.fail ? "failure" : "success"; step.secs = p.secs;
-  if (p.artifact && !run.artifacts.some(a => a.name === p.artifact.name)) run.artifacts.push(p.artifact);
-  // After a failure only the clean-up steps still run.
-  if (p.fail) { job.failed = true; job.steps.forEach((s, i) => { if (i > job.at && !planOf(run, job)[i].post) s.status = "skipped"; }); }
-  job.at = job.steps.findIndex(s => s.status === "queued");
-  if (job.at >= 0) return startStep(job, now);
+  step.status = fail ? "failure" : "success"; step.secs = secs; job.failed ||= fail;
+  if (++job.at < job.steps.length) { job.steps[job.at].status = "in_progress"; job.steps[job.at].startedAt = now; return; }
   job.status = job.failed ? "failure" : "success"; job.endedAt = now;
-  job.secs = job.steps.reduce((n, s) => n + (s.secs ?? 0), 0);
+  job.secs = job.steps.reduce((n, s) => n + s.secs, 0);
 }
-// When a run's last job would end on a runner's clock: each job starts when the jobs it needs are done.
-function totalSecs(run) {
-  const end = {};
-  const at = j => end[j.id] ??= Math.max(0, ...j.needs.map(id => at(run.jobs.find(x => x.id === id)))) + (j.secs ?? 0);
-  return Math.max(...run.jobs.map(at));
-}
-const statusSig = run => run.jobs.map(j => j.status + j.steps.map(s => s.status[0]).join("")).join("|");
+const signature = run => run.status + run.jobs.map(j => j.status + j.at).join();
 const lineCount = run => run.jobs.reduce((n, j) => n + j.steps.reduce((m, s) => m + s.lines.length, 0), 0);
 // Moves a run on to `now`. Returns 2 when a status changed, 1 when only log lines came in, 0 when nothing did.
 function stepRun(run, now) {
-  if (!active(run) || now < run.at) return 0;
-  if (run.cancelAt && now - run.at >= run.cancelAt * 1000 / SPEED) return cancelRun(run, now), 2;
-  const before = run.status + statusSig(run), lines = lineCount(run);
+  if (ended(run.status) || now < run.at) return 0;
+  const before = signature(run), lines = lineCount(run);
   run.jobs.forEach(j => stepJob(run, j, now));
   const s = run.jobs.map(j => j.status);
-  run.status = s.includes("in_progress") ? "in_progress" : s.includes("waiting") ? "waiting" : s.includes("queued") ? "in_progress" : s.includes("failure") ? "failure" : "success";
-  if (ended(run.status)) { run.secs = totalSecs(run); run.endedAt = now; }
-  return before !== run.status + statusSig(run) ? 2 : lines !== lineCount(run) ? 1 : 0;
+  run.status = s.some(x => !ended(x)) ? "in_progress" : s.includes("failure") ? "failure" : "success";
+  if (ended(run.status)) run.secs = Math.max(...run.jobs.map(j => j.secs));
+  return before !== signature(run) ? 2 : lines !== lineCount(run) ? 1 : 0;
 }
-function cancelRun(run, now = Date.now()) {
-  for (const j of run.jobs) {
-    if (ended(j.status)) continue;
-    const running = j.status === "in_progress";
-    j.steps.forEach(s => { if (s.status === "in_progress") s.status = "cancelled"; else if (s.status === "queued") s.status = "skipped"; });
-    j.status = "cancelled"; j.endedAt = now;
-    j.secs = running ? Math.round((now - j.startedAt) * SPEED / 1000) : null;
-    if (running) j.steps.find(s => s.status === "cancelled")?.lines.push({ t: now, s: "##[error]The operation was canceled." });
-  }
-  run.status = "cancelled"; run.endedAt = now; run.secs = Math.round((now - run.at) * SPEED / 1000);
+// A new attempt: every job queued again. The flaky test passes the second time.
+function rerun(run) {
+  Object.assign(run, { attempt: run.attempt + 1, status: "queued", at: Date.now(), secs: null });
+  run.jobs = run.jobs.map(j => newJob(run, j.id));
 }
-// Re-run every job, the ones that did not succeed, or one job: a new attempt, queued again.
-function rerun(run, which) {
-  const again = j => which === "all" || (which === "failed" ? j.status !== "success" : j.id === which || j.needs.includes(which));
-  run.attempt += 1; run.status = "queued"; run.at = Date.now(); run.secs = null; run.approved = false;
-  if (which === "all") run.artifacts = [];
-  run.jobs = run.jobs.map(j => again(j) ? newJob(run, j.id) : j);
-}
+const pull = { event: "pull_request", branch: "dev/assessment-spaces", actor: "dev", pr: 912 };
+const push = { event: "push", branch: "main", actor: "marcus" };
+addRun({ id: 4821, workflow: "ci", title: "test: cover a resumed backfill", sha: "c41d9e7", ...pull, at: T0 - 8 * SEC, created: T0 - 28 * SEC });
+addRun({ id: 732, workflow: "codeql", title: "test: cover a resumed backfill", sha: "c41d9e7", ...pull, at: T0 + 5 * SEC, created: T0 - 28 * SEC });
+addRun({ id: 1482, workflow: "deploy", title: "fix: retry idempotent requests (#905)", sha: "a3f9e1c", ...push, at: T0 - 3 * HOUR - 6 * MIN });
+addRun({ id: 4820, workflow: "ci", title: "fix: retry idempotent requests (#905)", sha: "a3f9e1c", ...push, at: T0 - 3 * HOUR - 10 * MIN });
+addRun({ id: 4819, workflow: "ci", title: "fix(jobs): batch the backfill in chunks of 5k", sha: "8be2a04", ...pull, at: T0 - 5 * HOUR - 5 * MIN, fail: "test2" });
+addRun({ id: 731, workflow: "codeql", title: "Nightly scan", event: "schedule", branch: "main", sha: "5ac27d1", actor: "hana", at: T0 - 9 * HOUR });
+addRun({ id: 4818, workflow: "ci", title: "fix(checkout): make retry timing injectable", event: "pull_request", branch: "naman/fix-checkout-flake", sha: "b60c1f8", actor: "naman", pr: 915, at: T0 - 20 * HOUR });
+addRun({ id: 4817, workflow: "ci", title: "chore(deps): bump vitest to 2.1.4", event: "pull_request", branch: "lena/bump-vitest", sha: "0d94e77", actor: "lena", pr: 910, at: T0 - 28 * HOUR, status: "cancelled", secs: 31 });
 // Everything before the page opened has already happened: play it at once.
-for (const run of RUNS) {
-  run.created = run.shown ?? run.at;
-  for (let t = run.at; t < T0 && active(run) && run.status !== "waiting"; t += TICK) stepRun(run, t);
-}
+for (const run of RUNS) for (let t = run.at; t < T0 && !ended(run.status); t += TICK) stepRun(run, t);
 
-// ---------- What a pull request shows about its runs ----------
 const byNumber = n => PRS.find(p => p.number === n);
 const runById = id => RUNS.find(r => r.id === id);
-const wfOf = run => WORKFLOWS.find(w => w.id === run.workflow);
+const wfName = run => WORKFLOWS.find(w => w.id === run.workflow).name;
 // A pull request's checks: the jobs of the latest run of each workflow on it.
 function checksOf(pr) {
   return WORKFLOWS.flatMap(wf => {
     const run = RUNS.filter(r => r.workflow === wf.id && r.pr === pr.number).sort((a, b) => b.created - a.created)[0];
-    return run ? run.jobs.map(j => ({ name: `${wf.name} / ${j.name}`, event: run.event, status: j.status, secs: j.secs, run: run.id, job: j.id, required: REPO.required.includes(j.name) })) : [];
+    return run ? run.jobs.map(j => ({ name: `${wf.name} / ${j.name}`, status: j.status, secs: j.secs, run: run.id, job: j.id })) : [];
   });
 }
-const rollup = list => list.some(s => s === "failure") ? "failure" : list.some(s => !ended(s)) ? "in_progress" : list.some(s => s === "cancelled") ? "cancelled" : list.length ? "success" : null;
-const commitStatus = sha => rollup(RUNS.filter(r => r.sha === sha && r.event !== "schedule").map(r => r.status === "waiting" ? "success" : r.status));
-const approvals = pr => Object.values(pr.reviewers).filter(s => s === "approved").length;
-const approved = pr => approvals(pr) >= REPO.approvals && !Object.values(pr.reviewers).includes("changes_requested");
-const checksPass = pr => checksOf(pr).filter(c => c.required).every(c => c.status === "success");
-const mergeable = pr => pr.state === "open" && approved(pr) && checksPass(pr);
-const CHECK_TEXT = { success: "Successful", failure: "Failing", in_progress: "In progress", queued: "Queued", waiting: "Waiting for review", cancelled: "Cancelled", skipped: "Skipped" };
-function checkText(c) {
-  if (c.status === "success") return `Successful in ${dur(c.secs)}`;
-  if (c.status === "failure") return `Failing after ${dur(c.secs)}`;
-  if (c.status === "cancelled") return c.secs == null ? "Cancelled" : `Cancelled after ${dur(c.secs)}`;
-  if (c.status === "in_progress") return "In progress - This check has started...";
-  if (c.status === "queued") return "Queued - Waiting to run this check...";
-  return CHECK_TEXT[c.status];
-}
+const rollup = list => list.includes("failure") ? "failure" : list.some(s => !ended(s)) ? "in_progress" : list.includes("cancelled") ? "cancelled" : list.length ? "success" : null;
+const commitStatus = sha => rollup(RUNS.filter(r => r.sha === sha).map(r => r.status));
+const approved = pr => Object.values(pr.reviewers).includes("approved");
+const mergeable = pr => pr.state === "open" && approved(pr) && checksOf(pr).every(c => c.status === "success");
+const checkText = c => c.status === "success" ? `Successful in ${dur(c.secs)}` : c.status === "failure" ? `Failing after ${dur(c.secs)}` : c.status === "cancelled" ? "Cancelled" : c.status === "queued" ? "Queued" : "In progress";
 
-// ---------- State ----------
-const state = {
-  page: "pr", pr: 912, prTab: "conversation", run: null, job: null, wf: "all", prFilter: "open", prQuery: "", runQuery: "", branch: "main",
-  menu: null, drawer: false, dialog: null, draft: "", theme: "light", showChecks: true, confirm: false, viewed: {}, shut: {},
-  log: { q: "", ts: false, wrap: true, open: {}, groups: {}, hl: null },
-};
+// ---------- State and rendering ----------
+const state = { page: "pr", pr: 912, tab: "conversation", run: null, job: null, wf: "all", filter: "open", menu: false, theme: "light", draft: "", open: {} };
 const user = k => `<b>${esc(k)}</b>`;
 const label = n => { const c = LABELS[n] ?? "#d1d9e0", [r, g, b] = [1, 3, 5].map(i => parseInt(c.slice(i, i + 2), 16)); return `<span class="label" style="background:${c};color:${r * .299 + g * .587 + b * .114 > 150 ? "#1f2328" : "#fff"}">${esc(n)}</span>`; };
-
-// GitHub-flavored Markdown, the little of it comments and the README use.
-const inline = s => esc(s)
-  .replace(/`([^`]+)`/g, "<code>$1</code>").replace(/\*\*([^*]+)\*\*/g, "<b>$1</b>")
-  .replace(/\[badge:([^:\]]+):([^\]]+)\]/g, '<span class="badge"><b>$1</b><i>$2</i></span>')
-  .replace(/(^|\s)@(\w+)/g, "$1<a>@$2</a>");
-function md(text) {
-  return text.split(/\n{2,}/).map(b => {
-    if (b.startsWith("```")) return `<pre>${esc(b.replace(/^```\w*\n?|\n?```$/g, ""))}</pre>`;
-    if (b.startsWith("## ")) return `<h2>${inline(b.slice(3))}</h2>`;
-    if (b.startsWith("# ")) return `<h1>${inline(b.slice(2))}</h1>`;
-    const rows = b.split("\n");
-    if (rows.every(l => l.startsWith("- "))) return `<ul>${rows.map(l => `<li>${inline(l.slice(2))}</li>`).join("")}</ul>`;
-    return `<p>${inline(b).replace(/\n/g, "<br>")}</p>`;
-  }).join("");
-}
+// The little Markdown comments use: paragraphs, lists, `code`, **bold** and @mentions.
+const inline = s => esc(s).replace(/`([^`]+)`/g, "<code>$1</code>").replace(/\*\*([^*]+)\*\*/g, "<b>$1</b>").replace(/(^|\s)@(\w+)/g, "$1<a>@$2</a>");
+const md = text => text.split(/\n{2,}/).map(b => b.startsWith("- ") ? `<ul>${b.split("\n").map(l => `<li>${inline(l.slice(2))}</li>`).join("")}</ul>` : `<p>${inline(b)}</p>`).join("");
 
 let toastT;
 function toast(msg) {
@@ -1218,598 +645,261 @@ function toast(msg) {
   clearTimeout(toastT); toastT = setTimeout(() => el.classList.remove("show"), 2400);
 }
 
-// ---------- Header and repository tabs ----------
-const openPRs = () => PRS.filter(p => p.state === "open").length;
 function renderTop() {
-  const tab = state.page === "code" ? "code" : state.page === "pulls" || state.page === "pr" ? "pulls" : "actions";
-  const tabs = [["code", "code", "Code"], ["issues", "issue", "Issues", REPO.issues], ["pulls", "pr", "Pull requests", openPRs()], ["actions", "play", "Actions"], ["projects", "table", "Projects"], ["security", "shield", "Security"], ["insights", "graph", "Insights"], ["settings", "gear", "Settings"]];
-  const item = (icon, text, attr) => `<button class="mi" role="menuitem" ${attr}>${ic(icon)}${text}</button>`;
+  const on = state.page === "pulls" || state.page === "pr" ? "Pull requests" : "Actions";
+  const tabs = [["code", "Code"], ["issue", "Issues", REPO.issues], ["pr", "Pull requests", PRS.filter(p => p.state === "open").length], ["play", "Actions"], ["table", "Projects"], ["shield", "Security"], ["graph", "Insights"], ["gear", "Settings"]];
+  const go = { "Pull requests": "pulls", Actions: "actions" };
   $("#top").innerHTML = `
     <div class="gh-bar">
-      <button class="icon-btn bordered" data-toast="Navigation menu" aria-label="Open navigation menu">${ic("menu")}</button>
-      <button class="gh-logo" data-go="code" aria-label="casuro/core">${LOGO}</button>
-      <nav class="crumbs" aria-label="Repository"><button data-toast="The casuro organization">${REPO.owner}</button><span class="sep">/</span><button class="repo" data-go="code">${REPO.name}</button></nav>
+      <button class="icon-btn" data-toast="Navigation menu" aria-label="Open navigation menu">${ic("menu")}</button>
+      <button class="gh-logo" data-go="pulls" aria-label="casuro/core">${LOGO}</button>
+      <nav class="crumbs" aria-label="Repository"><button data-toast="The casuro organization">${REPO.owner}</button><span class="sep">/</span><button class="repo" data-go="pulls">${REPO.name}</button></nav>
       <div class="grow"></div>
-      <button class="gh-search" data-toast="Search is not available in this demo" aria-label="Search or jump to">${ic("search")}<span>Type <kbd>/</kbd> to search</span></button>
-      <span class="gh-divider hide-sm"></span>
-      <button class="icon-btn bordered plus-btn hide-sm" data-menu="plus" aria-label="Create new" aria-expanded="${state.menu === "plus"}">${ic("plus")}${ic("caret")}</button>
-      <button class="icon-btn bordered hide-sm" data-toast="Issues assigned to you" aria-label="Your issues">${ic("issue")}</button>
-      <button class="icon-btn bordered hide-sm" data-go="pulls" aria-label="Your pull requests">${ic("pr")}</button>
-      <button class="icon-btn bordered notif" data-toast="You have 3 unread notifications" aria-label="Notifications, 3 unread">${ic("bell")}<i></i></button>
-      <button class="me-btn" data-menu="me" aria-label="Open user menu" aria-expanded="${state.menu === "me"}">${avatar(ME, "s32")}</button>
+      <button class="gh-search" data-toast="Search is not part of this demo" aria-label="Search or jump to">${ic("search")}<span>Type <kbd>/</kbd> to search</span></button>
+      <button class="icon-btn hide-sm" data-toast="Create new: repository, issue, pull request" aria-label="Create new">${ic("plus")}</button>
+      <button class="icon-btn notif" data-toast="You have 3 unread notifications" aria-label="Notifications, 3 unread">${ic("bell")}<i></i></button>
+      <button class="me-btn" data-act="menu" aria-label="Open user menu" aria-expanded="${state.menu}">${avatar(ME, "s32")}</button>
     </div>
-    <nav class="repo-nav" aria-label="Repository tabs">${tabs.map(([id, icon, name, n]) =>
-      `<button class="tab${id === tab ? " on" : ""}" ${["code", "pulls", "actions"].includes(id) ? `data-go="${id}"` : `data-toast="${name} is not part of this demo"`}${id === tab ? ' aria-current="page"' : ""}><span>${ic(icon)}${name}${n != null ? `<span class="counter">${n}</span>` : ""}</span></button>`).join("")}</nav>
-    ${state.menu === "plus" ? `<div class="pop plus-pop" role="menu">${item("repo", "New repository", 'data-toast="New repository"')}${item("issue", "New issue", 'data-toast="New issue"')}${item("pr", "New pull request", 'data-toast="New pull request"')}</div>` : ""}
-    ${state.menu === "me" ? `<div class="pop me-pop" role="menu" aria-label="User menu">
-      <div class="who">${avatar(ME, "s32")}<div><b>${ME}</b><span>${esc(PEOPLE[ME].name)}</span></div></div><hr>
-      ${item("person", "Your profile", 'data-toast="Your profile"')}${item("repo", "Your repositories", 'data-toast="Your repositories"')}${item("pr", "Your pull requests", 'data-go="pulls"')}
-      <hr>${item("moon", state.theme === "dark" ? "Light theme" : "Dark theme", 'data-act="theme"')}${item("gear", "Settings", 'data-toast="Settings"')}
-      <hr>${item("out", "Sign out", 'data-toast="Signed out (demo)"')}
+    <nav class="repo-nav" aria-label="Repository tabs">${tabs.map(([icon, name, n]) =>
+      `<button class="tab${name === on ? " on" : ""}" ${go[name] ? `data-go="${go[name]}"` : `data-toast="${name} is not part of this demo"`}${name === on ? ' aria-current="page"' : ""}><span>${ic(icon)}${name}${n != null ? `<span class="counter">${n}</span>` : ""}</span></button>`).join("")}</nav>
+    ${state.menu ? `<div class="me-pop" role="menu" aria-label="User menu">
+      <div class="who">${avatar(ME, "s32")}<div><b>${ME}</b><span>${PEOPLE[ME]}</span></div></div><hr>
+      <button role="menuitem" data-toast="Your profile">${ic("person")}Your profile</button>
+      <button role="menuitem" data-act="theme">${ic("moon")}${state.theme === "dark" ? "Light theme" : "Dark theme"}</button>
+      <button role="menuitem" data-toast="Signed out (demo)">${ic("out")}Sign out</button>
     </div>` : ""}`;
 }
 
-// ---------- Code ----------
-function codePage() {
-  const l = REPO.last;
-  return `<div class="container">
-    <div class="repo-head">
-      <h1>${ic("repo")}<span>${REPO.name}</span><span class="pill">${REPO.visibility}</span></h1><span class="grow"></span>
-      <button class="btn sm hide-sm" data-toast="Watching casuro/core">${ic("eye")}Watch <span class="counter">${REPO.watchers}</span></button>
-      <button class="btn sm hide-sm" data-toast="Forks are disabled for this repository">${ic("fork")}Fork <span class="counter">${REPO.forks}</span></button>
-      <button class="btn sm" data-toast="Starred casuro/core">${ic("star")}Star <span class="counter">${REPO.stars}</span></button>
-    </div>
-    <div class="code-grid"><div>
-      <div class="code-bar">
-        <button class="btn" data-menu="branch" aria-label="Switch branch, ${esc(state.branch)}" aria-expanded="${state.menu === "branch"}">${ic("branch")}<span class="mono">${esc(state.branch)}</span>${ic("caret")}</button>
-        <button class="meta hide-sm" data-toast="Branches">${ic("branch")}${REPO.branches.length} <span>Branches</span></button>
-        <button class="meta hide-sm" data-toast="Tags">${ic("tag")}48 <span>Tags</span></button>
-        <span class="grow"></span>
-        <button class="btn primary" data-toast="Clone URL copied">${ic("code")}Code${ic("caret")}</button>
-        ${state.menu === "branch" ? `<div class="pop branch-pop" role="menu"><div class="pop-t">Switch branches</div>${REPO.branches.map(b => `<button class="mi" role="menuitemradio" aria-checked="${b === state.branch}" data-branch="${esc(b)}"><span class="chk">${b === state.branch ? ic("check") : ""}</span><span class="mono">${esc(b)}</span>${b === REPO.branch ? '<span class="pill">default</span>' : ""}</button>`).join("")}</div>` : ""}
-      </div>
-      <div class="box files">
-        <div class="last">${avatar(l.by)}<b>${l.by}</b><span class="msg">${esc(l.message)}</span>${st(l.status)}<span class="r"><span>${l.sha} · ${ago(l.at)}</span><b>${ic("clock")}${REPO.commits.toLocaleString("en-US")} Commits</b></span></div>
-        ${REPO.files.map(f => `<button class="file" data-file="${esc(f.name)}"><span class="n">${ic(f.dir ? "folder" : "file", f.dir ? "dir" : "")}<span>${esc(f.name)}</span></span><span class="m">${esc(f.message)}</span><span class="w">${ago(f.at)}</span></button>`).join("")}
-      </div>
-      <div class="box readme"><div class="box-h">${ic("book")}README</div><div class="md">${md(REPO.readme)}</div></div>
-    </div>
-    <aside class="about">
-      <h3>About</h3><p>${esc(REPO.about)}</p>
-      <div class="topics">${REPO.topics.map(t => `<span>${t}</span>`).join("")}</div>
-      <div class="row">${ic("book")}Readme</div><div class="row">${ic("graph")}Activity</div>
-      <div class="row">${ic("star")}<b>${REPO.stars}</b> stars</div><div class="row">${ic("eye")}<b>${REPO.watchers}</b> watching</div><div class="row">${ic("fork")}<b>${REPO.forks}</b> forks</div>
-      <section><h3>Languages</h3>
-        <div class="langbar">${REPO.languages.map(([, pct, c]) => `<span style="width:${pct}%;background:${c}"></span>`).join("")}</div>
-        <div class="langs">${REPO.languages.map(([n, pct, c]) => `<span><i style="background:${c}"></i><b>${n}</b><span class="muted">${pct}%</span></span>`).join("")}</div>
-      </section>
-    </aside></div>
-  </div>`;
-}
-
 // ---------- Pull requests ----------
-const PR_ICON = { open: "pr", merged: "merge", closed: "closed" };
+const PR_ICON = { open: "pr", merged: "merge" };
+const comments = pr => pr.timeline.filter(t => t.type === "comment").length;
 function prRows() {
-  const q = state.prQuery.trim().toLowerCase();
-  const rows = PRS.filter(p => (state.prFilter === "open") === (p.state === "open") && (!q || `${p.title} #${p.number} ${p.author} ${p.labels.join(" ")}`.toLowerCase().includes(q)));
-  if (!rows.length) return `<div class="empty"><b>No results matched your search.</b>Try another filter.</div>`;
-  return rows.map(p => {
-    const checks = rollup(checksOf(p).map(c => c.status)), n = p.timeline.filter(t => t.type === "comment" || (t.type === "review" && t.text)).length;
-    const sub = p.state === "open" ? `opened ${ago(p.at)} by ${p.author}` : p.state === "merged" ? `by ${p.author} was merged ${ago(p.mergedAt)}` : `by ${p.author} was closed ${ago(p.closedAt)}`;
-    const review = p.state !== "open" ? "" : approved(p) ? " · Approved" : " · Review required";
+  return PRS.filter(p => (state.filter === "open") === (p.state === "open")).map(p => {
+    const checks = rollup(checksOf(p).map(c => c.status)), n = comments(p);
     return `<div class="pr-row" data-pr="${p.number}" role="link" tabindex="0">${ic(PR_ICON[p.state], p.state)}
-      <div class="t"><b>${esc(p.title)}</b>${p.labels.map(label).join("")}${checks ? st(checks) : ""}<div class="sub">#${p.number} ${sub}${review}</div></div>
-      <div class="rt">${Object.keys(p.reviewers).slice(0, 1).map(k => avatar(k)).join("")}${n ? `<span>${ic("comment")}${n}</span>` : ""}</div></div>`;
+      <div class="grow"><b>${esc(p.title)}</b>${p.labels.map(label).join("")}${checks ? st(checks) : ""}
+        <div class="sub">#${p.number} ${p.state === "open" ? `opened ${ago(p.at)} by ${p.author} · ${approved(p) ? "Approved" : "Review required"}` : `by ${p.author} was merged ${ago(p.mergedAt)}`}</div></div>
+      ${n ? `<span class="rt">${ic("comment")}${n}</span>` : ""}</div>`;
   }).join("");
 }
 function pullsPage() {
-  const open = openPRs();
-  return `<div class="container">
-    <div class="list-bar">
-      <label class="search">${ic("search")}<input id="prq" aria-label="Search pull requests" placeholder="Search all pull requests" value="${esc(state.prQuery)}"></label>
-      <button class="btn hide-sm" data-toast="Labels">${ic("tag")}Labels</button>
-      <button class="btn primary" data-toast="Compare changes to open a pull request">New pull request</button>
-    </div>
-    <div class="box"><div class="box-h list-h">
-      <button class="${state.prFilter === "open" ? "on" : ""}" data-prfilter="open">${ic("pr")}${open} Open</button>
-      <button class="${state.prFilter === "closed" ? "on" : ""}" data-prfilter="closed">${ic("check")}${PRS.length - open} Closed</button>
-      <span class="grow"></span><div class="f">${["Author", "Label", "Reviews", "Sort"].map(f => `<button data-toast="Filter by ${f.toLowerCase()}">${f}${ic("caret")}</button>`).join("")}</div>
-    </div><div id="pr-rows">${prRows()}</div></div>
-  </div>`;
+  const open = PRS.filter(p => p.state === "open").length;
+  return `<div class="container"><div class="box"><div class="box-h">
+    <button class="${state.filter === "open" ? "on" : ""}" data-filter="open">${ic("pr")}${open} Open</button>
+    <button class="${state.filter === "closed" ? "on" : ""}" data-filter="closed">${ic("check")}${PRS.length - open} Closed</button>
+  </div><div id="pr-rows">${prRows()}</div></div></div>`;
 }
-
 // A unified diff, as rows: hunk headers, context, additions and deletions with both line numbers.
 function diffRows(text) {
   let o = 0, n = 0;
   return text.split("\n").map(line => {
     const m = /^@@ -(\d+),?\d* \+(\d+)/.exec(line);
     if (m) { o = +m[1]; n = +m[2]; return { type: "hunk", text: line }; }
-    if (line[0] === "+") return { type: "add", n: n++, text: line.slice(1) };
-    if (line[0] === "-") return { type: "del", o: o++, text: line.slice(1) };
-    return { type: "ctx", o: o++, n: n++, text: line.slice(1) };
+    if (line[0] === "+") return { type: "add", n: n++, text: line };
+    if (line[0] === "-") return { type: "del", o: o++, text: line };
+    return { type: "ctx", o: o++, n: n++, text: line };
   });
 }
-const fileStat = f => f.diff ? diffRows(f.diff).reduce((s, r) => ({ a: s.a + (r.type === "add"), d: s.d + (r.type === "del") }), { a: 0, d: 0 }) : { a: f.additions ?? 0, d: f.deletions ?? 0 };
-const prStat = pr => pr.files.map(fileStat).reduce((s, f) => ({ a: s.a + f.a, d: s.d + f.d }), { a: 0, d: 0 });
-function diffstat({ a, d }, blocks = true) {
-  const k = a + d ? Math.round(5 * a / (a + d)) : 0;
-  return `<span class="diffstat"><span class="a">+${a}</span> <span class="d">−${d}</span>${blocks && a + d ? " " + [0, 1, 2, 3, 4].map(i => `<i class="${i < k ? "a" : "d"}"></i>`).join("") : ""}</span>`;
+function diffstat(files) {
+  const rows = files.flatMap(f => diffRows(f.diff));
+  return `<span class="diffstat"><span class="a">+${rows.filter(r => r.type === "add").length}</span> <span class="d">−${rows.filter(r => r.type === "del").length}</span></span>`;
 }
-
-const REVIEW = { approved: ["check", "green", "approved these changes"], changes_requested: ["alert", "red", "requested changes"], commented: ["eye", "", "reviewed"] };
+function comment(pr, by, at, text) {
+  return `<div class="tl-item">${avatar(by, "s40")}<div class="comment${by === ME ? " mine" : ""}"><div class="comment-h">${user(by)} commented ${ago(at)}<span class="grow"></span>${by === pr.author ? '<span class="pill">Author</span>' : ""}</div><div class="comment-b">${md(text)}</div></div></div>`;
+}
 function timelineItem(pr, t) {
-  if (t.type === "commit") {
-    const c = pr.commits.find(c => c.sha === t.sha), s = commitStatus(t.sha);
-    return `<div class="ev commit"><span class="dot plain">${ic("commit")}</span><div class="body">${avatar(c.by)}<a class="msg" data-prtab="commits">${esc(c.message)}</a><span data-status-of="${c.sha}">${s ? st(s) : ""}</span><span class="sha">${c.sha}</span></div></div>`;
-  }
   if (t.type === "comment") return comment(pr, t.by, t.at, t.text);
-  if (t.type === "review") {
-    const [icon, color, verb] = REVIEW[t.state];
-    return `<div class="ev"><span class="dot ${color}">${ic(icon)}</span><div class="body">${avatar(t.by)} ${user(t.by)} ${verb} ${ago(t.at)}${t.text ? `<div class="review-body">${comment(pr, t.by, t.at, t.text, true)}</div>` : ""}</div></div>`;
-  }
-  return `<div class="ev"><span class="dot ${t.color ?? ""}">${ic(t.icon ?? "commit")}</span><div class="body">${avatar(t.by)} ${user(t.by)} ${inline(t.text)} ${ago(t.at)}</div></div>`;
-}
-function comment(pr, by, at, text, bare) {
-  const box = `<div class="comment${by === ME ? " mine" : ""}"><div class="comment-h">${user(by)} ${bare ? "left a comment" : `commented ${ago(at)}`}<span class="grow"></span>${by === pr.author ? '<span class="pill">Author</span>' : ""}</div><div class="comment-b">${md(text)}</div></div>`;
-  return bare ? box : `<div class="tl-item">${avatar(by, "s40")}${box}</div>`;
+  if (t.type === "commit") { const s = commitStatus(t.sha); return `<div class="ev commit"><span class="dot plain">${ic("commit")}</span><div class="body">${avatar(t.by)}<span class="msg">${esc(t.text)}</span><span data-status-of="${t.sha}">${s ? st(s) : ""}</span><span class="sha">${t.sha}</span></div></div>`; }
+  return `<div class="ev"><span class="dot ${t.color ?? ""}">${ic(t.icon)}</span><div class="body">${avatar(t.by)} ${user(t.by)} ${inline(t.text)} ${ago(t.at)}</div></div>`;
 }
 function mergeBox(pr) {
-  if (pr.state === "merged") return `<div class="mergebox merged"><div class="mb-sec"><span class="i purple">${ic("merge")}</span><div class="b"><h4>Pull request successfully merged and closed</h4><p>You're all set. The <span class="branch">${esc(pr.branch)}</span> branch can be safely deleted.</p></div><button class="btn sm" data-toast="Deleted branch ${esc(pr.branch)}">Delete branch</button></div></div>`;
-  if (pr.state === "closed") return `<div class="mergebox"><div class="mb-sec"><span class="i">${ic("closed")}</span><div class="b"><h4>Closed with unmerged commits</h4><p>This pull request is closed.</p></div></div></div>`;
+  if (pr.state === "merged") return `<div class="mergebox merged"><div class="mb-sec"><span class="i purple">${ic("merge")}</span><div class="grow"><h4>Pull request successfully merged and closed</h4><p>The <span class="branch">${esc(pr.branch)}</span> branch can be safely deleted.</p></div></div></div>`;
   const checks = checksOf(pr), all = rollup(checks.map(c => c.status)), ok = approved(pr), can = mergeable(pr);
-  const count = s => checks.filter(c => c.status === s).length;
-  const parts = [["failure", "failing"], ["in_progress", "in progress"], ["queued", "queued"], ["waiting", "waiting"], ["cancelled", "cancelled"], ["skipped", "skipped"], ["success", "successful"]].filter(([s]) => count(s)).map(([s, w]) => `${count(s)} ${w}`);
   const head = all === "failure" ? "Some checks were not successful" : all === "in_progress" ? "Some checks haven't completed yet" : all === "cancelled" ? "Some checks were cancelled" : "All checks have passed";
-  const why = !ok ? "at least 1 approving review is required" : "required checks have not passed yet";
+  const n = checks.filter(c => c.status === "success").length;
   return `<div class="mergebox${can ? " ok" : ""}">
-    <div class="mb-sec"><span class="i ${ok ? "ok" : "bad"}">${ic(ok ? "check" : "x")}</span><div class="b"><h4>${ok ? "Changes approved" : "Review required"}</h4><p>${ok ? `${approvals(pr)} approving review by reviewers with write access.` : `At least ${REPO.approvals} approving review is required by reviewers with write access.`}</p></div></div>
-    ${checks.length ? `<div class="mb-sec"><span class="i ${all === "success" ? "ok" : all === "failure" ? "bad" : "wait"}">${all === "success" ? ic("check") : all === "failure" ? ic("x") : st(all)}</span><div class="b"><h4>${head}</h4><p>${parts.join(", ")} check${checks.length === 1 ? "" : "s"}</p></div><button class="tog" data-act="checks" aria-expanded="${state.showChecks}">${state.showChecks ? "Hide" : "Show"} all checks</button></div>
-    ${state.showChecks ? `<div class="checks">${checks.map(checkRow).join("")}</div>` : ""}` : ""}
-    <div class="mb-sec"><span class="i ok">${ic("check")}</span><div class="b"><h4>No conflicts with base branch</h4><p>Merging can be performed automatically.</p></div></div>
-    <div class="mb-sec mb-foot">${state.confirm && can
-      ? `<input class="input" id="merge-title" aria-label="Commit message" value="${esc(pr.title)} (#${pr.number})"><div class="row"><button class="btn primary" data-act="merge">Confirm merge</button><button class="btn" data-act="merge-cancel">Cancel</button></div>`
-      : `<div class="row"><button class="btn primary" data-act="merge-start" ${can ? "" : "disabled"}>Merge pull request</button></div><p class="hint">${can ? "This branch has no conflicts and every requirement is met." : `Merging is blocked: ${why}.`}</p>`}</div>
+    <div class="mb-sec"><span class="i ${ok ? "ok" : "bad"}">${ic(ok ? "check" : "x")}</span><div class="grow"><h4>${ok ? "Changes approved" : "Review required"}</h4><p>${ok ? "1 approving review by a reviewer with write access." : "At least 1 approving review is required by reviewers with write access."}</p></div>
+      ${!ok && pr.author !== ME ? `<button class="btn" data-act="approve">${ic("check")}Approve</button>` : ""}</div>
+    ${checks.length ? `<div class="mb-sec">${all === "success" ? `<span class="i ok">${ic("check")}</span>` : all === "failure" ? `<span class="i bad">${ic("x")}</span>` : `<span class="i">${st(all, "lg")}</span>`}<div class="grow"><h4>${head}</h4><p>${n} of ${checks.length} checks successful</p></div></div>
+    <div class="checks">${checks.map(c => `<div class="check">${st(c.status)}<span class="nm"><b>${esc(c.name)}</b> ${checkText(c)}</span><a data-run="${c.run}" data-job="${c.job}" aria-label="Details of ${esc(c.name)}">Details</a></div>`).join("")}</div>` : ""}
+    <div class="mb-sec mb-foot"><button class="btn primary" data-act="merge" ${can ? "" : "disabled"}>Merge pull request</button><p>${can ? "This branch has no conflicts with the base branch." : `Merging is blocked: ${ok ? "every check has to pass" : "an approving review is required"}.`}</p></div>
   </div>`;
 }
-const checkRow = c => `<div class="check">${st(c.status)}<span class="nm"><b>${esc(c.name)}</b> <span>(${c.event}) ${esc(checkText(c))}</span></span>${c.required ? '<span class="req">Required</span>' : ""}<a data-run="${c.run}" data-job="${c.job}" aria-label="Details of ${esc(c.name)}">Details</a></div>`;
-
-const REVIEWER = { approved: ["check", "var(--green)", "approved"], changes_requested: ["alert", "var(--red)", "requested changes"], commented: ["comment", "var(--muted)", "left review comments"], requested: ["issue", "var(--amber)", "awaiting review"] };
-function conversation(pr) {
-  const side = (title, body) => `<div class="side-sec"><h4>${title}</h4>${body || '<span class="muted">None yet</span>'}</div>`;
-  return `<div class="pr-grid"><div>
-    ${pr.state === "open" && pr.reviewers[ME] === "requested" ? `<div class="banner">${avatar(pr.author, "s32")}<div class="grow">${user(pr.author)} requested your review on this pull request.</div><button class="btn primary" data-act="review">Add your review</button></div>` : ""}
-    <div class="tl">
-      ${comment(pr, pr.author, pr.at, pr.body)}
-      ${pr.timeline.map(t => timelineItem(pr, t)).join("")}
-      <div class="tl-end">
-        <div id="mergebox">${mergeBox(pr)}</div>
-        <div class="tl-item composer">${avatar(ME, "s40")}<h4>Add a comment</h4><div class="box"><div class="tabs"><span class="on">Write</span><span>Preview</span></div>
-          <div class="pad"><textarea class="input" id="comment" rows="4" aria-label="Add a comment" placeholder="Use Markdown to format your comment">${esc(state.draft)}</textarea></div>
-          <div class="foot"><button class="btn primary" data-act="comment">Comment</button></div></div></div>
-      </div>
-    </div></div>
-    <aside>
-      ${side("Reviewers", Object.entries(pr.reviewers).map(([k, s]) => `<div class="p">${avatar(k)}<span class="grow">${k}</span><span title="${k} ${REVIEWER[s][2]}" style="color:${REVIEWER[s][1]}">${ic(REVIEWER[s][0])}</span></div>`).join(""))}
-      ${side("Assignees", pr.assignees.map(k => `<div class="p">${avatar(k)}${k}</div>`).join(""))}
-      ${side("Labels", pr.labels.length ? `<div class="labels">${pr.labels.map(label).join("")}</div>` : "")}
-      ${side("Milestone", "")}
-    </aside></div>`;
-}
-function commitsTab(pr) {
-  const days = [...new Set(pr.commits.map(c => day(c.at)))];
-  return days.map(d => `<div class="commit-day">${ic("commit")}Commits on ${d}</div><div class="box" style="margin:0 0 24px 28px">${pr.commits.filter(c => day(c.at) === d).map(c => {
-    const s = commitStatus(c.sha);
-    return `<div class="commit-row"><div class="t"><b>${esc(c.message)}</b><span>${avatar(c.by, "s16")}${c.by} committed ${ago(c.at)}<span data-status-of="${c.sha}">${s ? st(s) : ""}</span></span></div><button class="btn sm sha" data-toast="Copied ${c.sha}" aria-label="Copy the commit SHA ${c.sha}">${c.sha}</button></div>`;
-  }).join("")}</div>`).join("");
-}
-function checksTab(pr) {
-  const checks = checksOf(pr);
-  return checks.length ? `<div class="box" id="checks-tab">${checks.map(checkRow).join("")}</div>` : `<div class="box empty"><b>No checks</b>No workflow has run on this pull request.</div>`;
-}
-function filesTab(pr) {
-  if (!pr.files.length) return `<div class="box empty"><b>No diff to show</b>The files of this pull request are not part of this demo.</div>`;
-  const s = prStat(pr), seen = pr.files.filter(f => state.viewed[`${pr.number}:${f.path}`]).length;
-  return `<div class="files-bar"><span>Showing <b>${pr.files.length} changed files</b> with <b>${s.a} additions</b> and <b>${s.d} deletions</b>.</span><span class="grow"></span><span class="muted">${seen} / ${pr.files.length} files viewed</span>${pr.state === "open" ? `<button class="btn primary sm" data-act="review">Review changes${ic("caret")}</button>` : ""}</div>
-  ${pr.files.map(f => {
-    const key = `${pr.number}:${f.path}`, viewed = !!state.viewed[key], shut = state.shut[key] ?? viewed;
-    return `<div class="box diff${shut ? " shut" : ""}"><div class="diff-h">
-      <button class="icon-btn" data-shut="${esc(key)}" aria-label="${shut ? "Expand" : "Collapse"} ${esc(f.path)}" aria-expanded="${!shut}">${ic(shut ? "chev" : "down")}</button>
-      <span class="path"><bdi>${esc(f.path)}</bdi></span>${diffstat(fileStat(f))}
-      <label class="${viewed ? "on" : ""}"><input type="checkbox" data-viewed="${esc(key)}" ${viewed ? "checked" : ""} aria-label="Viewed ${esc(f.path)}"><span>Viewed</span></label></div>
-      ${shut ? "" : f.diff ? `<div class="diff-body"><table>${diffRows(f.diff).map(r => r.type === "hunk"
-        ? `<tr class="hunk"><td class="n" colspan="2"></td><td class="c">${esc(r.text)}</td></tr>`
-        : `<tr class="${r.type}"><td class="n">${r.o ?? ""}</td><td class="n">${r.n ?? ""}</td><td class="c">${r.type === "add" ? "+" : r.type === "del" ? "-" : " "} ${esc(r.text)}</td></tr>`).join("")}</table></div>`
-        : `<div class="big"><a data-toast="Loading large diffs is not part of this demo">Load diff</a>Large diffs are not rendered by default.</div>`}
-    </div>`;
-  }).join("")}`;
-}
 function prPage() {
-  const pr = byNumber(state.pr), s = prStat(pr), n = pr.commits.length;
-  const comments = pr.timeline.filter(t => t.type === "comment" || (t.type === "review" && t.text)).length;
-  const tabs = [["conversation", "comment", "Conversation", comments], ["commits", "commit", "Commits", n], ["checks", "play", "Checks", checksOf(pr).length], ["files", "file", "Files changed", pr.files.length]];
-  const STATE = { open: "Open", merged: "Merged", closed: "Closed" };
+  const pr = byNumber(state.pr), files = state.tab === "files";
+  const tab = (id, icon, name, n) => `<button class="tab${state.tab === id ? " on" : ""}" role="tab" aria-selected="${state.tab === id}" data-tab="${id}"><span>${ic(icon)}${name}<span class="counter">${n}</span></span></button>`;
   const br = b => `<span class="branch">${esc(b)}</span>`;
   return `<div class="container">
     <h1 class="pr-title">${esc(pr.title)} <span>#${pr.number}</span></h1>
-    <div class="pr-meta"><span class="state ${pr.state}">${ic(PR_ICON[pr.state])}${STATE[pr.state]}</span><span>${pr.state === "merged"
-      ? `<b>${pr.mergedBy}</b> merged ${n} commit${n === 1 ? "" : "s"} into ${br(pr.base)} from ${br(pr.branch)} ${ago(pr.mergedAt)}`
-      : `<b>${pr.author}</b> wants to merge ${n} commit${n === 1 ? "" : "s"} into ${br(pr.base)} from ${br(pr.branch)}`}</span></div>
-    <div class="pr-tabs" role="tablist">${tabs.map(([id, icon, name, c]) => `<button class="tab${state.prTab === id ? " on" : ""}" role="tab" aria-selected="${state.prTab === id}" data-prtab="${id}"><span>${ic(icon)}${name}<span class="counter">${c}</span></span></button>`).join("")}<span class="grow"></span>${pr.files.length ? diffstat(s) : ""}</div>
-    ${state.prTab === "conversation" ? conversation(pr) : state.prTab === "commits" ? commitsTab(pr) : state.prTab === "checks" ? checksTab(pr) : filesTab(pr)}
+    <div class="pr-meta"><span class="state ${pr.state}">${ic(PR_ICON[pr.state])}${pr.state === "open" ? "Open" : "Merged"}</span><span><b>${pr.state === "open" ? pr.author : pr.mergedBy}</b> ${pr.state === "open" ? "wants to merge" : "merged"} into ${br(pr.base)} from ${br(pr.branch)}</span></div>
+    <div class="pr-tabs" role="tablist">${tab("conversation", "comment", "Conversation", comments(pr))}${tab("files", "code", "Files changed", pr.files.length)}<span class="grow"></span>${diffstat(pr.files)}</div>
+    ${files ? pr.files.map(f => `<div class="box diff"><div class="diff-h"><span class="grow">${esc(f.path)}</span>${diffstat([f])}</div><div class="diff-body"><table>${diffRows(f.diff).map(r => r.type === "hunk"
+      ? `<tr class="hunk"><td class="n" colspan="2"></td><td>${esc(r.text)}</td></tr>`
+      : `<tr class="${r.type}"><td class="n">${r.o ?? ""}</td><td class="n">${r.n ?? ""}</td><td>${esc(r.text)}</td></tr>`).join("")}</table></div></div>`).join("") || `<p>No files to show.</p>`
+    : `<div class="pr-grid"><div class="tl">
+      ${comment(pr, pr.author, pr.at, pr.body)}${pr.timeline.map(t => timelineItem(pr, t)).join("")}
+      <div class="tl-end"><div id="mergebox">${mergeBox(pr)}</div>
+        <div class="tl-item composer">${avatar(ME, "s40")}<h4>Add a comment</h4><div class="box"><textarea id="comment" rows="4" aria-label="Add a comment" placeholder="Use Markdown to format your comment">${esc(state.draft)}</textarea><button class="btn primary" data-act="comment">Comment</button></div></div>
+      </div></div>
+      <aside>
+        <div class="side-sec"><h4>Reviewers</h4>${Object.entries(pr.reviewers).map(([k, s]) => `<div class="p">${avatar(k)}<span class="grow">${k}</span><span title="${s}" style="color:var(--${s === "approved" ? "green" : s === "requested" ? "amber" : "muted"})">${ic(s === "approved" ? "check" : s === "requested" ? "issue" : "comment")}</span></div>`).join("") || "None yet"}</div>
+        <div class="side-sec"><h4>Labels</h4>${pr.labels.map(label).join("") || "None yet"}</div>
+      </aside></div>`}
   </div>`;
 }
-function reviewDialog() {
-  const pr = byNumber(state.pr), d = state.dialog, own = pr.author === ME;
-  const opt = (v, name, text, off) => `<label class="radio"><input type="radio" name="review" value="${v}" ${d.choice === v ? "checked" : ""} ${off ? "disabled" : ""}><b>${name}</b><span>${text}</span></label>`;
-  return `<div class="scrim" data-act="dialog-close"><div class="dialog" role="dialog" aria-modal="true" aria-label="Finish your review">
-    <div class="dialog-h"><span class="grow">Finish your review</span><button class="icon-btn" data-act="dialog-close" aria-label="Close">${ic("x")}</button></div>
-    <div class="dialog-b"><textarea class="input" id="review-text" rows="4" aria-label="Review comment" placeholder="Leave a comment">${esc(d.text)}</textarea>
-      ${opt("commented", "Comment", "Submit general feedback without explicit approval.")}
-      ${opt("approved", "Approve", own ? "Pull request authors can't approve their own pull request." : "Submit feedback and approve merging these changes.", own)}
-      ${opt("changes_requested", "Request changes", own ? "Pull request authors can't request changes on their own pull request." : "Submit feedback that must be addressed before merging.", own)}</div>
-    <div class="dialog-f"><button class="btn" data-act="dialog-close">Cancel</button><button class="btn primary" data-act="review-submit">Submit review</button></div>
-  </div></div>`;
-}
 
-// ---------- Actions: workflows and their runs ----------
-const RUN_TEXT = { success: "Success", failure: "Failure", in_progress: "In progress", queued: "Queued", waiting: "Waiting", cancelled: "Cancelled" };
-const trigger = run => run.event === "pull_request" ? `Pull request #${run.pr} synchronize by ${run.actor}` : run.event === "push" ? `Commit ${run.sha} pushed by ${run.actor}` : run.event === "schedule" ? "Scheduled" : `Manually run by ${run.actor}`;
-function shownRuns() {
-  const q = state.runQuery.trim().toLowerCase();
-  return RUNS.filter(r => (state.wf === "all" || r.workflow === state.wf) && (!q || `${r.title} ${r.branch} ${r.actor} ${wfOf(r).name} #${r.id} ${r.status}`.toLowerCase().includes(q))).sort((a, b) => b.created - a.created);
-}
+// ---------- Actions ----------
+const RUN_TEXT = { success: "Success", failure: "Failure", in_progress: "In progress", queued: "Queued", cancelled: "Cancelled" };
+const trigger = run => run.event === "pull_request" ? `Pull request #${run.pr} by ${run.actor}` : run.event === "push" ? `Commit ${run.sha} pushed by ${run.actor}` : "Scheduled";
+const shownRuns = () => RUNS.filter(r => state.wf === "all" || r.workflow === state.wf).sort((a, b) => b.created - a.created);
 function runRows() {
-  const rows = shownRuns();
-  if (!rows.length) return `<div class="empty"><b>No workflow runs</b>Nothing matches this filter.</div>`;
-  return rows.map(r => `<div class="run-row" data-run="${r.id}" role="link" tabindex="0" aria-label="${esc(wfOf(r).name)} #${r.id}: ${esc(r.title)}, ${RUN_TEXT[r.status]}">${st(r.status)}
-    <span class="t"><b>${esc(r.title)}</b><span><b>${esc(wfOf(r).name)}</b> #${r.id}: ${esc(trigger(r))}</span></span>
+  return shownRuns().map(r => `<div class="run-row" data-run="${r.id}" role="link" tabindex="0" aria-label="${esc(wfName(r))} #${r.id}: ${esc(r.title)}, ${RUN_TEXT[r.status]}">${st(r.status)}
+    <span class="t"><b>${esc(r.title)}</b><span><b>${esc(wfName(r))}</b> #${r.id}: ${esc(trigger(r))}</span></span>
     <span class="br"><span class="branch">${esc(r.branch)}</span></span>
-    <span class="when"><span>${ic("cal")}${ago(r.created)}</span><span>${ic("timer")}${r.secs != null ? dur(r.secs) : RUN_TEXT[r.status]}</span></span>
-    <button class="icon-btn" data-toast="Run options: view workflow file, delete run" aria-label="Options for run #${r.id}">${ic("kebab")}</button></div>`).join("");
+    <span class="when"><span>${ic("cal")}${ago(r.created)}</span><span>${ic("timer")}${r.secs != null ? dur(r.secs) : RUN_TEXT[r.status]}</span></span></div>`).join("");
 }
-const runCount = () => { const n = shownRuns().length; return `${n} workflow run${n === 1 ? "" : "s"}`; };
 function actionsPage() {
-  const wf = WORKFLOWS.find(w => w.id === state.wf);
-  const item = (id, name, icon) => `<button class="side-item${state.wf === id ? " on" : ""}" data-wf="${id}"${state.wf === id ? ' aria-current="true"' : ""}>${icon ? ic(icon) : ""}<span>${esc(name)}</span></button>`;
-  return `<div class="split${state.drawer ? " drawer" : ""}">
-    <div class="side-scrim" data-act="drawer"></div>
-    <aside class="side" aria-label="Workflows">
-      <h2>Actions<span class="grow"></span><button class="btn sm" data-toast="Choose a workflow template">New workflow</button><button class="icon-btn x" data-act="drawer" aria-label="Close">${ic("x")}</button></h2>
-      <div style="height:12px"></div>
-      ${item("all", "All workflows")}${WORKFLOWS.map(w => item(w.id, w.name, "workflow")).join("")}
-      <div class="grp">Management</div>
-      <button class="side-item" data-toast="Caches: 3 entries, 412 MB">${ic("db")}<span>Caches</span></button>
-      <button class="side-item" data-toast="Runners: GitHub-hosted, ubuntu-24.04">${ic("server")}<span>Runners</span></button>
-    </aside>
-    <div class="act-main"><div class="in">
-      <div class="act-title"><button class="btn sm side-toggle" data-act="drawer">${ic("menu")}Workflows</button><h1>${esc(wf?.name ?? "All workflows")}</h1></div>
-      <p class="act-sub">${wf ? `<a data-toast=".github/workflows/${wf.file}">${wf.file}</a>` : "Showing runs from all workflows"}</p>
-      <div class="list-bar"><label class="search">${ic("search")}<input id="runq" aria-label="Filter workflow runs" placeholder="Filter workflow runs" value="${esc(state.runQuery)}"></label></div>
-      <div class="box"><div class="box-h list-h"><b id="run-count">${runCount()}</b><span class="grow"></span><div class="f">${["Event", "Status", "Branch", "Actor"].map(f => `<button data-toast="Filter by ${f.toLowerCase()}">${f}${ic("caret")}</button>`).join("")}</div></div><div id="runs">${runRows()}</div></div>
-    </div></div>
+  const item = (id, name) => `<button class="side-item${state.wf === id ? " on" : ""}" data-wf="${id}"${state.wf === id ? ' aria-current="true"' : ""}>${id === "all" ? "" : ic("workflow")}<span>${esc(name)}</span></button>`;
+  const n = shownRuns().length;
+  return `<div class="split">
+    <aside class="side" aria-label="Workflows"><h2>Actions</h2>${item("all", "All workflows")}${WORKFLOWS.map(w => item(w.id, w.name)).join("")}</aside>
+    <div class="act-main"><h1>${esc(WORKFLOWS.find(w => w.id === state.wf)?.name ?? "All workflows")}</h1>
+      <div class="box"><div class="box-h"><b>${n} workflow run${n === 1 ? "" : "s"}</b></div><div id="runs">${runRows()}</div></div></div>
   </div>`;
 }
-
-// ---------- A run ----------
 function runHead(run) {
-  const wf = wfOf(run), failed = run.jobs.some(j => j.status === "failure" || j.status === "cancelled");
-  return `<button class="crumb" data-wf="${wf.id}">${ic("left")}${esc(wf.name)}</button>
-    <div class="row"><button class="btn sm side-toggle" data-act="drawer">${ic("menu")}Jobs</button>
-      <h1>${st(run.status, "lg")}<span><b>${esc(run.title)}</b> <span>#${run.id}</span></span></h1>
-      ${run.attempt > 1 ? `<span class="pill">Attempt #${run.attempt}</span>` : ""}
-      ${active(run) ? `<button class="btn" data-act="cancel">Cancel workflow</button>`
-        : failed ? `<button class="btn" data-menu="rerun" aria-expanded="${state.menu === "rerun"}">${ic("sync")}Re-run jobs${ic("caret")}</button>`
-        : `<button class="btn" data-rerun="all">${ic("sync")}Re-run all jobs</button>`}
-      ${state.menu === "rerun" ? `<div class="pop run-pop" role="menu"><button class="mi" role="menuitem" data-rerun="failed">Re-run failed jobs</button><button class="mi" role="menuitem" data-rerun="all">Re-run all jobs</button></div>` : ""}
-    </div>`;
+  return `<button class="crumb" data-wf="${run.workflow}">${ic("left")}${esc(wfName(run))}</button>
+    <div class="row"><h1>${st(run.status, "lg")}<span>${esc(run.title)} <span>#${run.id}</span></span></h1>
+      <button class="btn" data-act="rerun" ${ended(run.status) ? "" : "disabled"}>${ic("sync")}Re-run jobs</button></div>
+    <div class="meta">${avatar(run.actor)}<b>${run.actor}</b><span>${run.attempt > 1 ? `re-run by ${ME} ${ago(run.at)}` : `${run.event === "push" ? "pushed" : "triggered"} ${ago(run.created)}`}</span><span class="sha">${run.sha}</span><span class="branch">${esc(run.branch)}</span><span>${ic("timer")} ${run.secs != null ? dur(run.secs) : RUN_TEXT[run.status]}</span>${run.attempt > 1 ? `<span class="pill">Attempt #${run.attempt}</span>` : ""}</div>`;
 }
-function runSide(run) {
-  return `<h2 style="font-size:14px;min-height:0"><span class="grow"></span><button class="icon-btn x" data-act="drawer" aria-label="Close">${ic("x")}</button></h2>
-    <button class="side-item${state.page === "run" ? " on" : ""}" data-run="${run.id}">${ic("home")}<span>Summary</span></button>
-    <div class="grp">Jobs</div>
-    ${run.jobs.map(j => `<button class="side-item${state.page === "job" && state.job === j.id ? " on" : ""}" data-run="${run.id}" data-job="${j.id}" aria-label="${esc(j.name)}, ${ST_LABEL[j.status]}">${st(j.status)}<span>${esc(j.name)}</span></button>`).join("")}
-    <hr><div class="grp" style="padding-top:8px">Run details</div>
-    <button class="side-item" data-toast="Usage: ${run.secs != null ? dur(run.secs) : "still running"} of runner time">${ic("timer")}<span>Usage</span></button>
-    <button class="side-item" data-toast=".github/workflows/${wfOf(run).file}">${ic("file")}<span>Workflow file</span></button>`;
-}
-// The run's annotations: what its jobs reported with ##[error] and ##[warning].
-function annotations(run) {
-  return run.jobs.flatMap(j => j.steps.flatMap(s => s.lines.map(l => /^##\[(error|warning)([^\]]*)\](.*)$/.exec(l.s)).filter(Boolean).map(m => {
-    const file = /file=([^,\]]+)/.exec(m[2])?.[1], line = /line=(\d+)/.exec(m[2])?.[1];
-    return { level: m[1] === "error" ? "failure" : "warning", job: j, step: s.id, path: file ? `${file}${line ? `#L${line}` : ""}` : null, text: m[3] };
-  })));
-}
-const GRAPH = { w: 236, h: 44, gx: 56, gy: 12 };
-function graph(run) {
-  const depth = j => j.needs.length ? 1 + Math.max(...j.needs.map(id => depth(run.jobs.find(x => x.id === id)))) : 0;
-  const cols = []; run.jobs.forEach(j => (cols[depth(j)] ??= []).push(j));
-  const { w, h, gx, gy } = GRAPH, colH = n => n * h + (n - 1) * gy, H = Math.max(...cols.map(c => colH(c.length))), W = cols.length * w + (cols.length - 1) * gx;
-  const pos = {};
-  cols.forEach((c, x) => c.forEach((j, y) => pos[j.id] = { x: x * (w + gx), y: (H - colH(c.length)) / 2 + y * (h + gy) }));
-  const lines = run.jobs.flatMap(j => j.needs.map(id => { const a = pos[id], b = pos[j.id], y1 = a.y + h / 2, y2 = b.y + h / 2; return `<path d="M${a.x + w} ${y1}C${a.x + w + gx / 2} ${y1} ${b.x - gx / 2} ${y2} ${b.x} ${y2}"/>`; }));
-  return `<div class="graph"><div class="in" style="width:${W}px;height:${H}px"><svg viewBox="0 0 ${W} ${H}" aria-hidden="true">${lines.join("")}</svg>${run.jobs.map(j =>
-    `<button class="gjob" style="left:${pos[j.id].x}px;top:${pos[j.id].y}px;width:${w}px;height:${h}px" data-run="${run.id}" data-job="${j.id}" aria-label="${esc(j.name)}, ${ST_LABEL[j.status]}">${st(j.status)}<span>${esc(j.name)}</span><small>${j.secs != null ? dur(j.secs) : ""}</small></button>`).join("")}</div></div>`;
-}
-function runSummary(run) {
-  const wf = wfOf(run), notes = annotations(run), gate = run.jobs.find(j => j.status === "waiting");
-  const errors = notes.filter(n => n.level === "failure").length, warnings = notes.length - errors;
-  const count = [errors && `${errors} error${errors === 1 ? "" : "s"}`, warnings && `${warnings} warning${warnings === 1 ? "" : "s"}`].filter(Boolean).join(" and ");
-  return `${gate ? `<div class="gate">${st("waiting", "lg")}<div class="grow"><b>${esc(gate.env)}</b> is waiting for review<p>The ${esc(gate.name)} job needs approval from a reviewer of the ${esc(gate.env)} environment before it starts.</p></div><button class="btn primary" data-act="deploy-review">Review deployments</button></div>` : ""}
-    <div class="card run-info">
-      <div><div class="k">${run.attempt > 1 ? "Re-run triggered" : `Triggered via ${EVENT[run.event]}`} ${ago(run.attempt > 1 ? run.at : run.created)}</div><div class="v">${avatar(run.attempt > 1 ? ME : run.actor)}${run.attempt > 1 ? ME : run.actor}${run.pr ? `<a data-pr="${run.pr}">#${run.pr}</a>` : ""}<span class="sha">${ic("commit")} ${run.sha}</span><span class="branch">${esc(run.branch)}</span></div></div>
-      <div><div class="k">Status</div><div class="v big">${RUN_TEXT[run.status]}</div></div>
-      <div><div class="k">Total duration</div><div class="v big">${run.secs != null ? dur(run.secs) : "–"}</div></div>
-      <div><div class="k">Artifacts</div><div class="v big">${run.artifacts.length || "–"}</div></div>
-    </div>
-    <div class="card"><div class="card-h"><b>${wf.file}</b><span>on: ${run.event}</span></div>${graph(run)}</div>
-    ${notes.length ? `<div class="card"><div class="card-h"><b>Annotations</b><span>${count}</span></div>${notes.map(n =>
-      `<button class="annot" data-run="${run.id}" data-job="${n.job.id}" data-step="${n.step}">${ic(n.level === "failure" ? "xcircle" : "alert", n.level)}<span class="b"><b>${esc(n.job.name)}</b>${n.path ? `<span>${esc(n.path)}</span>` : ""}<pre>${esc(n.text)}</pre></span></button>`).join("")}</div>` : ""}
-    ${run.artifacts.length ? `<div class="card"><div class="card-h"><b>Artifacts</b><span>Produced during runtime</span></div>${run.artifacts.map(a =>
-      `<div class="art"><span class="n">${ic("pkg")}<a data-toast="Downloading ${esc(a.name)}.zip">${esc(a.name)}</a></span><span class="s">${esc(a.size)}</span><button class="icon-btn" data-toast="Downloading ${esc(a.name)}.zip" aria-label="Download ${esc(a.name)}">${ic("download")}</button></div>`).join("")}</div>` : ""}`;
-}
+const runSide = run => `<h3>Jobs</h3>${run.jobs.map(j => `<button class="side-item${state.job === j.id ? " on" : ""}" data-run="${run.id}" data-job="${j.id}" aria-label="${esc(j.name)}, ${ST_LABEL[j.status]}">${st(j.status)}<span>${esc(j.name)}</span></button>`).join("")}`;
 
-// ---------- A job's log ----------
-const SGR = { 1: "c-bold", 2: "c-dim", 30: "c-gray", 31: "c-red", 32: "c-green", 33: "c-yellow", 34: "c-blue", 35: "c-magenta", 36: "c-cyan", 37: "c-white", 90: "c-gray", 91: "c-red", 92: "c-green", 93: "c-yellow", 94: "c-blue", 95: "c-magenta", 96: "c-cyan", 97: "c-white", 41: "bg-red", 42: "bg-green", 43: "bg-yellow", 44: "bg-blue", 46: "bg-cyan" };
-const plain = s => s.replace(/\x1b\[[\d;]*m/g, "").replace(/^##\[[^\]]*\]/, "");
-// One log line as HTML: ANSI colors become spans, and the search text is marked.
-function ansi(s, q) {
-  const mark = t => { if (!q) return esc(t); const i = t.toLowerCase().indexOf(q); return i < 0 ? esc(t) : `${esc(t.slice(0, i))}<mark>${esc(t.slice(i, i + q.length))}</mark>${mark(t.slice(i + q.length))}`; };
-  let cls = [], out = "";
-  s.split(/(\x1b\[[\d;]*m)/).forEach(part => {
-    const m = /^\x1b\[([\d;]*)m$/.exec(part);
-    if (!m) { if (part) out += cls.length ? `<span class="${cls.join(" ")}">${mark(part)}</span>` : mark(part); return; }
-    for (const code of (m[1] || "0").split(";").map(Number)) { if (code === 0) cls = []; else if (SGR[code]) cls.push(SGR[code]); }
-  });
-  return out;
-}
-const stepKey = (run, job, step) => `${run.id}/${job.id}/${step.id}`;
-function stepLines(run, job, step, q) {
-  const key = stepKey(run, job, step);
-  let group = null, n = 0, html = "", hits = 0;
-  for (const l of step.lines) {
-    const m = /^##\[(group|endgroup|command|error|warning|notice)[^\]]*\](.*)$/.exec(l.s), kind = m?.[1], text = m ? m[2] : l.s;
-    if (kind === "endgroup") { group = null; continue; }
-    n += 1;
-    const inside = group, gkey = `${key}:${n}`;
-    if (kind === "group") group = gkey;
-    const hit = q && plain(l.s).toLowerCase().includes(q);
-    if (q ? !hit : inside && !state.log.groups[inside]) continue;
-    hits += hit ? 1 : 0;
-    const open = kind === "group" && !!state.log.groups[gkey];
-    const cls = ["ln", kind === "group" ? `grp${open ? " open" : ""}` : "", inside ? "in" : "", kind === "command" ? "cmd" : "", kind === "error" ? "err" : kind === "warning" ? "warn" : kind === "notice" ? "note" : "", state.log.hl === gkey ? "hl" : ""].filter(Boolean).join(" ");
-    const lead = kind === "error" ? '<b class="c-red">Error: </b>' : kind === "warning" ? '<b class="c-yellow">Warning: </b>' : kind === "notice" ? '<b class="c-blue">Notice: </b>' : "";
-    html += `<div class="${cls}"><button class="no" data-line="${gkey}" aria-label="Line ${n}">${n}</button>${state.log.ts ? `<span class="ts">${new Date(l.t).toISOString().replace(/\.\d+Z$/, "Z")}</span>` : ""}<span class="tx"${kind === "group" ? ` data-group="${gkey}" role="button" aria-expanded="${open}"` : ""}>${kind === "group" ? `<svg class="fold" viewBox="0 0 16 16" aria-hidden="true">${I.tri}</svg>` : ""}${lead}${ansi(text, q)}</span></div>`;
-  }
-  return { html, hits };
-}
-const STEP_EMPTY = { queued: "This step has not started yet.", skipped: "This step was skipped.", in_progress: "Waiting for output...", cancelled: "This step was cancelled." };
-function logSteps(run, job) {
-  const q = state.log.q.trim().toLowerCase();
-  let total = 0;
-  const html = job.steps.map(step => {
-    const key = stepKey(run, job, step), { html, hits } = stepLines(run, job, step, q);
-    total += hits;
-    const open = q ? hits > 0 : state.log.open[key] ?? (step.status === "failure" || step.status === "in_progress");
-    return `<div class="step ${step.status}${open ? " open" : ""}"><button class="step-h" data-step="${key}" aria-expanded="${open}">${ic("chev", "chev")}${st(step.status)}<span class="nm">${esc(step.name)}</span><span class="d">${step.secs != null ? dur(step.secs) : ""}</span></button>${open ? `<div class="lines">${html || `<div class="log-empty">${q ? "" : STEP_EMPTY[step.status] ?? "No output."}</div>`}</div>` : ""}</div>`;
+// One log line as HTML: its ANSI colors become spans.
+const SGR = { 1: "c-bold", 31: "c-red", 32: "c-green", 33: "c-yellow", 34: "c-blue", 36: "c-cyan", 90: "c-gray", 41: "bg-red", 46: "bg-cyan" };
+function ansi(s) {
+  let cls = [];
+  return s.split(/(\x1b\[\d+m)/).map(part => {
+    const m = /^\x1b\[(\d+)m$/.exec(part);
+    if (!m) return part && cls.length ? `<span class="${cls.join(" ")}">${esc(part)}</span>` : esc(part);
+    cls = m[1] === "0" ? [] : [...cls, SGR[m[1]]];
+    return "";
   }).join("");
-  return { html: job.status === "skipped" ? `<div class="log-empty">This job was skipped: a job it needs did not succeed.</div>` : job.status === "waiting" ? `<div class="log-empty">Waiting for review: ${esc(job.env)} needs approval before this job starts.</div>` : html, total, q };
 }
 function jobSub(job) {
-  const s = job.status, took = job.secs != null ? ` in ${dur(job.secs)}` : "";
-  return s === "success" ? `succeeded ${ago(job.endedAt)}${took}` : s === "failure" ? `failed ${ago(job.endedAt)}${took}` : s === "cancelled" ? `cancelled ${ago(job.endedAt)}${took}`
-    : s === "in_progress" ? `Started ${ago(job.startedAt)}` : s === "queued" ? "Queued: waiting for a runner" : s === "waiting" ? "Waiting for review" : "Skipped";
+  const s = job.status;
+  return s === "success" ? `succeeded ${ago(job.endedAt)} in ${dur(job.secs)}` : s === "failure" ? `failed ${ago(job.endedAt)} in ${dur(job.secs)}` : s === "in_progress" ? `Started ${ago(job.startedAt)}` : s === "queued" ? "Queued: waiting for a runner" : "Cancelled";
 }
+// The steps of the job on screen. A step is open when it failed or is running, unless the reader chose otherwise.
 function renderLog() {
-  const run = runById(state.run), job = run?.jobs.find(j => j.id === state.job), el = $("#log-body");
-  if (!job || !el) return;
+  const run = runById(state.run), job = run.jobs.find(j => j.id === state.job), el = $("#log-body");
   // Follow the output while the reader is at the bottom of it.
   const stick = el.scrollHeight - el.scrollTop - el.clientHeight < 40;
-  const { html, total, q } = logSteps(run, job);
-  el.innerHTML = html;
-  $("#log-count").textContent = q ? `${total} match${total === 1 ? "" : "es"}` : "";
+  el.innerHTML = job.status === "cancelled" ? `<div class="log-empty">This job was cancelled before it started.</div>` : job.steps.map((step, i) => {
+    const key = `${run.id}/${job.id}/${i}`, open = state.open[key] ?? (step.status === "failure" || step.status === "in_progress");
+    return `<div class="step ${step.status}${open ? " open" : ""}"><button class="step-h" data-step="${key}" aria-expanded="${open}">${ic("chev")}${st(step.status)}<span class="grow">${esc(step.name)}</span><span class="d">${step.secs != null ? dur(step.secs) : ""}</span></button>${open ? `<div class="lines">${step.lines.map((l, n) => `<div class="ln"><span class="no">${n + 1}</span><span class="tx">${ansi(l)}</span></div>`).join("") || `<div class="log-empty">${step.status === "queued" ? "This step has not started yet." : "Waiting for output..."}</div>`}</div>` : ""}</div>`;
+  }).join("");
   $("#job-sub").textContent = jobSub(job);
-  if (stick && job.status === "in_progress" && !q) el.scrollTop = el.scrollHeight;
-}
-function jobMain(run, job) {
-  const tick = on => `<span class="chk">${on ? ic("check") : ""}</span>`;
-  return `<div class="job-main"><section class="log${state.log.wrap ? "" : " nowrap"}" aria-label="Log of ${esc(job.name)}">
-    <header class="log-h"><div class="t"><h2>${esc(job.name)}</h2><p id="job-sub"></p></div>
-      <label class="log-search">${ic("search")}<input id="logq" aria-label="Search logs" placeholder="Search logs" value="${esc(state.log.q)}"><span class="cnt" id="log-count"></span></label>
-      <button class="icon-btn" id="rerun-job" data-rerun="${job.id}" aria-label="Re-run this job" ${active(run) ? "disabled" : ""}>${ic("sync")}</button>
-      <button class="icon-btn" data-menu="log" aria-label="Log options" aria-expanded="${state.menu === "log"}">${ic("gear")}</button>
-      ${state.menu === "log" ? `<div class="pop log-pop" role="menu">
-        <button class="mi" role="menuitemcheckbox" aria-checked="${state.log.ts}" data-act="log-ts">${tick(state.log.ts)}Show timestamps</button>
-        <button class="mi" role="menuitemcheckbox" aria-checked="${state.log.wrap}" data-act="log-wrap">${tick(state.log.wrap)}Wrap lines</button><hr>
-        <button class="mi" role="menuitem" data-toast="Raw logs open in a new tab">${tick(false)}View raw logs</button>
-        <button class="mi" role="menuitem" data-toast="Downloading the log archive">${tick(false)}Download log archive</button></div>` : ""}
-    </header>
-    <div class="log-body" id="log-body" tabindex="0"></div>
-  </section></div>`;
+  if (stick && job.status === "in_progress") el.scrollTop = el.scrollHeight;
 }
 function runPage() {
-  const run = runById(state.run), job = state.page === "job" ? run.jobs.find(j => j.id === state.job) : null;
+  const run = runById(state.run), job = run.jobs.find(j => j.id === state.job);
   return `<div class="run-head" id="run-head">${runHead(run)}</div>
-    <div class="split${state.drawer ? " drawer" : ""}"><div class="side-scrim" data-act="drawer"></div>
-      <aside class="side run-side" id="run-side" aria-label="Jobs">${runSide(run)}</aside>
-      ${job ? jobMain(run, job) : `<div class="run-main" id="run-main">${runSummary(run)}</div>`}
+    <div class="split"><aside class="side" id="run-side" aria-label="Jobs">${runSide(run)}</aside>
+      <div class="job-main"><section class="log" aria-label="Log of ${esc(job.name)}"><header class="log-h"><h2>${esc(job.name)}</h2><p id="job-sub"></p></header><div class="log-body" id="log-body" tabindex="0"></div></section></div>
     </div>`;
 }
-function deployDialog() {
-  const run = runById(state.run), job = run.jobs.find(j => j.status === "waiting");
-  if (!job) return "";
-  return `<div class="scrim" data-act="dialog-close"><div class="dialog" role="dialog" aria-modal="true" aria-label="Review pending deployments">
-    <div class="dialog-h"><span class="grow">Review pending deployments</span><button class="icon-btn" data-act="dialog-close" aria-label="Close">${ic("x")}</button></div>
-    <div class="dialog-b"><p class="muted">Requested by ${avatar(run.actor)} ${user(run.actor)} in ${esc(wfOf(run).name)} #${run.id}</p>
-      <label class="radio"><input type="checkbox" checked disabled aria-label="${esc(job.env)}"><b>${esc(job.env)}</b><span>The ${esc(job.name)} job will deploy ${run.sha}. Reviewers: ${ME}, hana</span></label>
-      <textarea class="input" id="deploy-text" rows="3" aria-label="Leave a comment" placeholder="Leave a comment"></textarea></div>
-    <div class="dialog-f"><button class="btn danger" data-act="deploy-reject">Reject</button><button class="btn primary" data-act="deploy-approve">Approve and deploy</button></div>
-  </div></div>`;
-}
 
-// ---------- Render ----------
-let shownKey = "";
+let shown = "";
 function render() {
   document.documentElement.dataset.theme = state.theme;
   renderTop();
-  const main = $("#main"), p = state.page, key = [p, state.pr, state.prTab, state.run, state.job, state.wf].join("|");
-  const keep = key === shownKey ? [main.scrollTop, $("#log-body")?.scrollTop] : null;
-  main.className = "main" + (p === "run" || p === "job" ? " fixed" : "");
-  main.innerHTML = p === "code" ? codePage() : p === "pulls" ? pullsPage() : p === "pr" ? prPage() : p === "actions" ? actionsPage() : runPage();
-  $("#dialog").innerHTML = state.dialog?.type === "review" ? reviewDialog() : state.dialog?.type === "deploy" ? deployDialog() : "";
-  if (p === "job") renderLog();
+  const main = $("#main"), p = state.page, key = [p, state.pr, state.tab, state.run, state.job, state.wf].join();
+  const keep = key === shown ? [main.scrollTop, $("#log-body")?.scrollTop] : null;
+  main.className = "main" + (p === "run" ? " fixed" : "");
+  main.innerHTML = p === "pulls" ? pullsPage() : p === "pr" ? prPage() : p === "actions" ? actionsPage() : runPage();
   const log = $("#log-body");
-  if (keep) { main.scrollTop = keep[0]; if (log) log.scrollTop = keep[1] ?? 0; }
-  else {
-    main.scrollTop = 0;
-    // A job opens where the reader wants to be: at the error, or at the end of a log that is still streaming.
-    const at = log?.querySelector(".ln.hl, .ln.err");
-    if (at) log.scrollTop = at.offsetTop - log.clientHeight / 2; else if (log && runById(state.run).jobs.find(j => j.id === state.job)?.status === "in_progress") log.scrollTop = log.scrollHeight;
+  if (log) renderLog();
+  if (keep) { main.scrollTop = keep[0]; if (log) log.scrollTop = keep[1]; }
+  else if (log) {
+    // A job opens where the reader wants to be: at the end of the failed step, or of a log that is still streaming.
+    const f = log.querySelector(".step.failure");
+    log.scrollTop = f ? Math.max(f.offsetTop, f.offsetTop + f.offsetHeight - log.clientHeight + 8) : log.scrollHeight;
   }
-  shownKey = key;
+  shown = key;
 }
 // What changes while a run is going, without redrawing the page under the reader's hands.
-function live(lines) {
+function live(linesOnly) {
   const p = state.page, fill = (sel, html) => { const el = $(sel); if (el) el.innerHTML = html; };
-  if (p === "job") renderLog();
-  if (lines) return;
-  if (p === "actions") { fill("#runs", runRows()); fill("#run-count", runCount()); }
+  if (p === "run") renderLog();
+  if (linesOnly) return;
+  if (p === "actions") fill("#runs", runRows());
   else if (p === "pulls") fill("#pr-rows", prRows());
-  else if (p === "run" || p === "job") {
-    const run = runById(state.run);
-    if (!state.menu) fill("#run-head", runHead(run));
-    fill("#run-side", runSide(run));
-    if (p === "run") fill("#run-main", runSummary(run));
-    else { const b = $("#rerun-job"); if (b) b.disabled = active(run); }
-    if (state.dialog?.type === "deploy" && !run.jobs.some(j => j.status === "waiting")) { state.dialog = null; fill("#dialog", ""); }
-  } else if (p === "pr") {
-    const pr = byNumber(state.pr);
-    if (state.prTab === "conversation" && !state.confirm) fill("#mergebox", mergeBox(pr));
-    if (state.prTab === "checks") fill("#checks-tab", checksOf(pr).map(checkRow).join(""));
+  else if (p === "run") { fill("#run-head", runHead(runById(state.run))); fill("#run-side", runSide(runById(state.run))); }
+  else {
+    fill("#mergebox", mergeBox(byNumber(state.pr)));
     document.querySelectorAll("[data-status-of]").forEach(el => { const s = commitStatus(el.dataset.statusOf); el.innerHTML = s ? st(s) : ""; });
   }
 }
-function go(patch) {
-  if (patch.job !== undefined && (patch.job !== state.job || patch.run !== state.run)) Object.assign(state.log, { q: "", hl: null });
-  Object.assign(state, { menu: null, drawer: false, dialog: null, confirm: false }, patch);
-  render();
-}
+function go(patch) { Object.assign(state, { menu: false }, patch); render(); }
 
 // ---------- What Naman does ----------
-const nextRun = wf => Math.max(...RUNS.filter(r => r.workflow === wf).map(r => r.id)) + 1;
 function addComment() {
-  const el = $("#comment"), text = (el?.value ?? "").trim(), pr = byNumber(state.pr);
-  if (!text) { el?.focus(); return toast("Write a comment first"); }
-  pr.timeline.push({ type: "comment", by: ME, at: Date.now(), text });
+  const text = state.draft.trim();
+  if (!text) { $("#comment")?.focus(); return toast("Write a comment first"); }
+  byNumber(state.pr).timeline.push({ type: "comment", by: ME, at: Date.now(), text });
   state.draft = ""; render();
 }
-function submitReview() {
-  const pr = byNumber(state.pr), d = state.dialog, text = d.text.trim();
-  if (d.choice !== "approved" && !text) { $("#review-text")?.focus(); return toast("Write a comment for this review"); }
-  pr.timeline.push({ type: "review", by: ME, state: d.choice, at: Date.now(), text });
-  pr.reviewers[ME] = d.choice;
-  state.dialog = null; render();
-  toast(d.choice === "approved" ? "You approved these changes" : d.choice === "changes_requested" ? "You requested changes" : "Review submitted");
+function approve() {
+  const pr = byNumber(state.pr);
+  pr.reviewers[ME] = "approved";
+  pr.timeline.push({ type: "event", icon: "check", color: "green", by: ME, at: Date.now(), text: "approved these changes" });
+  render(); toast("You approved these changes");
 }
 function merge() {
-  const pr = byNumber(state.pr), now = Date.now(), sha = "9d2f4b1", title = $("#merge-title")?.value.trim() || `${pr.title} (#${pr.number})`;
+  const pr = byNumber(state.pr), now = Date.now(), sha = "9d2f4b1";
   if (!mergeable(pr)) return;
   Object.assign(pr, { state: "merged", mergedAt: now, mergedBy: ME });
   pr.timeline.push({ type: "event", icon: "merge", color: "purple", by: ME, at: now, text: `merged commit \`${sha}\` into \`${pr.base}\`` });
-  Object.assign(REPO.last, { by: ME, message: title, sha, at: now, status: "in_progress" });
-  // The push to main starts CI and a production deploy, which waits for a review.
-  for (const wf of ["ci", "deploy"]) { const run = addRun({ id: nextRun(wf), workflow: wf, title, event: "push", branch: pr.base, sha, actor: ME, at: now + 2 * SEC }); run.created = now; }
-  state.confirm = false; render();
-  toast(`Pull request #${pr.number} merged`);
-}
-function doRerun(which) {
-  const run = runById(state.run);
-  if (active(run)) return;
-  rerun(run, which);
-  state.menu = null; state.log.hl = null; render();
-  toast(which === "all" ? "Re-running all jobs" : which === "failed" ? "Re-running failed jobs" : `Re-running ${run.jobs.find(j => j.id === which).name}`);
+  // The push to main starts CI.
+  addRun({ id: Math.max(...RUNS.filter(r => r.workflow === "ci").map(r => r.id)) + 1, workflow: "ci", title: `${pr.title} (#${pr.number})`, event: "push", branch: pr.base, sha, actor: ME, at: now + 2 * SEC, created: now });
+  render(); toast(`Pull request #${pr.number} merged`);
 }
 
 document.addEventListener("click", e => {
-  const el = e.target.closest("[data-toast],[data-go],[data-menu],[data-act],[data-pr],[data-prtab],[data-prfilter],[data-run],[data-wf],[data-branch],[data-file],[data-rerun],[data-step],[data-group],[data-line],[data-shut],[data-viewed]");
-  if (state.menu && !e.target.closest(".pop,[data-menu]")) { state.menu = null; if (!el) return render(); }
+  const el = e.target.closest("[data-toast],[data-go],[data-act],[data-pr],[data-tab],[data-filter],[data-run],[data-wf],[data-step]");
+  if (state.menu && !e.target.closest(".me-pop,.me-btn")) { state.menu = false; if (!el) return render(); }
   if (!el) return;
   const d = el.dataset, a = d.act;
-  if (a === "dialog-close" && el.classList.contains("scrim") && e.target !== el) return;
-  if (d.toast) { if (state.menu) { state.menu = null; render(); } return toast(d.toast); }
+  if (d.toast) { if (state.menu) go({}); return toast(d.toast); }
   if (d.go) return go({ page: d.go, wf: "all" });
-  if (d.menu) { state.menu = state.menu === d.menu ? null : d.menu; return render(); }
-  if (d.run) {
-    if (d.step) state.log.open[`${d.run}/${d.job}/${d.step}`] = true;
-    return go({ page: d.job ? "job" : "run", run: +d.run, job: d.job ?? null });
-  }
-  if (d.pr) return go({ page: "pr", pr: +d.pr, prTab: "conversation" });
-  if (d.prtab) { state.prTab = d.prtab; return render(); }
-  if (d.prfilter) { state.prFilter = d.prfilter; return render(); }
+  if (d.pr) return go({ page: "pr", pr: +d.pr, tab: "conversation", draft: "" });
+  if (d.tab) return go({ tab: d.tab });
+  if (d.filter) return go({ filter: d.filter });
   if (d.wf) return go({ page: "actions", wf: d.wf });
-  if (d.branch) { state.branch = d.branch; state.menu = null; render(); return toast(`Switched to branch ${d.branch}`); }
-  if (d.file) return toast(`${d.file}: browsing files is not part of this demo`);
-  if (d.rerun) return doRerun(d.rerun);
-  if (d.step) { state.log.open[d.step] = !el.parentElement.classList.contains("open"); return renderLog(); }
-  if (d.group) { state.log.groups[d.group] = !state.log.groups[d.group]; return renderLog(); }
-  if (d.line) { state.log.hl = state.log.hl === d.line ? null : d.line; return renderLog(); }
-  if (d.shut) { state.shut[d.shut] = el.getAttribute("aria-expanded") === "true"; return render(); }
-  if (d.viewed) { state.viewed[d.viewed] = el.checked; delete state.shut[d.viewed]; return render(); }
-  if (a === "theme") { state.theme = state.theme === "dark" ? "light" : "dark"; state.menu = null; return render(); }
-  if (a === "drawer") { state.drawer = !state.drawer; return render(); }
-  if (a === "checks") { state.showChecks = !state.showChecks; return render(); }
-  if (a === "review") { state.dialog = { type: "review", choice: byNumber(state.pr).author === ME ? "commented" : "approved", text: "" }; render(); return $("#review-text")?.focus(); }
-  if (a === "dialog-close") { state.dialog = null; return render(); }
-  if (a === "review-submit") return submitReview();
+  // A run opens on the job that needs attention: the one asked for, else the failed one, else the first.
+  if (d.run) { const run = runById(+d.run); return go({ page: "run", run: run.id, job: d.job ?? (run.jobs.find(j => j.status === "failure") ?? run.jobs[0]).id }); }
+  if (d.step) { state.open[d.step] = el.getAttribute("aria-expanded") !== "true"; return renderLog(); }
+  if (a === "menu") return go({ menu: !state.menu });
+  if (a === "theme") return go({ theme: state.theme === "dark" ? "light" : "dark" });
   if (a === "comment") return addComment();
-  if (a === "merge-start") { state.confirm = true; render(); return $("#merge-title")?.focus(); }
-  if (a === "merge-cancel") { state.confirm = false; return render(); }
+  if (a === "approve") return approve();
   if (a === "merge") return merge();
-  if (a === "cancel") { cancelRun(runById(state.run)); render(); return toast("Workflow run cancelled"); }
-  if (a === "deploy-review") { state.dialog = { type: "deploy" }; return render(); }
-  if (a === "deploy-approve" || a === "deploy-reject") {
-    const run = runById(state.run), job = run.jobs.find(j => j.status === "waiting");
-    if (a === "deploy-approve") run.approved = true;
-    else { job.status = "failure"; job.endedAt = Date.now(); job.steps.forEach(s => s.status = "skipped"); run.status = "failure"; run.endedAt = Date.now(); run.secs = totalSecs(run); }
-    state.dialog = null; render();
-    return toast(a === "deploy-approve" ? `Approved: deploying to ${job.env}` : `Rejected the deployment to ${job.env}`);
-  }
-  if (a === "log-ts") { state.log.ts = !state.log.ts; state.menu = null; return render(); }
-  if (a === "log-wrap") { state.log.wrap = !state.log.wrap; state.menu = null; return render(); }
+  if (a === "rerun") { rerun(runById(state.run)); render(); return toast("Re-running all jobs"); }
 });
-document.addEventListener("input", e => {
-  const t = e.target;
-  if (t.id === "logq") { state.log.q = t.value; renderLog(); }
-  if (t.id === "runq") { state.runQuery = t.value; $("#runs").innerHTML = runRows(); $("#run-count").textContent = runCount(); }
-  if (t.id === "prq") { state.prQuery = t.value; $("#pr-rows").innerHTML = prRows(); }
-  if (t.id === "comment") state.draft = t.value;
-  if (t.id === "review-text") state.dialog.text = t.value;
-  if (t.name === "review") state.dialog.choice = t.value;
-});
+document.addEventListener("input", e => { if (e.target.id === "comment") state.draft = e.target.value; });
 document.addEventListener("keydown", e => {
-  const t = e.target;
-  if (e.key === "Enter" && t.matches?.("[role=link]")) return t.click();
-  if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
-    if (t.id === "comment") { e.preventDefault(); return addComment(); }
-    if (t.id === "review-text") { e.preventDefault(); return submitReview(); }
-  }
-  if (e.key !== "Escape") return;
-  if (state.dialog) state.dialog = null; else if (state.menu) state.menu = null; else if (state.drawer) state.drawer = false; else if (state.confirm) state.confirm = false; else return;
-  render();
+  if (e.key === "Enter" && e.target.matches("[role=link]")) return e.target.click();
+  if (e.key === "Enter" && (e.metaKey || e.ctrlKey) && e.target.id === "comment") { e.preventDefault(); return addComment(); }
+  if (e.key === "Escape" && state.menu) go({});
 });
-
 // The runners keep going: every tick, each active run prints a little more.
 setInterval(() => {
-  const now = Date.now();
-  let lines = false, status = false;
-  for (const run of RUNS) {
-    const was = run.status, c = stepRun(run, now);
-    if (c === 2) status = true; else if (c === 1 && run.id === state.run) lines = true;
-    if (was !== run.status && ended(run.status) && run.sha === REPO.last.sha) REPO.last.status = commitStatus(run.sha) ?? REPO.last.status;
-  }
-  if (status) live(false); else if (lines) live(true);
+  const now = Date.now(), changes = RUNS.map(run => [stepRun(run, now), run.id]);
+  if (changes.some(([c]) => c === 2)) live(false); else if (changes.some(([c, id]) => c === 1 && id === state.run)) live(true);
 }, TICK);
 // "5 minutes ago" keeps moving.
-setInterval(() => { if (!document.activeElement?.matches("input, textarea")) live(false); }, 30000);
+setInterval(() => { if (!document.activeElement?.matches("textarea")) live(false); }, 30000);
 
 render();
 </script>
