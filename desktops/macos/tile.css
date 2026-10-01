@@ -1,0 +1,106 @@
+/*
+ * The app icon tile (tile.tsx): macOS Tahoe's squircle of glass. Not scoped to
+ * .kit-macos, so a tile looks the same in the Dock and inside a window. Every
+ * length is in cqw, a share of the tile's own width, so a 16px tile in a menu
+ * and a 62px one on the phone are the same drawing.
+ */
+.mac-tile {
+  position: relative; display: block; box-sizing: border-box; flex: none;
+  width: 100%; height: auto; aspect-ratio: 1; margin: 0; padding: 0;
+  container-type: inline-size;
+  line-height: 1; text-align: center; -webkit-user-select: none; user-select: none;
+}
+.mac-tile .mt-body {
+  position: absolute; inset: 0; display: block; isolation: isolate; overflow: hidden;
+  border-radius: 22.4%;
+  /* Tahoe's light tile: white, a touch cooler toward the bottom */
+  background: var(--mt-bg, linear-gradient(180deg, #fff 0%, #fafafc 45%, #ebebf0 100%));
+  box-shadow:
+    0 0 0 max(.5px, .8cqw) rgba(0, 0, 0, .07),
+    0 .8cqw 1.4cqw rgba(0, 0, 0, .14),
+    0 2.4cqw 5cqw rgba(0, 0, 0, .14);
+}
+/* Continuous corners where the browser can draw them: the curve eases into the sides. */
+@supports (corner-shape: superellipse(2)) {
+  .mac-tile .mt-body { border-radius: 50%; corner-shape: superellipse(2.4); }
+}
+
+/* Light falls from the top: a sheen at the top, a little shade at the foot. */
+.mac-tile .mt-body::after {
+  content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  border-radius: inherit; corner-shape: inherit;
+  background: linear-gradient(180deg, rgba(255, 255, 255, .26) 0%, rgba(255, 255, 255, .06) 38%, rgba(255, 255, 255, 0) 55%, rgba(0, 0, 0, .05) 100%);
+  box-shadow: inset 0 -1.6cqw 3cqw rgba(0, 0, 0, .04);
+}
+/* The specular rim: the glass's edge catching the light, brightest at the top
+   left corner and again, reflected, at the bottom right. */
+.mac-tile .mt-body::before {
+  content: ""; position: absolute; inset: 0; z-index: 3; pointer-events: none;
+  border-radius: inherit; corner-shape: inherit;
+  padding: max(.75px, 2.2cqw);
+  background: linear-gradient(135deg,
+    #fff 0%, rgba(255, 255, 255, .7) 16%, rgba(255, 255, 255, .22) 36%,
+    rgba(255, 255, 255, .14) 64%, rgba(255, 255, 255, .45) 86%, rgba(255, 255, 255, .85) 100%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+}
+/* A white tile's rim is lit gray, or it would vanish into the tile. */
+.mac-tile[data-tile="default"] .mt-body::before {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 30%, rgba(0, 0, 0, 0) 70%, rgba(0, 0, 0, .07) 100%);
+}
+
+.mac-tile .mt-art {
+  position: absolute; inset: var(--mt-inset, 19%); z-index: 1;
+  display: grid; place-items: center;
+  color: #1d1d1f; font: 600 44cqw/1 -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+}
+.mac-tile[data-tile="color"] .mt-art { color: #fff; }
+.mac-tile[data-ink="dark"] .mt-art { color: #1d1d1f; }
+/* Whatever the logo says about its own size, it fills the box, kept in proportion. */
+.mac-tile .mt-art > *,
+.mac-tile .mt-art > :not(svg, img) > :is(svg, img) {
+  display: block; width: 100%; height: 100%; max-width: none; max-height: none; min-width: 0; min-height: 0;
+  margin: 0; object-fit: contain;
+}
+/* Anything else is centered in the box and never spills out of it. */
+.mac-tile .mt-art > :not(svg, img) { display: grid; place-items: center; overflow: hidden; }
+
+/* An emoji fills the logo's box; a letter or a short word is bold and shrinks to fit. */
+.mac-tile .mt-art > :is(.mt-emoji, .mt-text) { overflow: visible; white-space: nowrap; line-height: 1; font-style: normal; text-align: center; }
+.mac-tile .mt-art > .mt-emoji {
+  font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", "Twemoji Mozilla", sans-serif; font-weight: 400;
+  font-size: 58cqw; letter-spacing: 0;
+}
+.mac-tile .mt-art > .mt-text {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif; font-weight: 700;
+  font-size: 44cqw; letter-spacing: -.02em;
+}
+.mac-tile .mt-art > .mt-text[data-len="2"] { font-size: 32cqw; }
+.mac-tile .mt-art > .mt-text[data-len="3"] { font-size: 24cqw; }
+.mac-tile .mt-art > .mt-text[data-len="4"] { font-size: 18cqw; }
+.mac-tile .mt-art > .mt-text[data-len="5"] { font-size: 14cqw; overflow: hidden; }
+.mac-tile[data-tile="none"] .mt-art > .mt-text { color: #fff; }
+/* The logo floats a little above the glass. */
+.mac-tile:is([data-tile="default"], [data-tile="color"]) .mt-art > * { filter: drop-shadow(0 .9cqw 1.1cqw rgba(0, 0, 0, .16)); }
+
+/* "full": the logo is the whole icon, cut to the tile's shape. */
+.mac-tile[data-tile="full"] .mt-body { background: none; }
+/* Drawn a little larger, so a logo rounder than the tile still reaches its
+   edges; a larger, softened copy behind fills what is left of the corners. */
+.mac-tile[data-tile="full"] .mt-art { transform: scale(1.08); }
+.mac-tile .mt-under { position: absolute; inset: 0; display: grid; transform: scale(1.25); filter: blur(.8cqw); }
+.mac-tile .mt-under > * { display: block; width: 100%; height: 100%; max-width: none; object-fit: cover; }
+
+/* "none": the logo alone, as macOS draws the Trash. */
+.mac-tile[data-tile="none"] .mt-body { background: none; box-shadow: none; overflow: visible; }
+.mac-tile[data-tile="none"] .mt-body::before,
+.mac-tile[data-tile="none"] .mt-body::after { content: none; }
+.mac-tile[data-tile="none"] .mt-art > * { filter: drop-shadow(0 1.2cqw 1.6cqw rgba(0, 0, 0, .26)); }
+
+/* A tile someone wrapped in another tile anyway: the outer one steps aside. */
+.mac-tile:has(> .mt-body > .mt-art > .mac-tile) > .mt-body { background: none; box-shadow: none; overflow: visible; }
+.mac-tile:has(> .mt-body > .mt-art > .mac-tile) > .mt-body::before,
+.mac-tile:has(> .mt-body > .mt-art > .mac-tile) > .mt-body::after { content: none; }
+.mac-tile:has(> .mt-body > .mt-art > .mac-tile) > .mt-body > .mt-art { inset: 0; }
+.mac-tile:has(> .mt-body > .mt-art > .mac-tile) > .mt-body > .mt-art > .mac-tile { filter: none; }

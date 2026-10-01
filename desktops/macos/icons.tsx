@@ -1,5 +1,7 @@
-// The desktop's own drawings: app icons for the Dock (100x100 squares that
-// sit on a rounded tile) and the menu bar's glyphs. Plain SVG, no assets.
+import { AppTile, TILED } from "./tile";
+
+// The desktop's own drawings: app icons for the Dock (100x100 squares drawn
+// edge to edge on a tile) and the menu bar's glyphs. Plain SVG, no assets.
 
 export function Apple() {
   return (
@@ -37,10 +39,12 @@ export const Close = () => <svg viewBox="0 0 8 8" aria-hidden="true"><path d="M1
 export const Minimize = () => <svg viewBox="0 0 8 8" aria-hidden="true"><path d="M1.2 4h5.6" /></svg>;
 export const Zoom = () => <svg viewBox="0 0 8 8" aria-hidden="true"><path className="fill" d="M1.5 6.5V2.6l3.9 3.9zM6.5 1.5v3.9L2.6 1.5z" /></svg>;
 
-/** An app icon: a drawing on the rounded macOS tile. */
-export function AppIcon({ name, background = TILES[name], bare }: { name: keyof typeof DRAWINGS; background?: string; bare?: boolean }) {
-  return <span className={bare ? "icon bare" : "icon"} style={{ background: bare ? undefined : background }}>{DRAWINGS[name]}</span>;
+/** A built-in app icon: its drawing on a tile (`bare`: the drawing alone, like the Trash). */
+export function AppIcon({ name, background = TILES[name], bare }: { name: IconName; background?: string; bare?: boolean }) {
+  // The drawings carry their own margins, so they go edge to edge.
+  return <AppTile tile={bare || background === "none" ? "none" : background} inset={0}>{DRAWINGS[name]}</AppTile>;
 }
+TILED.add(AppIcon);
 
 const DRAWINGS = {
   finder: (
@@ -92,14 +96,14 @@ const DRAWINGS = {
   ),
 };
 
-/** Tile backgrounds that match each drawing. */
+/** Tile backgrounds that match each drawing ("none": drawn without a tile). */
 export const TILES: Record<keyof typeof DRAWINGS, string> = {
-  finder: "transparent",
+  finder: "#1f8ef1",
   safari: "linear-gradient(#fff, #e8e8ed)",
   notes: "#fff",
   terminal: "linear-gradient(#4a4a4e, #1c1c1e)",
   settings: "linear-gradient(#e5e5ea, #a1a1a6)",
-  trash: "transparent",
-  folder: "transparent",
+  trash: "none",
+  folder: "none",
 };
 export type IconName = keyof typeof DRAWINGS;

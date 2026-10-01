@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type CSSProperties, type KeyboardEvent, type PointerEvent as ReactPointerEvent, type ReactNode } from "react";
 import * as I from "./icons";
-import type { DockItem, MacWindow } from "./types";
+import { AppTile } from "./tile";
+import type { DockItem, MacToast, MacWindow } from "./types";
 import type { MacOSDesktop } from "./use-macos";
 import "./macos.css";
 
@@ -22,7 +23,7 @@ export interface MacOSProps {
   style?: CSSProperties;
 }
 
-type MenuItem = { label: string; keys?: string; run?: () => void; checked?: boolean } | "-";
+type MenuItem = { label: string; keys?: string; run?: () => void; checked?: boolean; icon?: ReactNode } | "-";
 
 export function MacOS({ mac, dock = [], renderWindow, idleApp = "Finder", onTrash, className, style }: MacOSProps) {
   const { state } = mac;
@@ -42,6 +43,15 @@ export function MacOS({ mac, dock = [], renderWindow, idleApp = "Finder", onTras
     document.addEventListener("pointerdown", off);
     return () => document.removeEventListener("pointerdown", off);
   }, [menu]);
+
+  // An app's icon by its Dock id, for its windows and notifications.
+  const dockIcon = (id?: string) => {
+    const d = id ? dock.find((x) => x.id === id) : undefined;
+    return d && <AppTile tile={d.tile}>{d.icon}</AppTile>;
+  };
+  const toastIcon = (t: MacToast) =>
+    t.icon != null ? <AppTile tile={t.tile}>{t.icon}</AppTile>
+      : dockIcon(t.app) ?? <AppTile tile="linear-gradient(160deg, #5e5e64, #1c1c1e)" inset="25%"><I.Apple /></AppTile>;
 
   const openMenu = (id: string | null, el?: HTMLElement) => setMenuState(id && el ? { id, left: el.offsetLeft } : null);
   const act = (label: string, run?: () => void) => () => { setMenuState(null); mac.emit({ type: "menu", item: label }); run?.(); };
@@ -63,7 +73,7 @@ export function MacOS({ mac, dock = [], renderWindow, idleApp = "Finder", onTras
       : [{ label: `About ${idleApp}` }],
     window: [
       ...(focused ? [{ label: "Minimize", keys: "⌘M", run: () => minimize(focused.id) }, { label: "Zoom", run: () => maximize(focused) }, "-" as const] : []),
-      ...state.windows.map((w) => ({ label: w.title, checked: w.id === focused?.id, run: () => { mac.restore(w.id); mac.emit({ type: "restore", id: w.id }); } })),
+      ...state.windows.map((w) => ({ label: w.title, icon: w.icon != null ? <AppTile>{w.icon}</AppTile> : dockIcon(w.dockId), checked: w.id === focused?.id, run: () => { mac.restore(w.id); mac.emit({ type: "restore", id: w.id }); } })),
     ],
   };
 
@@ -88,7 +98,7 @@ export function MacOS({ mac, dock = [], renderWindow, idleApp = "Finder", onTras
         <div className="pg">
           {dock.map((d) => (
             <button key={d.id} className="pa" onClick={() => openDock(d)}>
-              <span className="picon">{d.icon}</span>
+              <span className="picon"><AppTile tile={d.tile}>{d.icon}</AppTile></span>
               {d.name}
             </button>
           ))}
@@ -118,7 +128,7 @@ export function MacOS({ mac, dock = [], renderWindow, idleApp = "Finder", onTras
         <div className="menu" role="menu" style={{ left: menu.left }}>
           {menus[menu.id].map((m, i) => m === "-" ? <hr key={i} /> : (
             <button key={i} role="menuitem" className={`it${m.run ? "" : " dis"}${m.checked ? " chk" : ""}`} onClick={m.run ? act(m.label, m.run) : undefined}>
-              <span>{m.label}</span>{m.keys && <span className="k">{m.keys}</span>}
+              {m.icon && <span className="mi">{m.icon}</span>}<span>{m.label}</span>{m.keys && <span className="k">{m.keys}</span>}
             </button>
           ))}
         </div>
@@ -136,12 +146,12 @@ export function MacOS({ mac, dock = [], renderWindow, idleApp = "Finder", onTras
         <nav className="dock" aria-label="Dock">
           {dock.map((d) => (
             <button key={d.id} className={`ditem${state.windows.some((w) => w.dockId === d.id) ? " running" : ""}`} aria-label={d.name} onClick={() => openDock(d)}>
-              {d.icon}<span className="tip">{d.name}</span><span className="dot" />
+              <AppTile tile={d.tile}>{d.icon}</AppTile><span className="tip">{d.name}</span><span className="dot" />
             </button>
           ))}
           <span className="dsep" />
           <button className="ditem" aria-label="Trash" onClick={() => { mac.emit({ type: "dock", id: "trash" }); onTrash?.(); }}>
-            <I.AppIcon name="trash" bare /><span className="tip">Trash</span>
+            <I.AppIcon name="trash" /><span className="tip">Trash</span>
           </button>
         </nav>
       </div>
@@ -149,7 +159,7 @@ export function MacOS({ mac, dock = [], renderWindow, idleApp = "Finder", onTras
       <div className="toasts">
         {state.toasts.map((t) => (
           <button key={t.id} className="toast" onClick={() => mac.dismissToast(t.id)}>
-            <span className="ti"><I.Apple /></span><span><b>{t.title}</b>{t.body && <span>{t.body}</span>}</span><span className="now">now</span>
+            <span className="ti">{toastIcon(t)}</span><span><b>{t.title}</b>{t.body && <span>{t.body}</span>}</span><span className="now">now</span>
           </button>
         ))}
       </div>
