@@ -82,7 +82,7 @@ size, so it also works as one pane of a larger screen.
 | `meet.react(id, emoji)` | A reaction floats up the stage with their name. |
 | `meet.raiseHand(id, on)` | A hand goes up (with a snackbar and "Open queue") or down. |
 | `meet.present(id)` / `meet.present(null)` | Someone starts or stops presenting. |
-| `meet.chat(id, text)` | A chat message; a preview and a dot when the chat is closed. Returns its id. |
+| `meet.chat(id, text)` | A chat message; a preview and a dot when the chat is closed. Returns its id. An empty text delivers nothing and returns `""`. |
 | `meet.media(id, { muted, video })` | Someone mutes or turns their camera off. |
 | `meet.vote(index)` / `meet.ask(id, text)` / `meet.upvote(questionId, n)` | Votes in your poll, questions and upvotes in Q&A. |
 | `meet.toast(text, { who })` | A snackbar at the bottom left. |

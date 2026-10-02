@@ -832,6 +832,8 @@ export function useOutlook(seed: OutlookSeed, options: OutlookOptions = {}) {
   /** Someone answers in a conversation: after `delay` ms their message lands, the conversation moves to the inbox, and a card pops up. Resolves with the message id (or null if the conversation is gone). */
   const reply = useCallback(
     (conversation: string, message: OutlookMessageInput, o: ReplyOptions = {}): Promise<string | null> => {
+      // An empty message (a reply nobody needed to write) delivers nothing.
+      if (!message.text?.trim() && !message.html?.trim() && !message.attachments?.length && !message.custom) return Promise.resolve(null);
       const land = () => {
         if (!find(ref.current, conversation)) return null;
         let id = "";

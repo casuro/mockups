@@ -242,6 +242,8 @@ export function useGmail(seed: GmailSeed, options: GmailOptions = {}) {
    */
   const reply = useCallback(
     (mailId: string, message: Omit<GmailMessageInput, "to"> & { to?: string[] }, o: { delay?: number; notify?: boolean } = {}) => {
+      // An empty message (a reply nobody needed to write) delivers nothing.
+      if (!message.body?.trim() && !message.attachments?.length && !message.custom) return Promise.resolve("");
       const land = () => {
         // The conversation may be gone by now (its sending undone): then nothing lands.
         if (!ref.current.mails.some((x) => x.id === mailId)) return "";

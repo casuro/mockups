@@ -270,6 +270,8 @@ export function useMeet(seed: MeetSeed, options: MeetOptions = {}) {
       },
       /** A chat message from someone. Shows a preview and a dot on the chat button when the chat is closed. Returns its id. */
       chat(person: string, text: string) {
+        // An empty message (a reply nobody needed to write) delivers nothing.
+        if (!text?.trim()) return "";
         let id = "";
         let hidden = false;
         update((s) => {

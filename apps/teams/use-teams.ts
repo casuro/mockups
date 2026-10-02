@@ -368,12 +368,23 @@ export function useTeams(seed: TeamsSeed, options: TeamsOptions = {}) {
     });
   }, []);
 
+  /** An empty message (a reply nobody needed to write) delivers nothing: they stop typing, and that is all. */
+  const nothing = useCallback(
+    (key: string, message: TeamsMessageInput) => {
+      if (message.text?.trim() || message.subject || message.file || message.call || message.custom) return false;
+      if (typingRef.current?.key === key && typingRef.current.from === message.from) setTyping(null);
+      return true;
+    },
+    [setTyping]
+  );
+
   // ---------- What the world does ----------
 
   /** A message lands in a chat, or a new post in a channel. Resolves with its id once it is on screen. */
   const deliver = useCallback(
     (where: Where, message: TeamsMessageInput, options: DeliverOptions = {}): Promise<string> => {
       const key = need(where);
+      if (nothing(key, message)) return Promise.resolve("");
       if (options.typing) setTyping({ key, from: message.from });
       return later(options.typing, () => {
         if (typingRef.current?.key === key && typingRef.current.from === message.from) setTyping(null);
@@ -400,7 +411,7 @@ export function useTeams(seed: TeamsSeed, options: TeamsOptions = {}) {
         return id;
       });
     },
-    [need, later, update, newMessage, setTyping, toast, base, channelOf]
+    [need, nothing, later, update, newMessage, setTyping, toast, base, channelOf]
   );
 
   /** A new post in a channel: `deliver` for a team's channel. */
@@ -416,6 +427,7 @@ export function useTeams(seed: TeamsSeed, options: TeamsOptions = {}) {
       if (!at) throw new Error(`Teams: no post ${postId} to reply to`);
       const key = at.key;
       const parentId = at.parent?.id ?? postId;
+      if (nothing(key, message)) return Promise.resolve("");
       if (options.typing) setTyping({ key, from: message.from });
       return later(options.typing, () => {
         if (typingRef.current?.key === key && typingRef.current.from === message.from) setTyping(null);
@@ -434,7 +446,7 @@ export function useTeams(seed: TeamsSeed, options: TeamsOptions = {}) {
         return id;
       });
     },
-    [later, update, newMessage, setTyping]
+    [nothing, later, update, newMessage, setTyping]
   );
 
   /** Someone starts (`from`) or stops (null) typing in `where`: use it while a reply is being written. */

@@ -269,6 +269,11 @@ export function useSlack(seed: SlackSeed, options: SlackOptions = {}) {
   const deliver = useCallback(
     (where: Where, message: SlackMessageInput & { thread?: string }, options: DeliverOptions = {}): Promise<string> => {
       const key = need(where);
+      // An empty message (a reply nobody needed to write) delivers nothing: they stop typing, and that is all.
+      if (!message.text?.trim() && !message.card && !message.chart && !message.file && !message.link && !message.custom) {
+        if (typingRef.current?.key === key && typingRef.current.from === message.from) setTyping(null);
+        return Promise.resolve("");
+      }
       const land = () => {
         if (typingRef.current?.key === key && typingRef.current.from === message.from) setTyping(null);
         let id = "";

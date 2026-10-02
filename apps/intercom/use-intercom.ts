@@ -173,6 +173,11 @@ export function useIntercom(seed: IntercomSeed, options: IntercomOptions = {}) {
   const deliver = useCallback(
     (conversation: string, message: IntercomMessageInput, options: DeliverOptions = {}): Promise<string> => {
       const id = need(conversation);
+      // An empty message (a reply nobody needed to write) delivers nothing: the typing stops, and that is all.
+      if (!message.text.trim() && !message.custom) {
+        if (typingRef.current === id) setTyping(null);
+        return Promise.resolve("");
+      }
       const land = () => {
         if (typingRef.current === id) setTyping(null);
         let mid = "";

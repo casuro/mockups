@@ -95,7 +95,7 @@ of a larger screen.
 | Call | What happens |
 | --- | --- |
 | `outlook.receive(conversation)` | New mail lands (in the inbox, unread, unless it says otherwise) with a notification card. Returns its id. |
-| `outlook.reply(id, message, { delay: 5000 })` | Someone answers in a conversation: after the delay the message lands, the conversation moves to the inbox (unread unless it is open) and a card pops up. Resolves with the message id, or null if the conversation is gone. |
+| `outlook.reply(id, message, { delay: 5000 })` | Someone answers in a conversation: after the delay the message lands, the conversation moves to the inbox (unread unless it is open) and a card pops up. Resolves with the message id, or null if the conversation is gone. An empty text delivers nothing and resolves with null. |
 | `outlook.open(id)` | Show a conversation, from whatever folder it is in. |
 | `outlook.compose({ to, subject, html })` | Open a new message (or, with `kind` and `conversation`, a reply) already filled in. |
 | `outlook.toast(text, { ok, actions })` | A notice at the bottom, with buttons if you like. |

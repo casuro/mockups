@@ -335,6 +335,8 @@ export function useZoom(seed: ZoomSeed, options: ZoomOptions = {}) {
   /** A chat message from someone, to everyone or (with `to`) to one person. Resolves with its id. */
   const chat = useCallback(
     (from: string, text: string, to = "everyone", extra: { file?: { name: string; size?: string } } = {}) => {
+      // An empty message (a reply nobody needed to write) delivers nothing.
+      if (!text?.trim() && !extra.file) return "";
       let id = "";
       update((d) => {
         id = pushChat(d, { from, to, text, ...extra }).id;

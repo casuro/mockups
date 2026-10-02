@@ -192,8 +192,10 @@ export function useZendesk(seed: ZendeskSeed, options: ZendeskOptions = {}) {
    * with the message id once it is on screen.
    */
   const addMessage = useCallback(
-    (ticket: number, message: ZendeskMessageInput, o: MessageOptions = {}): Promise<string> =>
-      new Promise((resolve) =>
+    (ticket: number, message: ZendeskMessageInput, o: MessageOptions = {}): Promise<string> => {
+      // An empty message (a reply nobody needed to write) delivers nothing.
+      if (!message.text?.trim() && !message.attachment) return Promise.resolve("");
+      return new Promise((resolve) =>
         later(o.delay, () => {
           let id = "";
           const s = update((d) => {
@@ -209,7 +211,8 @@ export function useZendesk(seed: ZendeskSeed, options: ZendeskOptions = {}) {
             toast(`${people[message.from]?.name ?? message.from} ${message.note ? "added a note" : "replied"} on #${ticket}`);
           resolve(id);
         })
-      ),
+      );
+    },
     [update, later, people, toast]
   );
 
