@@ -84,7 +84,7 @@ window, so it also works as one pane of a larger screen.
 | Call | What happens |
 | --- | --- |
 | `gmail.receive(mail)` | A new conversation arrives (in the inbox, unread, by default) with a "New message from ..." notice and an Open button. Returns its id. |
-| `gmail.reply(mailId, message, { delay: 5000 })` | After the delay, a message lands in that conversation, which moves back to the inbox, unread unless it is on screen, with a notice. `to` defaults to the signed-in person. Resolves with the message id. |
+| `gmail.reply(mailId, message, { delay: 5000 })` | After the delay, a message lands in that conversation, which moves back to the inbox, unread unless it is on screen, with a notice. `to` defaults to the signed-in person. Resolves with the message id. An empty body delivers nothing and resolves with `""`. |
 | `gmail.modify(mailId, { folder, tab, labels, unread, starred, important })` | Change a conversation. |
 | `gmail.open(mailId)` | Show a conversation (a draft opens in the compose window). |
 | `gmail.toast(text, [{ label, run }])` | A notice at the bottom left, with optional actions. |

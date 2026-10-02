@@ -77,7 +77,7 @@ size, so it also works as one pane of a larger screen.
 
 | Call | What happens |
 | --- | --- |
-| `slack.deliver(where, message, { typing: 1500 })` | Shows the sender typing, then the message lands. Elsewhere, it bumps the unread count; a DM or a mention also shows a toast. Resolves with the message id. |
+| `slack.deliver(where, message, { typing: 1500 })` | Shows the sender typing, then the message lands. Elsewhere, it bumps the unread count; a DM or a mention also shows a toast. Resolves with the message id. An empty text delivers nothing: no typing, no message, and it resolves with `""`. |
 | `slack.deliver(where, { ...message, thread: id })` | A reply in a thread. |
 | `slack.typingIn(where, personId)` / `(where, null)` | Typing, while a reply is being written. |
 | `slack.react(messageId, emoji)` | Someone else reacts. |

@@ -82,7 +82,7 @@ as one pane of a larger screen.
 
 | Call | What happens |
 | --- | --- |
-| `whatsapp.deliver(chatId, message, { typing: 1500 })` | Shows the sender typing, then the message lands and the chat moves to the top. Elsewhere, it bumps the unread count (`notify: true` also shows a toast). Resolves with the message id. A person's id as `chatId` starts a chat with them. |
+| `whatsapp.deliver(chatId, message, { typing: 1500 })` | Shows the sender typing, then the message lands and the chat moves to the top. Elsewhere, it bumps the unread count (`notify: true` also shows a toast). Resolves with the message id. A person's id as `chatId` starts a chat with them. An empty text delivers nothing: no typing, no message, and it resolves with `""`. |
 | `whatsapp.setTicks(messageId, "delivered" \| "read")` | The ticks on one of the signed-in person's messages. |
 | `whatsapp.typingIn(chatId, personId)` / `(chatId, null)` | Typing, in the list and the header, while a reply is being written. |
 | `whatsapp.setOnline(personId, true \| false)` | "online" in the header; going offline records "last seen today at ..." |

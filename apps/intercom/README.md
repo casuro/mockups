@@ -91,7 +91,7 @@ sidebar becomes a drawer and the list and the conversation take turns.
 | Call | What happens |
 | --- | --- |
 | `intercom.customerMessage(id, text, { typing: 1500 })` | The customer is seen typing, then the message lands. Elsewhere, the conversation turns unread, moves to the top and a toast shows it. Resolves with the message id. |
-| `intercom.deliver(id, message, { typing })` | Any message: Fin's answer, a teammate's reply or note, an event line. |
+| `intercom.deliver(id, message, { typing })` | Any message: Fin's answer, a teammate's reply or note, an event line. An empty text delivers nothing (`customerMessage` too): no typing, no message, and it resolves with `""`. |
 | `intercom.typingIn(id)` / `(null)` | The customer typing, while a message is being written. |
 | `intercom.newConversation(conversation, customer?)` | A conversation arrives at the top of the list, unread. Pass `customer` when they are new. |
 | `intercom.suggest(id, { answer, question?, sources? })` | Copilot's suggested answer (a string is just the answer). |

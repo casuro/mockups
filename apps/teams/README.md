@@ -87,7 +87,7 @@ it also works as one pane of a larger screen.
 
 | Call | What happens |
 | --- | --- |
-| `teams.deliver(where, message, { typing: 1500 })` | Shows the sender typing, then the message (or, in a channel, the post) lands. Elsewhere it bumps the unread count, and a chat message or a mention shows a toast. Resolves with its id. |
+| `teams.deliver(where, message, { typing: 1500 })` | Shows the sender typing, then the message (or, in a channel, the post) lands. Elsewhere it bumps the unread count, and a chat message or a mention shows a toast. Resolves with its id. An empty text delivers nothing (`post` and `reply` too): no typing, no message, and it resolves with `""`. |
 | `teams.post({ team, channel }, post)` | A new post in a channel. |
 | `teams.reply(postId, message, { typing })` | A reply to a channel post. |
 | `teams.typingIn(where, personId)` / `(where, null)` | Typing, while a reply is being written. |

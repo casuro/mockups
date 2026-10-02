@@ -95,7 +95,7 @@ whatever the window size, so it also works as one pane of a larger screen.
 | --- | --- |
 | `zendesk.createTicket(ticket, { open })` | A ticket arrives (at the top of the lists). Returns its number; `open: true` shows it in a tab. |
 | `zendesk.customerReply(id, text, { delay: 3000 })` | The requester answers after `delay` ms, which reopens a pending or solved ticket. A toast when the agent is on another ticket. Resolves with the message id. |
-| `zendesk.addMessage(id, message, { delay })` | Any message: another agent's reply or internal note (`note: true`), or a customer's. |
+| `zendesk.addMessage(id, message, { delay })` | Any message: another agent's reply or internal note (`note: true`), or a customer's. An empty text delivers nothing (`customerReply` too) and resolves with `""`. |
 | `zendesk.updateTicket(id, patch)` | Change `status`, `priority`, `type`, `assignee`, `tags`, `followers` or `subject`, as a trigger or another agent would. |
 | `zendesk.open(id)` / `zendesk.open(null)` | Show a ticket in a tab, or the view's list. |
 | `zendesk.showView(id)` | List a view. |

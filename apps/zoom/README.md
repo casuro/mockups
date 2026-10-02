@@ -93,7 +93,7 @@ shows on a grey screen.
 | `zoom.raiseHand(personId, on)` | Their hand goes up (top of the participants list) or down. |
 | `zoom.mute(personId, on)` / `zoom.camera(personId, on)` | They mute, or turn their camera on or off. |
 | `zoom.share(personId, screen)` / `zoom.share(null)` | They share a screen (under the green "You are viewing" bar), or stop. |
-| `zoom.chat(from, text, to?, { file? })` | A chat message, to everyone or (with `to`) a direct message. It bumps the Chat badge and toasts while the chat is closed. Returns its id. |
+| `zoom.chat(from, text, to?, { file? })` | A chat message, to everyone or (with `to`) a direct message. It bumps the Chat badge and toasts while the chat is closed. Returns its id. An empty text (and no file) delivers nothing and returns `""`. |
 | `zoom.end()` | The host ends the meeting for everyone. |
 | `zoom.toast(text)` | A notice at the top. |
 

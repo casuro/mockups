@@ -193,6 +193,11 @@ export function useWhatsApp(seed: WhatsAppSeed, options: WhatsAppOptions = {}) {
   /** A message lands in a chat. Resolves with its id once it is on screen. */
   const deliver = useCallback(
     (chatId: string, message: WhatsAppMessageInput, options: DeliverOptions = {}): Promise<string> => {
+      // An empty message (a reply nobody needed to write) delivers nothing: they stop typing, and that is all.
+      if (!message.text?.trim() && !message.image && !message.voice && !message.document && !message.custom) {
+        if (ref.current.chats[chatId]?.typing === message.from) update((s) => void (s.chats[chatId].typing = null));
+        return Promise.resolve("");
+      }
       const id = need(chatId);
       const land = () => {
         let mid = "";
